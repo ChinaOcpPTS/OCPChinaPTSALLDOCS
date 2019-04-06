@@ -11,3 +11,12 @@ PTS团队Azure、Office 365、其他产品等文档、BLOG、学习资料等合�
 | 06   | 06.Dynamics 文档合集        | Dynamics 相关文档合集            |
 | 07   | 07.SQL Server数据库相关文档 | SQL Server数据库相关文档         |
 
+
+
+
+
+
+
+Max Shen
+
+2019-04-06
