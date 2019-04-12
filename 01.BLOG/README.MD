@@ -12,6 +12,16 @@
 | 08 | [Power BI Desktop 10月更新](https://blog.csdn.net/capsicum29/article/details/83089745) | Max Shen | 10月份 | 2018/10/25  20:07:06 | 项 | teams/kaq/document/Lists/Blog |
 | 09 | [使用Microsoft 365 GDPR 仪表板为企业出海保驾护航 系列四--GDPR工具箱之响应](https://mp.weixin.qq.com/s/cu3H3Skhko0xEo17TOkBLg) | Jiayu Zhu | 10月份 | 2018/10/28  7:10:52 | 项 | teams/kaq/document/Lists/Blog |
 | 10 | [Azure区块链系统的概念搭建](https://mp.weixin.qq.com/s?__biz=MzI4OTc1NzUzMQ==&mid=2247483820&idx=1&sn=5b2d453e5ba7cf8e33da0a552be6409a&chksm=ec2b0198db5c888e8b606eae5d91a3c65d8bb1e0fd1aacc9da96c1fafa76a887ead136a81477&token=803975074&lang=zh_CN#rd) | Renjie Zhu | 10月份 | 2018/10/28  19:43:55 | 项 | teams/kaq/document/Lists/Blog |
+| 11 | [Global Azure试用账号注册操作和DSVM创建手册](https://www.cnblogs.com/wangsongshare/p/9522504.html) | Song Wang | 9月份 | 2018/11/9  4:25:02| 项 | teams/kaq/document/Lists/Blog |
+| 12 | [通过非托管自定义镜像创建VM](https://www.cnblogs.com/wangsongshare/p/9838183.html) | Song Wang | 11月份 | 2018/11/9  4:54:42 | 项 | teams/kaq/document/Lists/Blog |
+| 13 | [O365订阅用户License管理](https://www.cnblogs.com/wangsongshare/p/9837531.html) | Song Wang | 11月份 | 2018/11/9  4:54:59 | 项 | teams/kaq/document/Lists/Blog |
+| 14 | [Azure ASM模式下获取VM信息](https://www.cnblogs.com/wangsongshare/p/9836074.html) | Song Wang | 11月份 | 2018/11/9  4:55:18 | 项 | teams/kaq/document/Lists/Blog |
+| 15 | [Azure ASM模式下获取VM信息](https://www.cnblogs.com/wangsongshare/p/9835841.html) | Song Wang | 11月份 | 2018/11/9  4:55:34 | 项 | teams/kaq/document/Lists/Blog |
+| 16 | [纵有倚天剑还要屠龙刀，实现Power BI报表服务器自定义认证 ](https://blog.csdn.net/capsicum29/article/details/83746921) | Max Shen | 11月份 | 2018/11/26  4:20:45 | 项 | teams/kaq/document/Lists/Blog |
+| 17 | [Power BI 夜校完美收官-所有视频资料可下载](https://blog.csdn.net/capsicum29/article/details/83743785) | Max Shen | 11月份 | 2018/11/26  4:21:23 | 项 | teams/kaq/document/Lists/Blog |
+| 18 | [通过VMSS快速缩放ACS Engine集群](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247483913&idx=1&sn=66b0bbfab03e6695f0f6e1a620cf514c&chksm=fbadf01cccda790a264bde389c87b4f7119cefc4248d53577e9be9cbe3ff84332af4b66821bb#rd) | Jian Zhao | 11月份 | 2018/11/26  23:05:57 | 项 | teams/kaq/document/Lists/Blog |
+| 19 | [如何将已创建好的虚机加入到虚拟机规模集](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247483924&idx=1&sn=50805a3faf8e6d20e760b22dc8c0ea0f&chksm=fbadf001ccda7917500c997c2b199d55dd879b1e405e5d5b1caae725cc77f3c81afb5eaf7db6#rd) | Jian Zhao | 11月份 | 2018/11/26  23:06:18 | 项 | teams/kaq/document/Lists/Blog |
+| 20 | [借助Application Insights，让Apps快速拥有APM](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247483948&idx=1&sn=d65acce6b187635767cea7594128cd1f&chksm=fbadf039ccda792f9789dc83dfd8c106095b2dc066cd0b181a4c53a98627f8b471c8b55dba6e&token=709143059&lang=zh_CN#rd) | Jian Zhao | 11月份 | 2018/11/27  7:30:06 | 项 | teams/kaq/document/Lists/Blog |
 
 
 
