@@ -22,6 +22,16 @@
 | 18 | [通过VMSS快速缩放ACS Engine集群](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247483913&idx=1&sn=66b0bbfab03e6695f0f6e1a620cf514c&chksm=fbadf01cccda790a264bde389c87b4f7119cefc4248d53577e9be9cbe3ff84332af4b66821bb#rd) | Jian Zhao | 11月份 | 2018/11/26  23:05:57 | 项 | teams/kaq/document/Lists/Blog |
 | 19 | [如何将已创建好的虚机加入到虚拟机规模集](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247483924&idx=1&sn=50805a3faf8e6d20e760b22dc8c0ea0f&chksm=fbadf001ccda7917500c997c2b199d55dd879b1e405e5d5b1caae725cc77f3c81afb5eaf7db6#rd) | Jian Zhao | 11月份 | 2018/11/26  23:06:18 | 项 | teams/kaq/document/Lists/Blog |
 | 20 | [借助Application Insights，让Apps快速拥有APM](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247483948&idx=1&sn=d65acce6b187635767cea7594128cd1f&chksm=fbadf039ccda792f9789dc83dfd8c106095b2dc066cd0b181a4c53a98627f8b471c8b55dba6e&token=709143059&lang=zh_CN#rd) | Jian Zhao | 11月份 | 2018/11/27  7:30:06 | 项 | teams/kaq/document/Lists/Blog |
+| 21 | [充分利用新的Dynamics 365 App for Outlook](http://blog.sina.com.cn/s/blog_63f72f850102yiwd.html) | Watson Zhu | 11月份 | 2018/11/27  19:10:26 | 项 | teams/kaq/document/Lists/Blog |
+| 22 | [准备好适用于销售的Dynamics365中的新Playbook（剧本）](http://blog.sina.com.cn/s/blog_63f72f850102yiwp.html) | Watson Zhu | 11月份 | 2018/11/27  19:11:36 | 项 | teams/kaq/document/Lists/Blog |
+| 23 | [微软容器周边玩具之 Brigade 篇](https://www.cnblogs.com/wekang/p/10007365.html) | Wei Kang | 11月份 | 2018/11/27  21:47:21 | 项 | teams/kaq/document/Lists/Blog |
+| 24 | [一桥飞架南北，天堑变通途——通过File Sync实现分布式NAS](http://aubreyhan.net/undefined/46107/) | Yuan Han | 11月份 | 2018/11/28  4:35:07 | 项 | teams/kaq/document/Lists/Blog |
+| 25 | [不要让数字限制了你的想象力——用PowerBI分析Azure账单](http://aubreyhan.net/undefined/60335/) | Yuan Han | 11月份 | 2018/11/28  4:36:00 | 项 | teams/kaq/document/Lists/Blog |
+| 26 | [不要让数字限制了你的想象力——用PowerBI分析Azure账单续一](http://aubreyhan.net/undefined/49116/) | Yuan Han | 11月份 | 2018/11/28  4:36:30 | 项 | teams/kaq/document/Lists/Blog |
+| 27 | [MongoDB 不让云厂商用啦，Cosmos DB了解一下？](https://www.jianshu.com/p/c9d84e563102) | Kele Wang | 11月份 | 2018/11/28  23:38:26 | 项 | teams/kaq/document/Lists/Blog |
+| 28 | [如何在Dynamics 365中构建一个重复网站访问者的市场细分](http://blog.sina.com.cn/s/blog_63f72f850102ym94.html) | Watson Zhu | 12月份 | 2018/12/25  23:39:43 | 项 | teams/kaq/document/Lists/Blog |
+| 29 | [Dynamics 365中全新的组织结构图](http://blog.sina.com.cn/s/blog_63f72f850102ym93.html) | Watson Zhu | 12月份 | 2018/12/25  23:40:32 | 项 | teams/kaq/document/Lists/Blog |
+| 30 | [双重保护，加固云端的虚机](https://mp.weixin.qq.com/s/ZFUTnTPF6rZBp22FozfCIw) | Jiayu Zhu | 12月份 | 2018/12/27  6:07:14 | 项 | teams/kaq/document/Lists/Blog |
 
 
 
