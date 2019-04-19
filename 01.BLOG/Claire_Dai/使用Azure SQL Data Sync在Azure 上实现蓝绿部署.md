@@ -111,7 +111,7 @@
 
 那接下来我们就看一下如何配置Data Sync来实现以上的功能（Data Sync的原理可查阅https://docs.microsoft.com/en-us/azure/sql-database/sql-database-sync-data）
 
-    1. 首先创建2个Azure的Sql PaaS，其中一个生产环境的数据库含有真实的数据，另外一个我们会用空的数据库以便展示Data Sync的功能
+　　1. 首先创建2个Azure的Sql PaaS，其中一个生产环境的数据库含有真实的数据，另外一个我们会用空的数据库以便展示Data Sync的功能
  
 ![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B205.png)
 
@@ -146,8 +146,8 @@ Demotest1做为data sync的hub，每300秒会把数据从hub同步到member数�
 ![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B211.png)
 
 　　7.　5分钟后，再做一次查询，这时可以看到数据开始逐步同步到绿栈数据库。新版应用可以开始测试
-
- 　 8.　测试完成后即可平滑迁移生产环境流量
+  
+　　8.　测试完成后即可平滑迁移生产环境流量
 
 　　9.　此时需要删除原有data sync group，并配置从新的生产数据库（hub）往旧生产数据库（member）的data sync用于回滚切换
 
