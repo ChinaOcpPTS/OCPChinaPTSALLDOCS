@@ -13,12 +13,8 @@
 新蓝栈运行稳定后，绿栈（原蓝栈staging）被销毁
 整个流程如下图所示：
 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B201.png)
  
-
- 
-
- 
-
 这个方案虽然满足了零宕机的需求但是存在以下问题
 
 1． 新版本应用部署时数据库的升级是从版本零到最新版本，以上step3测试没有覆盖到生产环境数据库版本到最新版本的路径测试，这样新版本在生产环境顺利运行是存在隐患的
@@ -39,11 +35,7 @@
 新蓝栈运行稳定后，绿栈（原蓝栈staging）被销毁
 整个流程如下图所示。
 
- 
-
-
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B202.png)
 
 这个方案存在以下问题
 
@@ -71,13 +63,7 @@
 
 整个流程如下图所示。
 
-
-
- 
-
- 
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B203.png)
 
 这个方案还是存在以下问题
 
@@ -115,11 +101,9 @@
 
  
 
- 整个流程如下图所示。
+整个流程如下图所示。
 
-
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B204.png)
 
 可以看到step3加入Data Sync功能后，应用的测试是在非生产环境但是和生产环境数据又是实时同步的真实的数据上进行，不存在测试路径覆盖不全的问题也不存在会导致生产环境宕机的风险。同时，在step7加入另外一个方向的Data Sync功能后，终端用户在新蓝栈发生的任何事务数据被回写到原有蓝栈中。一旦需要回滚，不再需要花时间创建新数据库并导入备份，只需要由CD task把流量从新蓝栈切换到原来的蓝栈即可，回滚也能实现零宕机。
 
@@ -127,10 +111,9 @@
 
 那接下来我们就看一下如何配置Data Sync来实现以上的功能（Data Sync的原理可查阅https://docs.microsoft.com/en-us/azure/sql-database/sql-database-sync-data）
 
-首先创建2个Azure的Sql PaaS，其中一个生产环境的数据库含有真实的数据，另外一个我们会用空的数据库以便展示Data Sync的功能
+    1. 首先创建2个Azure的Sql PaaS，其中一个生产环境的数据库含有真实的数据，另外一个我们会用空的数据库以便展示Data Sync的功能
  
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B205.png)
 
 Demotest1是生产库蓝栈
 
@@ -140,41 +123,31 @@ StagingDB是绿栈
 
 　　2.　在Demotest1里enable Sync to other databases功能
 
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B206.png)
 
 Demotest1做为data sync的hub，每300秒会把数据从hub同步到member数据库StagingDB
 
- 
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B207.png)
 
 　　3.　配置data sync group的member数据库stagingdb
 
- 
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B208.png)
 
 　　4.　接下来，配置需要同步到绿栈的表和列，这里我们选择全部的表和列
 
- 
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B209.png) 
 
 　　5.　我们先看一下生产数据库内，现在使用azure portal的query editor功能就可以直接查询数据库
 
- 
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B210.png)
 
 　　6.　接着查询一下绿栈数据库，此时绿栈只有数据库元数据
 
-
-
- 
+![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Azure%20SQL%20Data%20Sync%E5%9C%A8Azure%20%E4%B8%8A%E5%AE%9E%E7%8E%B0%E8%93%9D%E7%BB%BF%E9%83%A8%E7%BD%B211.png)
 
 　　7.　5分钟后，再做一次查询，这时可以看到数据开始逐步同步到绿栈数据库。新版应用可以开始测试
 
-·　   8.　测试完成后即可平滑迁移生产环境流量
+ 　 8.　测试完成后即可平滑迁移生产环境流量
 
 　　9.　此时需要删除原有data sync group，并配置从新的生产数据库（hub）往旧生产数据库（member）的data sync用于回滚切换
 
