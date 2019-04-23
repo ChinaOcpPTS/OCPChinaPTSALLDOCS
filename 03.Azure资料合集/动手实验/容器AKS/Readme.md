@@ -364,3 +364,297 @@ Artifacts的配置如下，主要是为后面Release Pipeline中的Tasks提供�
 本次实验到此成功结束 ！
 
 ---
+
+# 监控部分 - 基于开源的Prometheus&Grafana&EFK完成对集群的监控
+
+本次实验，将实现基于Prometheus & EFK，构建用于监控AKS容器化集群的开源监控方案。所有监控服务组件均以容器的方式运行在AKS集群中。本次环境所创建的环境资源，尽量使用命令行方式进行创建。
+
+本次实验的架构图如下所示：
+
+![](./Media/monitor/y01.png)
+
+### 实验环境资源准备
+
+#### 构建AKS集群
+
+1. 创建资源组`zjdemo01`，并创建AKS集群`zjaksdemo01`
+
+```
+# 创建资源组 zjdemo01
+az group create -n zjdemo01 -l chinaeast2
+
+# 创建AKS集群 zjaksdemo01
+az aks create -n zjaksdemo01 -g zjdemo01 --node-vm-size Standard_DS2_v2 --node-count 2 --kubernetes-version 1.12.6 --disable-rbac
+```
+
+2. 连接到创建的AKS集群`zjaksdemo01`，验证集群可用
+
+```
+# 下载AKS连接Credentials信息，并保存在.kube/config文件中
+az aks get-credentials -n zjaksdemo01 -g zjdemo01
+
+# 查看集群信息，及Node状态，确保集群可用
+kubectl cluster-info
+kubectl get nodes
+```
+
+![](./Media/monitor/y02.png)
+
+#### 安装并配置Helm
+
+Helm作为一款流行的容器包管理工具，可以方便的对部署在Kubernetes集群中的各项资源进行打包管理。本次实验，将通过Helm进行Prometheus & EFK & Grafana的安装。
+
+1. 安装 Helm
+
+__**注意**__ 建议通过指定的镜像连接，在中国区进行Helm的安装，本次实验用到的Helm版本为2.11.0。
+
+```
+VER=v2.11.0
+wget https://mirror.azure.cn/kubernetes/helm/helm-$VER-linux-amd64.tar.gz
+tar -zxvf helm-v2.11.0-linux-amd64.tar.gz
+sudo mv linux-amd64/helm /usr/local/bin
+# 由于网络的限制，以将部分Repo的访问地址替换成可达的Proxy地址，并添加中国区可用的Mirror Repo
+sudo helm init --tiller-image gcr.azk8s.cn/kubernetes-helm/tiller:$VER --stable-repo-url https://mirror.azure.cn/kubernetes/charts/
+```
+
+![](./Media/monitor/y03.png)
+
+2. 查看可用的Helm Repo，并验证Helm环境可用
+
+查看可用的Helm Repo
+
+`helm repo list`
+
+![](./Media/monitor/y04.png)
+
+通过Helm，安装Redis，来确保环境可用
+
+```
+# 搜索可用的Redis
+helm search redis
+# 通过Helm安装Redis
+helm install mc/redis
+```
+
+![](./Media/monitor/y05.png)
+
+可以看到，通过Helm，部署了Service，Deployment，StatefulSet，Secret，ConfigMap等资源，通过kubectl命令，我们可以查看到部署的资源，以下命令将列出构建的Service及StatefulSet。
+
+```
+# 列出环境中部署的Helm资源
+helm list
+helm status -n joyous-umbrellabird
+```
+
+![](./Media/monitor/y06.png)
+ 
+```
+# 查看Kubernetes中的Service资源
+kubectl get svc joyous-umbrellabird-redis-master
+# 查看Kubernetes中的StatefulSet资源
+kubectl get statefulset joyous-umbrellabird-redis-master
+```
+
+![](./Media/monitor/y07.png)
+
+#### 实验所需的部署文件
+
+1. 实验所需的资源都以包含在此Repo中
+
+- [prometheus.yml](./Files/Monitor/prometheus.yml)
+- [prometheus-deploy.yml](./Files/Monitor/prometheus-deploy.yml)
+- [demo-rbac.yml](./Files/Monitor/demo-rbac.yml)
+
+### 安装 Prometheus & Grafana & EFK
+
+#### 安装 Prometheus
+
+Prometheus是目前开源世界非常流行的一种容器监控软件，原生支持Kubernetes，与Kubelet进行了无缝的整合，主要用于收集Metrics信息。本次实验，将通过Helm，部署Prometheus到AKS集群，并配置相应的环境监控。
+
+1. 为监控部分的容器创建独立的Namespace `monitoring`
+
+`kubectl create namespace monitoring`
+
+![](./Media/monitor/y08.png)
+
+2. 创建ConfigMap
+
+此ConfigMap为Prometheus Server的配置文件，记录了Prometheus用于监控容器环境的Metric Endpoint信息，将会在创建Prometheus容器时，挂载到对应的配置文件路径。
+
+创建 ConfigMap `Prometheus-config`
+
+` kubectl create configmap prometheus-config --from-file ./prometheus.yml -n monitoring`
+ 
+![](./Media/monitor/y09.png)
+
+3. 部署Prometheus Server
+
+本次部署将通过预先写好的Deployment YAML进行。本次部署将创建名为`prometheus-deployment` Deployment，创建名为`prometheus-server` Service。
+
+` kubectl apply -f ./prometheus-deploy.yml `
+
+![](./Media/monitor/y10.png)
+
+4. 验证Prometheus Server正常运行
+
+我们通过创建的Service对外暴露出来的公共IP及对应的端口，对Prometheus进行访问。可以看到，Prometheus Server运行正常。
+
+![](./Media/monitor/y11.png)
+
+当我们检查监测的Targets（点击Status - Targets）时，我们发现，其中两个Target `kube-state-metrics`及`node-exporter`并未正常监控，这主要是因为，我们目前并没有安装对应的容器程序来收集监控信息。Prometheus支持非常多的扩展程序，帮助用户收集不同种类的Metrics信息。
+
+![](./Media/monitor/y12.png)
+
+5. 安装 Node Exporter
+
+本次实验，将通过Helm安装Node Exporter。Node Exporter主要用来集群中Working Nodes的Hardware，OS的Metrics。Helm将会以DaemonSet的方式，部署Node Exporter容器，确保每个可用的Working Nodes都有Node Exporter容器运行。
+
+```
+# 手工添加需要的Role及RoleBinding，由于创建集群时，disable了RBAC，但Helm创建Node exporter时需要使用，所以需要手工创建
+kubectl apply -f ./demo-rbac.yml
+
+# 创建RBAC过程中，同时创建了Service Account tiller，需要通过此Service Account重新初始化Helm
+helm init --tiller-image gcr.azk8s.cn/kubernetes-helm/tiller:v2.11.0 --stable-repo-url https://mirror.azure.cn/kubernetes/charts/ --service-account tiller –upgrade
+
+# Update Helm Repo
+helm repo update
+
+# 创建 Node exporter
+helm install --name node-exporter mc/prometheus-node-exporter --namespace monitoring
+```
+
+![](./Media/monitor/y13.png)
+![](./Media/monitor/y14.png)
+![](./Media/monitor/y15.png)
+ 
+刷新Prometheus Server页面，你会发现，Targets `node-exporter`已经可用
+
+![](./Media/monitor/y16.png)
+
+6. 安装 `kube-state-metrics`
+
+`kube-state-metrics`是一款开源的工具，社区已经准备好了相对应的部署脚本，可以通过下载Git Repo，并通过相应的部署文件进行安装。
+
+```
+# 下载 “kube-state-metrics”
+git clone https://github.com/kubernetes/kube-state-metrics.git
+
+# 由于 k8s.gcr.io & quay.io 没有办法直接访问，需要替换成 mirror的镜像地址 gcr.azk8s.cn/google_containers/ & quay.azk8s.cn，需要通过修改文件 ./kube-state-metrics/kubernetes/kube-state-metrics-deployment.yaml，此步骤需要有学员自己完成
+vim ./kube-state-metrics/kubernetes/kube-state-metrics-deployment.yaml
+
+# 部署 “kube-state-metrics”
+kubectl apply -f kube-state-metrics/kubernetes/
+```
+
+![](./Media/monitor/y17.png) 
+
+刷新 Prometheus Servers界面，你会发现，所有Targets均可用
+
+![](./Media/monitor/y18.png)
+![](./Media/monitor/y19.png)  
+ 
+
+#### 安装 Grafana
+
+在实际应用中，用户普遍会选择Grafana与Prometheus进行搭配，将Prometheus收集到的数据更为友好的呈现给终端用户。本次实验将带大家实践如何通过Helm安装Grafana，并构建集群信息的大屏。
+
+1. 通过Helm，安装Grafana
+
+`helm install --name grafana mc/grafana --set service.type=LoadBalancer --set sidecar.datasources.enabled=true --set sidecar.dashboards.enabled=true --set sidecar.datasources.label=grafana_datasource --set sidecar.dashboards.label=grafana_dashboard --namespace monitoring`
+
+2. 部署完成后，获取Grafana对外暴露的Service地址，及Credential，用户名默认为`admin`
+
+```
+# 获取Grafana Service的对外访问地址
+kubectl get svc grafana -n monitoring
+
+# 获取 Grafana的登陆密码
+kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+
+![](./Media/monitor/y20.png)
+![](./Media/monitor/y21.png) 
+
+3. 配置 Prometheus Data Source
+
+Grafana是通过支持的Data Source，获取Metrics的数据。点击`Add data source`，添加相对应的Prometheus连接信息。
+
+![](./Media/monitor/y22.png) 
+
+4. 配置用于监视AKS集群状态的可视化大屏
+
+Grafana 除了可以自定义大家需要的Dashboard之外，Grafana 社区有很多大家分享的比较漂亮的模板，大家可以挑选自己喜欢的模板，并进行二次更改。本次实验将使用Grafana社区提供的两个模板`K8s Cluster Summary`&`Node Exporter Server Metrics`构建大屏。
+
+回到`Home`页，点击左下角的`？`，选择`Community site`，跳转到Grafana Community，然后点击`Dashboards`，通过左下角的`Seach within this list`，查看两个模板的编号。经查询可以确认，模板`K8s Cluster Summary`的编号为8685，模板`Node Exporter Server Metrics`的编号为405。
+ 
+![](./Media/monitor/y23.png)
+![](./Media/monitor/y24.png) 
+
+回到Grafana ，点击左侧`Dashboards`，选择`Manage`，点击`Import`，分别输入两个模板的编号，导入模板
+
+![](./Media/monitor/y25.png) 
+
+5. 验证大屏的可用性
+
+我们可以借助于两个Dashboard，了解集群中的使用情况
+
+![](./Media/monitor/y26.png)
+![](./Media/monitor/y27.png) 
+ 
+### 安装 EFK
+
+Prometheus主要是针对于Metrics进行收集，EFK（Elasticsearch & Fluent & Kibana）主要是针对于Logs进行收集。本次实验，将通过Helm，创建基于EFK的日志汇集查询系统。
+
+1. 配置 EFK 所使用的Helm repo
+
+```
+# 目前社区有一种流行的方式，即通过Operator的方式对有状态的服务进行集群的创建，EFK同样有相对应的Operator，将通过Helm，完成EFK Operator的安装
+helm repo add akomljen-charts https://raw.githubusercontent.com/komljen/helm-charts/master/charts/
+
+# 为EFK 创建单独的namespace
+kubectl create namespace logging
+
+# 安装 EFK Operator
+helm install --name es-operator --namespace logging akomljen-charts/elasticsearch-operator
+
+# 验证 EFK Operator 是否已经部署完成
+kubectl get deploy -n logging
+```
+
+![](./Media/monitor/y28.png)
+![](./Media/monitor/y29.png) 
+
+2. 安装 EFK
+
+` helm install --name efk --namespace logging akomljen-charts/efk `
+
+![](./Media/monitor/y30.png) 
+
+3. 验证部署是否完成，并调整Kibana Service的访问方式
+
+Kibana是整个日志系统的查询Dashboard，而Helm Chart默认创建的Service Type为ClusterIP，需要将ClusterIP更改为LoadBalancer，从而拿到一个可访问的公网IP，方便实验的验证。
+
+```
+# 确保资源已经部署完成
+kubectl get deploy -n logging
+
+# 检查 Kibana Service的类型，并将类型更改为LoadBalancer
+kubectl get svc efk-kibana -n logging
+kubectl edit svc efk-kibana -n logging
+kubectl get svc efk-kibana -n logging
+```
+ 
+![](./Media/monitor/y31.png)
+![](./Media/monitor/y32.png) 
+![](./Media/monitor/y33.png)
+![](./Media/monitor/y34.png) 
+ 
+4. 验证Kibana是否工作正常
+
+登陆 Kibana页面
+
+![](./Media/monitor/y35.png) 
+
+点击`Discover`，可以看到，集群中的Log信息已经可以在Kibana中获得。
+ 
+![](./Media/monitor/y36.png) 
