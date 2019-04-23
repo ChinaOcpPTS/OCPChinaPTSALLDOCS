@@ -129,3 +129,609 @@
 
     kubectl delete pods mypod
     kubectl delete pvc azure-managed-disk
+
+---
+
+# DevOps部分
+
+本次实验，将实现应用容器化的CI/CD流程，通过预先写好的Dockerfile，结合Azure DevOps，自动化Build容器化镜像，将容器化镜像发布到私有ACR中，并将容器镜像部署到AKS集群中。
+
+本次实验的程序为一个在线投票系统，具体架构图如下：
+
+![](./Media/devops/x01.png)
+
+系统共有三部分组成：
+- 前端Web Application ：使用Python开发；
+- 应用服务 Calculator microservice ：使用Java开发；
+- 缓存服务 Cache microservice ：使用 Redis 实现；
+
+本次实验所使用的 [Github Repo](https://github.com/ericzhao0821/python-voting-web-app) 
+ 
+本次实验Azure资源创建部分，尽量使用 `Azure CLI` ； Azure DevOps部分，将会使用 `DevOps Portal`进行创建。
+
+### 创建实验所需资源
+
+#### 创建Azure DevOps的Organization & Project
+
+Azure DevOps的Dashboard请参照 <https://dev.azure.com> ，请使用相应的`Global Azure`账户进行登陆。
+
+1. 创建Organization `zjdevopsdemo01`
+
+![](./Media/devops/x02.png)
+
+2. 创建 Project `devopsdemo01`
+
+![](./Media/devops/x03.png)
+
+3. 将实验中所使用的Github Repo克隆至Azure Repos
+
+Azure DevOps中也会提供代码管理功能，即服务 `Azure Repos`。本次实验，所有代码的修改，都将通过Azure Repos进行，Azure Repos也支持Git的操作方式，可以通过本地客户端，连接Azure Repos，并使用熟悉的Git命令进行操作。
+
+点击 `Repos`，选择 `Import`，来导入实验用到的Github项目
+
+![](./Media/devops/x04.png)
+
+可以看到，导入的项目内容如下：
+
+![](./Media/devops/x05.png)
+
+#### 配置Azure DevOps，连接Azure China
+
+由于目前Azure DevOps服务是由Global Azure提供，但提供对于Azure China的支持，即可以使用Global Azure的Azure DevOps来构建基于Azure China资源的自动化运维解决方案。 如果需要Azure DevOps与Azure China资源进行连接，需要进行手动的配置。
+
+1. 创建 Service Principal
+
+`az ad sp create-for-rbac -n "zjdevopssp01" --role contributor`
+
+![](./Media/devops/x06.png)
+
+2. 建立针对于Azure China的Endpoint，并创建连接
+
+进入Project `devopsdemo01`，点击`Project Settings`，选择`Pipelines - Service connections`，点击`New service connection`，选择`Azure Resource Manager`
+
+![](./Media/devops/x07.png)
+
+点击`use the full version of the service connection dialog`，创建`Azure China Cloud`，并填写相对应的Service Principal，点击`Verify connection`，确保连接成功。
+
+![](./Media/devops/x08.png)
+
+#### 创建实验所需的Azure资源
+
+1. 创建 Resource Group `zjdemo01`
+
+`az group create -n zjdemo01 -l chinaeast2`
+
+![](./Media/devops/x09.png)
+
+2. 创建Azure Kubernetes Service集群 `zjaksdemo01`
+
+`az aks create -n zjaksdemo01 -g zjdemo01 --node-vm-size Standard_DS2_v2 --node-count 2 --kubernetes-version 1.12.6 --disable-rbac`
+
+![](./Media/devops/x10.png)
+
+3. 创建 Azure Container Registry `zjacrdemo01`
+
+`az acr create -n zjacrdemo01 -g zjdemo01 --sku Standard --admin-enabled -l chinaeast2`
+ 
+![](./Media/devops/x11.png)
+
+### 通过 Azure DevOps，构建CI/CD Pipelines
+
+__**注意**__ 新版本Azure DevOps默认会开启YAML编辑页面，本次实验仍然以图形化界面为主，关闭YAML页面可通过如下操作：
+
+
+点击右上角的用户，选择`Preview features`，disable选项`New YAML pipeline creation experience`即可
+ 
+![](./Media/devops/x12.png)
+
+#### 构建 Builds Pipelines，通过Dockerfile，Build容器镜像，并上传到私有镜像仓库
+
+1. 选择`Pipelines -> Builds`，点击`New pipeline` 
+
+Source选择：选择前面导入的Azure Repos `devopsdemo01`
+ 
+![](./Media/devops/x13.png)
+
+Azure DevOps Pipelines提供了多种内置的模板供用户使用，本次实验，选取`Empty job`进行构建
+
+![](./Media/devops/x14.png)
+
+将创建好的Pipeline `devopsdemo01-CI`，Agent pool更改为`Hosted Ubuntu 1604`
+
+2. 添加 Task `Maven calculator-api/pom.xml`
+
+点击 `Agent job 1` 右侧的`+`，选择 Maven Task添加，Maven Task的作用主要将应用层计算服务的源码构建成可部署的Jar程序。Maven POM file，从Azure Repos `devopsdemo01/calculator-api/pom.xml`中选择，MavenTask的配置信息如下：
+
+![](./Media/devops/x15.png)
+
+3. 添加 Task `Build out demo images with Docker Compose`
+
+点击 `Agent job 1` 右侧的`+`，选择Docker Compose Task添加。Docker Compose Task的作用是通过写好的Docker Compose文件，构建出实验中需要的容器化镜像，Task的配置信息如下：
+ 
+![](./Media/devops/x16.png)
+![](./Media/devops/x17.png)
+
+4. 添加 Task `Push demo images to ACR`
+
+点击 `Agent job 1` 右侧的`+`，选择Docker Compose Task添加。Docker Compose Task的作用是将上一步构建好的两个容器镜像 `zjacrdemo01.azurecr.cn/azure-vote-front:latest`，`zjacrdemo01.azurecr.cn/azure-calculator-api:latest` 添加到ACR，Task的配置信息如下：
+
+![](./Media/devops/x18.png)
+![](./Media/devops/x19.png)
+ 
+添加完所有Task后，点击`Save & Queue`，手动触发Build的Pipeline，验证所有Tasks都达到预期
+
+![](./Media/devops/x20.png)
+![](./Media/devops/x21.png)
+ 
+可以看到，所有Tasks都已运行成功，并成功的将build好的images上传到了ACR中。
+
+5. Enable continuous integration
+
+通过Enable持续集成，后续当有代码更新，会自动触发此Build Pipeline，将更新后的代码打包成新的镜像，并上传到ACR
+
+![](./Media/devops/x22.png)
+
+#### 构建 Release Pipeline，将构建好的容器镜像，部署到AKS集群中
+
+1. 选择`Releases`，点击`New pipeline`，创建新的Release Pipeline，选择`Empty job` Template进行构建，创建好后，将Release Pipeline名字更改为`devopsdemo01-CD`
+
+2. 添加Artifacts，并Enable continuous deployment配置
+
+Artifacts的配置如下，主要是为后面Release Pipeline中的Tasks提供执行文件的支持
+
+![](./Media/devops/x23.png)
+
+为Artifacts Enable Continuous Delivery选项
+
+![](./Media/devops/x24.png)
+
+3. 添加 Task `Deploy out demo services to AKS`
+
+点击`Agent Job`右侧的`+`，选择 Task `Deploy to Kubernetes`，将为此实验写好的YAML，部署到AKS中，YAML中包括了实验中希望创建的服务，Task配置如下：
+ 
+![](./Media/devops/x25.png)
+![](./Media/devops/x26.png)
+![](./Media/devops/x27.png)
+ 
+配置好后，可以手动触发Release，进行验证。点击右上角`+Release`，选择`Create Release`，进行触发
+
+![](./Media/devops/x28.png)
+
+可以看到，Release Pipeline已经可以正常运行。
+
+4. 验证AKS集群中，实验中涉及到的服务的创建状况
+
+获取AKS的Credentials信息
+
+` az aks get-credentials -n zjaksdemo01 -g zjdemo01 `
+
+查看集群中创建的Pod资源
+
+` kubectl get pod `
+
+![](./Media/devops/x29.png)
+
+这里发现，实际运行服务的Pod并没有创建成功，通过查询可以看到，失败原因主要是因为容器镜像无法正确下载，容器镜像名称并非我们上传到ACR的名字。
+
+` kubectl describe pod azure-vote-front-b56b4686b-7lwt8 `
+
+![](./Media/devops/x30.png)
+
+#### 修复环境中目前的问题，模拟更新文件触发CI/CD
+
+1. 查看部署的文件`azure-vote-all-in-one-redis.yaml`，发现ACR的地址并未进行更改，使用的是个错误的ACR地址
+ 
+![](./Media/devops/x31.png)
+![](./Media/devops/x32.png)
+
+2. 将ACR的地址改为实际实验中创建的ACR地址，同时拉取ACR镜像需要Credentials信息，但部署文件中的`imagePullSecrets`信息并不准确，需要同时更新`imagePullSecrets`信息
+
+![](./Media/devops/x33.png)
+![](./Media/devops/x34.png)
+
+3. 更改文件后，会自动触发CI/CD的Pipeline，将更新后的信息部署到现有环境中，待Pipelines执行完成后，重新检验AKS环境中资源的创建情况：
+
+` kubectl get pod `
+
+![](./Media/devops/x35.png)
+
+这里发现，Pod `azure-vote-back-746d4bc54b-2h8md` 仍然处于failed状态，查看情况发现，是因为没有成功拉取到 Image `redis`。
+
+![](./Media/devops/x36.png)
+ 
+这个问题主要源于，国内对于 dockerhub 镜像的拉取会有些网络连接的问题，我们可以通过一些proxy进行帮助。
+
+4. 更改`azure-vote-all-in-one-redis.yaml`中，redis的Image地址，然后重新触发CI/CD Pipelines
+
+![](./Media/devops/x37.png)
+
+5. 待Pipeline运行完毕，重新检验AKS环境中资源的创建情况：
+
+` kubectl get pod `
+
+![](./Media/devops/x38.png)
+
+目测环境中一切正常，查询投票系统对外提供的服务信息并进行验证
+
+`kubectl get svc`
+
+![](./Media/devops/x39.png)
+
+访问 http:// 40.73.102.194，可以访问如下页面
+
+![](./Media/devops/x40.png)
+
+本次实验到此成功结束 ！
+
+---
+
+# 监控部分 - 基于开源的Prometheus&Grafana&EFK完成对集群的监控
+
+本次实验，将实现基于Prometheus & EFK，构建用于监控AKS容器化集群的开源监控方案。所有监控服务组件均以容器的方式运行在AKS集群中。本次环境所创建的环境资源，尽量使用命令行方式进行创建。
+
+本次实验的架构图如下所示：
+
+![](./Media/monitor/y01.png)
+
+### 实验环境资源准备
+
+#### 构建AKS集群
+
+1. 创建资源组`zjdemo01`，并创建AKS集群`zjaksdemo01`
+
+```
+# 创建资源组 zjdemo01
+az group create -n zjdemo01 -l chinaeast2
+
+# 创建AKS集群 zjaksdemo01
+az aks create -n zjaksdemo01 -g zjdemo01 --node-vm-size Standard_DS2_v2 --node-count 2 --kubernetes-version 1.12.6 --disable-rbac
+```
+
+2. 连接到创建的AKS集群`zjaksdemo01`，验证集群可用
+
+```
+# 下载AKS连接Credentials信息，并保存在.kube/config文件中
+az aks get-credentials -n zjaksdemo01 -g zjdemo01
+
+# 查看集群信息，及Node状态，确保集群可用
+kubectl cluster-info
+kubectl get nodes
+```
+
+![](./Media/monitor/y02.png)
+
+#### 安装并配置Helm
+
+Helm作为一款流行的容器包管理工具，可以方便的对部署在Kubernetes集群中的各项资源进行打包管理。本次实验，将通过Helm进行Prometheus & EFK & Grafana的安装。
+
+1. 安装 Helm
+
+__**注意**__ 建议通过指定的镜像连接，在中国区进行Helm的安装，本次实验用到的Helm版本为2.11.0。
+
+```
+VER=v2.11.0
+wget https://mirror.azure.cn/kubernetes/helm/helm-$VER-linux-amd64.tar.gz
+tar -zxvf helm-v2.11.0-linux-amd64.tar.gz
+sudo mv linux-amd64/helm /usr/local/bin
+# 由于网络的限制，以将部分Repo的访问地址替换成可达的Proxy地址，并添加中国区可用的Mirror Repo
+sudo helm init --tiller-image gcr.azk8s.cn/kubernetes-helm/tiller:$VER --stable-repo-url https://mirror.azure.cn/kubernetes/charts/
+```
+
+![](./Media/monitor/y03.png)
+
+2. 查看可用的Helm Repo，并验证Helm环境可用
+
+查看可用的Helm Repo
+
+`helm repo list`
+
+![](./Media/monitor/y04.png)
+
+通过Helm，安装Redis，来确保环境可用
+
+```
+# 搜索可用的Redis
+helm search redis
+# 通过Helm安装Redis
+helm install mc/redis
+```
+
+![](./Media/monitor/y05.png)
+
+可以看到，通过Helm，部署了Service，Deployment，StatefulSet，Secret，ConfigMap等资源，通过kubectl命令，我们可以查看到部署的资源，以下命令将列出构建的Service及StatefulSet。
+
+```
+# 列出环境中部署的Helm资源
+helm list
+helm status -n joyous-umbrellabird
+```
+
+![](./Media/monitor/y06.png)
+ 
+```
+# 查看Kubernetes中的Service资源
+kubectl get svc joyous-umbrellabird-redis-master
+# 查看Kubernetes中的StatefulSet资源
+kubectl get statefulset joyous-umbrellabird-redis-master
+```
+
+![](./Media/monitor/y07.png)
+
+#### 实验所需的部署文件
+
+1. 实验所需的资源都以包含在此Repo中
+
+- [prometheus.yml](./Files/Monitor/prometheus.yml)
+- [prometheus-deploy.yml](./Files/Monitor/prometheus-deploy.yml)
+- [demo-rbac.yml](./Files/Monitor/demo-rbac.yml)
+
+### 安装 Prometheus & Grafana & EFK
+
+#### 安装 Prometheus
+
+Prometheus是目前开源世界非常流行的一种容器监控软件，原生支持Kubernetes，与Kubelet进行了无缝的整合，主要用于收集Metrics信息。本次实验，将通过Helm，部署Prometheus到AKS集群，并配置相应的环境监控。
+
+1. 为监控部分的容器创建独立的Namespace `monitoring`
+
+`kubectl create namespace monitoring`
+
+![](./Media/monitor/y08.png)
+
+2. 创建ConfigMap
+
+此ConfigMap为Prometheus Server的配置文件，记录了Prometheus用于监控容器环境的Metric Endpoint信息，将会在创建Prometheus容器时，挂载到对应的配置文件路径。
+
+创建 ConfigMap `Prometheus-config`
+
+` kubectl create configmap prometheus-config --from-file ./prometheus.yml -n monitoring`
+ 
+![](./Media/monitor/y09.png)
+
+3. 部署Prometheus Server
+
+本次部署将通过预先写好的Deployment YAML进行。本次部署将创建名为`prometheus-deployment` Deployment，创建名为`prometheus-server` Service。
+
+` kubectl apply -f ./prometheus-deploy.yml `
+
+![](./Media/monitor/y10.png)
+
+4. 验证Prometheus Server正常运行
+
+我们通过创建的Service对外暴露出来的公共IP及对应的端口，对Prometheus进行访问。可以看到，Prometheus Server运行正常。
+
+![](./Media/monitor/y11.png)
+
+当我们检查监测的Targets（点击Status - Targets）时，我们发现，其中两个Target `kube-state-metrics`及`node-exporter`并未正常监控，这主要是因为，我们目前并没有安装对应的容器程序来收集监控信息。Prometheus支持非常多的扩展程序，帮助用户收集不同种类的Metrics信息。
+
+![](./Media/monitor/y12.png)
+
+5. 安装 Node Exporter
+
+本次实验，将通过Helm安装Node Exporter。Node Exporter主要用来集群中Working Nodes的Hardware，OS的Metrics。Helm将会以DaemonSet的方式，部署Node Exporter容器，确保每个可用的Working Nodes都有Node Exporter容器运行。
+
+```
+# 手工添加需要的Role及RoleBinding，由于创建集群时，disable了RBAC，但Helm创建Node exporter时需要使用，所以需要手工创建
+kubectl apply -f ./demo-rbac.yml
+
+# 创建RBAC过程中，同时创建了Service Account tiller，需要通过此Service Account重新初始化Helm
+helm init --tiller-image gcr.azk8s.cn/kubernetes-helm/tiller:v2.11.0 --stable-repo-url https://mirror.azure.cn/kubernetes/charts/ --service-account tiller –upgrade
+
+# Update Helm Repo
+helm repo update
+
+# 创建 Node exporter
+helm install --name node-exporter mc/prometheus-node-exporter --namespace monitoring
+```
+
+![](./Media/monitor/y13.png)
+![](./Media/monitor/y14.png)
+![](./Media/monitor/y15.png)
+ 
+刷新Prometheus Server页面，你会发现，Targets `node-exporter`已经可用
+
+![](./Media/monitor/y16.png)
+
+6. 安装 `kube-state-metrics`
+
+`kube-state-metrics`是一款开源的工具，社区已经准备好了相对应的部署脚本，可以通过下载Git Repo，并通过相应的部署文件进行安装。
+
+```
+# 下载 “kube-state-metrics”
+git clone https://github.com/kubernetes/kube-state-metrics.git
+
+# 由于 k8s.gcr.io & quay.io 没有办法直接访问，需要替换成 mirror的镜像地址 gcr.azk8s.cn/google_containers/ & quay.azk8s.cn，需要通过修改文件 ./kube-state-metrics/kubernetes/kube-state-metrics-deployment.yaml，此步骤需要有学员自己完成
+vim ./kube-state-metrics/kubernetes/kube-state-metrics-deployment.yaml
+
+# 部署 “kube-state-metrics”
+kubectl apply -f kube-state-metrics/kubernetes/
+```
+
+![](./Media/monitor/y17.png) 
+
+刷新 Prometheus Servers界面，你会发现，所有Targets均可用
+
+![](./Media/monitor/y18.png)
+![](./Media/monitor/y19.png)  
+ 
+
+#### 安装 Grafana
+
+在实际应用中，用户普遍会选择Grafana与Prometheus进行搭配，将Prometheus收集到的数据更为友好的呈现给终端用户。本次实验将带大家实践如何通过Helm安装Grafana，并构建集群信息的大屏。
+
+1. 通过Helm，安装Grafana
+
+`helm install --name grafana mc/grafana --set service.type=LoadBalancer --set sidecar.datasources.enabled=true --set sidecar.dashboards.enabled=true --set sidecar.datasources.label=grafana_datasource --set sidecar.dashboards.label=grafana_dashboard --namespace monitoring`
+
+2. 部署完成后，获取Grafana对外暴露的Service地址，及Credential，用户名默认为`admin`
+
+```
+# 获取Grafana Service的对外访问地址
+kubectl get svc grafana -n monitoring
+
+# 获取 Grafana的登陆密码
+kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+
+![](./Media/monitor/y20.png)
+![](./Media/monitor/y21.png) 
+
+3. 配置 Prometheus Data Source
+
+Grafana是通过支持的Data Source，获取Metrics的数据。点击`Add data source`，添加相对应的Prometheus连接信息。
+
+![](./Media/monitor/y22.png) 
+
+4. 配置用于监视AKS集群状态的可视化大屏
+
+Grafana 除了可以自定义大家需要的Dashboard之外，Grafana 社区有很多大家分享的比较漂亮的模板，大家可以挑选自己喜欢的模板，并进行二次更改。本次实验将使用Grafana社区提供的两个模板`K8s Cluster Summary`&`Node Exporter Server Metrics`构建大屏。
+
+回到`Home`页，点击左下角的`？`，选择`Community site`，跳转到Grafana Community，然后点击`Dashboards`，通过左下角的`Seach within this list`，查看两个模板的编号。经查询可以确认，模板`K8s Cluster Summary`的编号为8685，模板`Node Exporter Server Metrics`的编号为405。
+ 
+![](./Media/monitor/y23.png)
+![](./Media/monitor/y24.png) 
+
+回到Grafana ，点击左侧`Dashboards`，选择`Manage`，点击`Import`，分别输入两个模板的编号，导入模板
+
+![](./Media/monitor/y25.png) 
+
+5. 验证大屏的可用性
+
+我们可以借助于两个Dashboard，了解集群中的使用情况
+
+![](./Media/monitor/y26.png)
+![](./Media/monitor/y27.png) 
+ 
+### 安装 EFK
+
+Prometheus主要是针对于Metrics进行收集，EFK（Elasticsearch & Fluent & Kibana）主要是针对于Logs进行收集。本次实验，将通过Helm，创建基于EFK的日志汇集查询系统。
+
+1. 配置 EFK 所使用的Helm repo
+
+```
+# 目前社区有一种流行的方式，即通过Operator的方式对有状态的服务进行集群的创建，EFK同样有相对应的Operator，将通过Helm，完成EFK Operator的安装
+helm repo add akomljen-charts https://raw.githubusercontent.com/komljen/helm-charts/master/charts/
+
+# 为EFK 创建单独的namespace
+kubectl create namespace logging
+
+# 安装 EFK Operator
+helm install --name es-operator --namespace logging akomljen-charts/elasticsearch-operator
+
+# 验证 EFK Operator 是否已经部署完成
+kubectl get deploy -n logging
+```
+
+![](./Media/monitor/y28.png)
+![](./Media/monitor/y29.png) 
+
+2. 安装 EFK
+
+` helm install --name efk --namespace logging akomljen-charts/efk `
+
+![](./Media/monitor/y30.png) 
+
+3. 验证部署是否完成，并调整Kibana Service的访问方式
+
+Kibana是整个日志系统的查询Dashboard，而Helm Chart默认创建的Service Type为ClusterIP，需要将ClusterIP更改为LoadBalancer，从而拿到一个可访问的公网IP，方便实验的验证。
+
+```
+# 确保资源已经部署完成
+kubectl get deploy -n logging
+
+# 检查 Kibana Service的类型，并将类型更改为LoadBalancer
+kubectl get svc efk-kibana -n logging
+kubectl edit svc efk-kibana -n logging
+kubectl get svc efk-kibana -n logging
+```
+ 
+![](./Media/monitor/y31.png)
+![](./Media/monitor/y32.png) 
+![](./Media/monitor/y33.png)
+![](./Media/monitor/y34.png) 
+ 
+4. 验证Kibana是否工作正常
+
+登陆 Kibana页面
+
+![](./Media/monitor/y35.png) 
+
+点击`Discover`，可以看到，集群中的Log信息已经可以在Kibana中获得。
+ 
+![](./Media/monitor/y36.png) 
+
+---
+
+# 监控部分 - 基于Azure Monitor完成对AKS集群的监控
+
+本次实验，将通过Azure Monitor，完成对于AKS集群的端到端监控。 将借用 `Metrics` & `Log Analytics`，定制化仪表盘，来展现集群的使用情况。
+
+### 前期准备
+
+1. 准备好用于实验的AKS集群，并配置好Helm环境;
+
+2. Enable AKS 集群的监控
+
+`az aks enable-addons -a monitoring --workspace-resource-id $your_log_analytics_workspace_resourceid -n $your_clustername -g $your_rg`
+
+3. 通过 Helm 创建 Redis 作为实验数据
+
+```
+# 获取AKS集群连接信息，本次实验集群名称为 zjaksdemo01, 资源组名称为 zjdemo01
+az aks get-credentials -n zjaksdemo01 -g zjdemo01
+
+# 列出可用的Redis Charts
+helm search redis
+
+# 安装 Redis
+helm install mc/redis --namespace demo-monitor
+```
+
+__**注意**__ 如果针对新创建的集群开启容器监控服务
+
+- 通过 Azure Portal， 创建名为 `zjdemolog01` 的 Log Analytics Workspace
+
+![](./Media/monitor/createloganalytics.JPG)
+
+- 获取 Log Analytics Workspace 的ResourceID
+
+`az resource show -g zjaks01 -n zjdemolog01 --namespace Microsoft.OperationalInsights --resource-type workspaces | jq -r .id`
+
+- 在创建AKS集群过程中 Enable 容器监控
+
+`az aks create -n zjaks02 -g zjaks01 --node-count 1 --enable-addons monitoring --workspace-resource-id  $your_log_analytics_workspace_resourceid --disable-rbac`
+
+### 通过Azure Monitor查看集群信息 & 通过 Log Analytics查看容器的日志信息
+
+Azure Monitor是原生的Azure监控服务，目前支持对AKS集群的监控，通过Azure Monitor，可以看到当前集群的各类监控信息，包括Node节点的CPU & Memory负载，Pod & Container的配置及运行情况。
+
+进入AKS集群实例 `zjaksdemo01`， 点击 `Monitoring - Insights`，将可以看到集群中的使用信息
+
+可以查看到目前集群中节点的健康状况，资源使用情况，并可 Drill down查看目前节点中运行的所有Controllers & Container的信息； 右侧详细描述了节点的配置信息
+
+![](./Media/monitor/monitor01.JPG)
+
+可以查看到集群中运行的所有容器的信息，健康状况，资源使用情况，所属Pod等信息
+
+![](./Media/monitor/monitor02.JPG)
+
+点击 `Monitoring - Logs`, 将进入Log Analytics Workspace页面，通过不同的查询语句，可以查看集群中收集到的Log信息
+
+```
+# 本次实验 Example 查询语句，将查看一天内的容器的日志信息
+let startTimestamp = ago(1d);
+KubePodInventory
+    | where TimeGenerated > startTimestamp
+    | where ClusterName =~ "zjaks02"
+    | distinct ContainerID
+| join
+(
+  ContainerLog
+  | where TimeGenerated > startTimestamp
+)
+on ContainerID
+  | project LogEntrySource, LogEntry, TimeGenerated, Computer, Image, Name, ContainerID
+  | order by TimeGenerated desc
+  | render table
+```
+
+![](./Media/monitor/monitor03.JPG)
