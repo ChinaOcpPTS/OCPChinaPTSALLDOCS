@@ -661,7 +661,7 @@ kubectl get svc efk-kibana -n logging
 
 ---
 
-# 监控部分 - 基于开源的Prometheus&Grafana&EFK完成对集群的监控
+# 监控部分 - 基于Azure Monitor完成对AKS集群的监控
 
 本次实验，将通过Azure Monitor，完成对于AKS集群的端到端监控。 将借用 `Metrics` & `Log Analytics`，定制化仪表盘，来展现集群的使用情况。
 
