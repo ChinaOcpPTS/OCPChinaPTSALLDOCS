@@ -658,3 +658,80 @@ kubectl get svc efk-kibana -n logging
 点击`Discover`，可以看到，集群中的Log信息已经可以在Kibana中获得。
  
 ![](./Media/monitor/y36.png) 
+
+---
+
+# 监控部分 - 基于开源的Prometheus&Grafana&EFK完成对集群的监控
+
+本次实验，将通过Azure Monitor，完成对于AKS集群的端到端监控。 将借用 `Metrics` & `Log Analytics`，定制化仪表盘，来展现集群的使用情况。
+
+### 前期准备
+
+1. 准备好用于实验的AKS集群，并配置好Helm环境;
+
+2. Enable AKS 集群的监控
+
+`az aks enable-addons -a monitoring --workspace-resource-id $your_log_analytics_workspace_resourceid -n $your_clustername -g $your_rg`
+
+3. 通过 Helm 创建 Redis 作为实验数据
+
+```
+# 获取AKS集群连接信息，本次实验集群名称为 zjaksdemo01, 资源组名称为 zjdemo01
+az aks get-credentials -n zjaksdemo01 -g zjdemo01
+
+# 列出可用的Redis Charts
+helm search redis
+
+# 安装 Redis
+helm install mc/redis --namespace demo-monitor
+```
+
+__**注意**__ 如果针对新创建的集群开启容器监控服务
+
+- 通过 Azure Portal， 创建名为 `zjdemolog01` 的 Log Analytics Workspace
+
+![](./Media/monitor/createloganalytics.JPG)
+
+- 获取 Log Analytics Workspace 的ResourceID
+
+`az resource show -g zjaks01 -n zjdemolog01 --namespace Microsoft.OperationalInsights --resource-type workspaces | jq -r .id`
+
+- 在创建AKS集群过程中 Enable 容器监控
+
+`az aks create -n zjaks02 -g zjaks01 --node-count 1 --enable-addons monitoring --workspace-resource-id  $your_log_analytics_workspace_resourceid --disable-rbac`
+
+### 通过Azure Monitor查看集群信息 & 通过 Log Analytics查看容器的日志信息
+
+Azure Monitor是原生的Azure监控服务，目前支持对AKS集群的监控，通过Azure Monitor，可以看到当前集群的各类监控信息，包括Node节点的CPU & Memory负载，Pod & Container的配置及运行情况。
+
+进入AKS集群实例 `zjaksdemo01`， 点击 `Monitoring - Insights`，将可以看到集群中的使用信息
+
+可以查看到目前集群中节点的健康状况，资源使用情况，并可 Drill down查看目前节点中运行的所有Controllers & Container的信息； 右侧详细描述了节点的配置信息
+
+![](./Media/monitor/monitor01.JPG)
+
+可以查看到集群中运行的所有容器的信息，健康状况，资源使用情况，所属Pod等信息
+
+![](./Media/monitor/monitor02.JPG)
+
+点击 `Monitoring - Logs`, 将进入Log Analytics Workspace页面，通过不同的查询语句，可以查看集群中收集到的Log信息
+
+```
+# 本次实验 Example 查询语句，将查看一天内的容器的日志信息
+let startTimestamp = ago(1d);
+KubePodInventory
+    | where TimeGenerated > startTimestamp
+    | where ClusterName =~ "zjaks02"
+    | distinct ContainerID
+| join
+(
+  ContainerLog
+  | where TimeGenerated > startTimestamp
+)
+on ContainerID
+  | project LogEntrySource, LogEntry, TimeGenerated, Computer, Image, Name, ContainerID
+  | order by TimeGenerated desc
+  | render table
+```
+
+![](./Media/monitor/monitor03.JPG)
