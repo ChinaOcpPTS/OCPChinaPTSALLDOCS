@@ -132,7 +132,7 @@
 
 ---
 
-# ** DevOps部分 ** #
+# DevOps部分
 
 本次实验，将实现应用容器化的CI/CD流程，通过预先写好的Dockerfile，结合Azure DevOps，自动化Build容器化镜像，将容器化镜像发布到私有ACR中，并将容器镜像部署到AKS集群中。
 
