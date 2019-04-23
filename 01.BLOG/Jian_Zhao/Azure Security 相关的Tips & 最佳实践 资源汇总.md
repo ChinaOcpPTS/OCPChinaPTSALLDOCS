@@ -1,12 +1,12 @@
 这篇文档不是原创，只是基于Azure官网上的Doc进行了相关链接的整理，从简单层面的安全设置，到更高层面的安全架构考量，以及Azure安全的白皮书及最佳实践，送给需要的你们，定有一款适合你！
 
-做好数据的备份
+# 做好数据的备份
 
-    为了确保数据的安全，尽量减少RPO，合理的规划数据的备份是非常必要的。目前在Azure中，针对虚机资源，包括虚机用到的数据磁盘，有如下几种备份方式：
+为了确保数据的安全，尽量减少RPO，合理的规划数据的备份是非常必要的。目前在Azure中，针对虚机资源，包括虚机用到的数据磁盘，有如下几种备份方式：
 
-Azure 备份
+## Azure 备份
 
-    若要备份运行生产工作负荷的 Azure VM，请使用 Azure 备份。 Azure 备份对 Windows 和Linux VM 均支持应用程序一致性备份。 Azure 备份可创建恢复点，这些恢复点存储在异地冗余的恢复保管库中。从恢复点还原时，可以还原整个 VM，也可以仅还原特定的文件。
+若要备份运行生产工作负荷的 Azure VM，请使用 Azure 备份。 Azure 备份对 Windows 和Linux VM 均支持应用程序一致性备份。 Azure 备份可创建恢复点，这些恢复点存储在异地冗余的恢复保管库中。从恢复点还原时，可以还原整个 VM，也可以仅还原特定的文件。
 
 教程：在 Azure 中备份和还原 Linux 虚拟机的文件 - https://docs.azure.cn/zh-cn/virtual-machines/linux/tutorial-backup-vms
 
@@ -14,17 +14,17 @@ Azure 备份
 
  
 
-Azure Site Recovery
+## Azure Site Recovery
 
-    当整个区域因重大自然灾难或大规模服务中断而发生中断时，Azure Site Recovery 可以保护 VM，使其免受重大灾难影响。
+当整个区域因重大自然灾难或大规模服务中断而发生中断时，Azure Site Recovery 可以保护 VM，使其免受重大灾难影响。
 
 教程：将 Azure VM 复制到另一个 Azure 区域 - https://docs.azure.cn/zh-cn/site-recovery/azure-to-azure-quickstart
 
  
 
-托管快照
+## 托管快照
 
-    在开发和测试环境中，快照为使用托管磁盘的 VM 备份提供快速而又简单的选项。 托管快照是托管磁盘的只读完整副本。 快照独立于源磁盘而存在，并可用来新建用于重建 VM 的托管磁盘。 基于磁盘的已使用部分对快照进行计费。
+在开发和测试环境中，快照为使用托管磁盘的 VM 备份提供快速而又简单的选项。 托管快照是托管磁盘的只读完整副本。 快照独立于源磁盘而存在，并可用来新建用于重建 VM 的托管磁盘。 基于磁盘的已使用部分对快照进行计费。
 
 教程：使用 Windows 中的快照创建作为托管磁盘存储的 VHD 的副本 -https://docs.azure.cn/zh-cn/virtual-machines/windows/snapshot-copy-managed-disk
 
@@ -38,9 +38,9 @@ Azure Site Recovery
 
  
 
-安全加固虚机资源
+# 安全加固虚机资源
 
-    虚机目前还是云计算用户最常用的资源，保护好虚机的安全，也就确保了业务的稳定，Azure在针对Windows虚机，Linux虚机都提供了安全方面的最佳实践及建议，以及相应的Extension来保护你的虚机安全。
+虚机目前还是云计算用户最常用的资源，保护好虚机的安全，也就确保了业务的稳定，Azure在针对Windows虚机，Linux虚机都提供了安全方面的最佳实践及建议，以及相应的Extension来保护你的虚机安全。
 
 教程：适用于 Azure 云服务和虚拟机的 Microsoft 反恶意软件 - https://docs.azure.cn/zh-cn/security/azure-security-antimalware
 
@@ -60,9 +60,9 @@ Azure Site Recovery
 
  
 
-合理的规划网络安全性
+# 合理的规划网络安全性
 
-    网络是访问公有云资源的方式，合理的规划云端应用的网络结构，严格限制进出站流量的访问能力，尽可能将数据网络与管理网络分离，以提高云上资源的安全性。
+网络是访问公有云资源的方式，合理的规划云端应用的网络结构，严格限制进出站流量的访问能力，尽可能将数据网络与管理网络分离，以提高云上资源的安全性。
 
 教程：禁用对 Azure 虚拟机的 RDP/SSH 访问 - https://docs.azure.cn/zh-cn/security/azure-security-network-security-best-practices#%E7%A6%81%E7%94%A8%E5%AF%B9-azure-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84-rdpssh-%E8%AE%BF%E9%97%AE
 
@@ -80,9 +80,9 @@ Azure Site Recovery
 
  
 
-开启诊断日志来收集更多的信息
+# 开启诊断日志来收集更多的信息
 
-    Azure监控提供了包括Metrics及日志来帮助用户监控云端资源的使用情况，并可结合第三方的工具对日志进行更为具体的分析。目前针对Azure中提供的日志，主要包括活动日志和诊断日志，如果用户对于使用的服务有更多日志的需求，建议开启诊断日志，以收取更多的日志信息，以便日后分析需要。
+Azure监控提供了包括Metrics及日志来帮助用户监控云端资源的使用情况，并可结合第三方的工具对日志进行更为具体的分析。目前针对Azure中提供的日志，主要包括活动日志和诊断日志，如果用户对于使用的服务有更多日志的需求，建议开启诊断日志，以收取更多的日志信息，以便日后分析需要。
 
 教程：通过Azure Monitor，开启不同资源的诊断日志 - https://docs.azure.cn/zh-cn/monitoring-and-diagnostics/monitoring-overview-of-diagnostic-logs#enable-collection-of-resource-diagnostic-logs-in-the-portal
 
@@ -92,9 +92,9 @@ Azure Site Recovery
 
 
 
-制定相应的策略和规则
+# 制定相应的策略和规则
 
-    Azure管理员可以借助Azure Policy，通过制定并执行强制的各种规定规则，以尽量减少资源使用过程中误操作带来的风险。
+Azure管理员可以借助Azure Policy，通过制定并执行强制的各种规定规则，以尽量减少资源使用过程中误操作带来的风险。
 
 教程：Azure策略概述 - https://docs.azure.cn/zh-cn/azure-policy/azure-policy-introduction
 
