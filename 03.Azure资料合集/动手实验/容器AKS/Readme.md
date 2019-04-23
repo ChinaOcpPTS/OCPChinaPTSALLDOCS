@@ -129,3 +129,238 @@
 
     kubectl delete pods mypod
     kubectl delete pvc azure-managed-disk
+
+---
+
+# ** DevOps部分 ** #
+
+本次实验，将实现应用容器化的CI/CD流程，通过预先写好的Dockerfile，结合Azure DevOps，自动化Build容器化镜像，将容器化镜像发布到私有ACR中，并将容器镜像部署到AKS集群中。
+
+本次实验的程序为一个在线投票系统，具体架构图如下：
+
+![](./Media/devops/x01.png)
+
+系统共有三部分组成：
+- 前端Web Application ：使用Python开发；
+- 应用服务 Calculator microservice ：使用Java开发；
+- 缓存服务 Cache microservice ：使用 Redis 实现；
+
+本次实验所使用的 [Github Repo](https://github.com/ericzhao0821/python-voting-web-app) 
+ 
+本次实验Azure资源创建部分，尽量使用 `Azure CLI` ； Azure DevOps部分，将会使用 `DevOps Portal`进行创建。
+
+### 创建实验所需资源
+
+#### 创建Azure DevOps的Organization & Project
+
+Azure DevOps的Dashboard请参照 <https://dev.azure.com> ，请使用相应的`Global Azure`账户进行登陆。
+
+1. 创建Organization `zjdevopsdemo01`
+
+![](./Media/devops/x02.png)
+
+2. 创建 Project `devopsdemo01`
+
+![](./Media/devops/x03.png)
+
+3. 将实验中所使用的Github Repo克隆至Azure Repos
+
+Azure DevOps中也会提供代码管理功能，即服务 `Azure Repos`。本次实验，所有代码的修改，都将通过Azure Repos进行，Azure Repos也支持Git的操作方式，可以通过本地客户端，连接Azure Repos，并使用熟悉的Git命令进行操作。
+
+点击 `Repos`，选择 `Import`，来导入实验用到的Github项目
+
+![](./Media/devops/x04.png)
+
+可以看到，导入的项目内容如下：
+
+![](./Media/devops/x05.png)
+
+#### 配置Azure DevOps，连接Azure China
+
+由于目前Azure DevOps服务是由Global Azure提供，但提供对于Azure China的支持，即可以使用Global Azure的Azure DevOps来构建基于Azure China资源的自动化运维解决方案。 如果需要Azure DevOps与Azure China资源进行连接，需要进行手动的配置。
+
+1. 创建 Service Principal
+
+`az ad sp create-for-rbac -n "zjdevopssp01" --role contributor`
+
+![](./Media/devops/x06.png)
+
+2. 建立针对于Azure China的Endpoint，并创建连接
+
+进入Project `devopsdemo01`，点击`Project Settings`，选择`Pipelines - Service connections`，点击`New service connection`，选择`Azure Resource Manager`
+
+![](./Media/devops/x07.png)
+
+点击`use the full version of the service connection dialog`，创建`Azure China Cloud`，并填写相对应的Service Principal，点击`Verify connection`，确保连接成功。
+
+![](./Media/devops/x08.png)
+
+#### 创建实验所需的Azure资源
+
+1. 创建 Resource Group `zjdemo01`
+
+`az group create -n zjdemo01 -l chinaeast2`
+
+![](./Media/devops/x09.png)
+
+2. 创建Azure Kubernetes Service集群 `zjaksdemo01`
+
+`az aks create -n zjaksdemo01 -g zjdemo01 --node-vm-size Standard_DS2_v2 --node-count 2 --kubernetes-version 1.12.6 --disable-rbac`
+
+![](./Media/devops/x10.png)
+
+3. 创建 Azure Container Registry `zjacrdemo01`
+
+`az acr create -n zjacrdemo01 -g zjdemo01 --sku Standard --admin-enabled -l chinaeast2`
+ 
+![](./Media/devops/x11.png)
+
+### 通过 Azure DevOps，构建CI/CD Pipelines
+
+__**注意**__ 新版本Azure DevOps默认会开启YAML编辑页面，本次实验仍然以图形化界面为主，关闭YAML页面可通过如下操作：
+
+
+点击右上角的用户，选择`Preview features`，disable选项`New YAML pipeline creation experience`即可
+ 
+![](./Media/devops/x12.png)
+
+#### 构建 Builds Pipelines，通过Dockerfile，Build容器镜像，并上传到私有镜像仓库
+
+1. 选择`Pipelines -> Builds`，点击`New pipeline` 
+
+Source选择：选择前面导入的Azure Repos `devopsdemo01`
+ 
+![](./Media/devops/x13.png)
+
+Azure DevOps Pipelines提供了多种内置的模板供用户使用，本次实验，选取`Empty job`进行构建
+
+![](./Media/devops/x14.png)
+
+将创建好的Pipeline `devopsdemo01-CI`，Agent pool更改为`Hosted Ubuntu 1604`
+
+2. 添加 Task `Maven calculator-api/pom.xml`
+
+点击 `Agent job 1` 右侧的`+`，选择 Maven Task添加，Maven Task的作用主要将应用层计算服务的源码构建成可部署的Jar程序。Maven POM file，从Azure Repos `devopsdemo01/calculator-api/pom.xml`中选择，MavenTask的配置信息如下：
+
+![](./Media/devops/x15.png)
+
+3. 添加 Task `Build out demo images with Docker Compose`
+
+点击 `Agent job 1` 右侧的`+`，选择Docker Compose Task添加。Docker Compose Task的作用是通过写好的Docker Compose文件，构建出实验中需要的容器化镜像，Task的配置信息如下：
+ 
+![](./Media/devops/x16.png)
+![](./Media/devops/x17.png)
+
+4. 添加 Task `Push demo images to ACR`
+
+点击 `Agent job 1` 右侧的`+`，选择Docker Compose Task添加。Docker Compose Task的作用是将上一步构建好的两个容器镜像 `zjacrdemo01.azurecr.cn/azure-vote-front:latest`，`zjacrdemo01.azurecr.cn/azure-calculator-api:latest` 添加到ACR，Task的配置信息如下：
+
+![](./Media/devops/x18.png)
+![](./Media/devops/x19.png)
+ 
+添加完所有Task后，点击`Save & Queue`，手动触发Build的Pipeline，验证所有Tasks都达到预期
+
+![](./Media/devops/x20.png)
+![](./Media/devops/x21.png)
+ 
+可以看到，所有Tasks都已运行成功，并成功的将build好的images上传到了ACR中。
+
+5. Enable continuous integration
+
+通过Enable持续集成，后续当有代码更新，会自动触发此Build Pipeline，将更新后的代码打包成新的镜像，并上传到ACR
+
+![](./Media/devops/x22.png)
+
+#### 构建 Release Pipeline，将构建好的容器镜像，部署到AKS集群中
+
+1. 选择`Releases`，点击`New pipeline`，创建新的Release Pipeline，选择`Empty job` Template进行构建，创建好后，将Release Pipeline名字更改为`devopsdemo01-CD`
+
+2. 添加Artifacts，并Enable continuous deployment配置
+
+Artifacts的配置如下，主要是为后面Release Pipeline中的Tasks提供执行文件的支持
+
+![](./Media/devops/x23.png)
+
+为Artifacts Enable Continuous Delivery选项
+
+![](./Media/devops/x24.png)
+
+3. 添加 Task `Deploy out demo services to AKS`
+
+点击`Agent Job`右侧的`+`，选择 Task `Deploy to Kubernetes`，将为此实验写好的YAML，部署到AKS中，YAML中包括了实验中希望创建的服务，Task配置如下：
+ 
+![](./Media/devops/x25.png)
+![](./Media/devops/x26.png)
+![](./Media/devops/x27.png)
+ 
+配置好后，可以手动触发Release，进行验证。点击右上角`+Release`，选择`Create Release`，进行触发
+
+![](./Media/devops/x28.png)
+
+可以看到，Release Pipeline已经可以正常运行。
+
+4. 验证AKS集群中，实验中涉及到的服务的创建状况
+
+获取AKS的Credentials信息
+
+` az aks get-credentials -n zjaksdemo01 -g zjdemo01 `
+
+查看集群中创建的Pod资源
+
+` kubectl get pod `
+
+![](./Media/devops/x29.png)
+
+这里发现，实际运行服务的Pod并没有创建成功，通过查询可以看到，失败原因主要是因为容器镜像无法正确下载，容器镜像名称并非我们上传到ACR的名字。
+
+` kubectl describe pod azure-vote-front-b56b4686b-7lwt8 `
+
+![](./Media/devops/x30.png)
+
+#### 修复环境中目前的问题，模拟更新文件触发CI/CD
+
+1. 查看部署的文件`azure-vote-all-in-one-redis.yaml`，发现ACR的地址并未进行更改，使用的是个错误的ACR地址
+ 
+![](./Media/devops/x31.png)
+![](./Media/devops/x32.png)
+
+2. 将ACR的地址改为实际实验中创建的ACR地址，同时拉取ACR镜像需要Credentials信息，但部署文件中的`imagePullSecrets`信息并不准确，需要同时更新`imagePullSecrets`信息
+
+![](./Media/devops/x33.png)
+![](./Media/devops/x34.png)
+
+3. 更改文件后，会自动触发CI/CD的Pipeline，将更新后的信息部署到现有环境中，待Pipelines执行完成后，重新检验AKS环境中资源的创建情况：
+
+` kubectl get pod `
+
+![](./Media/devops/x35.png)
+
+这里发现，Pod `azure-vote-back-746d4bc54b-2h8md` 仍然处于failed状态，查看情况发现，是因为没有成功拉取到 Image `redis`。
+
+![](./Media/devops/x36.png)
+ 
+这个问题主要源于，国内对于 dockerhub 镜像的拉取会有些网络连接的问题，我们可以通过一些proxy进行帮助。
+
+4. 更改`azure-vote-all-in-one-redis.yaml`中，redis的Image地址，然后重新触发CI/CD Pipelines
+
+![](./Media/devops/x37.png)
+
+5. 待Pipeline运行完毕，重新检验AKS环境中资源的创建情况：
+
+` kubectl get pod `
+
+![](./Media/devops/x38.png)
+
+目测环境中一切正常，查询投票系统对外提供的服务信息并进行验证
+
+`kubectl get svc`
+
+![](./Media/devops/x39.png)
+
+访问 http:// 40.73.102.194，可以访问如下页面
+
+![](./Media/devops/x40.png)
+
+本次实验到此成功结束 ！
+
+---
