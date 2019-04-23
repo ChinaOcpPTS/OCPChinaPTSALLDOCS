@@ -2,12 +2,13 @@
 
 
 
-部署支持 VMSS 的ACS-Engine集群
+# 部署支持 VMSS 的ACS-Engine集群
 
 
 
 部署支持 VMSS 的ACS-Engine集群很简单，所使用的ACS-Engine模板请参照：
 
+```
 {
   "apiVersion": "vlabs",
   "location": "chinaeast2",
@@ -57,6 +58,7 @@
     }
   }
 }
+```
 
 接下来，按照官方步骤部署集群，请参照：
 
@@ -92,7 +94,7 @@ VMSS已经创建出来，且包含一个实例，正是目前正在运行的Kube
 
 ![image](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E9%80%9A%E8%BF%87VMSS%E5%BF%AB%E9%80%9F%E7%BC%A9%E6%94%BEACS%20Engine%E9%9B%86%E7%BE%A409.webp)
 
-实现原理
+# 实现原理
 
 
 
@@ -120,7 +122,7 @@ Cluster Autoscaler 结合 Azure VMSS，我们既可以从Kubernetes集群出发�
 
 
 
-参考资料：
+# 参考资料：
 
 ACS Engine : https://github.com/Azure/acs-engine
 
