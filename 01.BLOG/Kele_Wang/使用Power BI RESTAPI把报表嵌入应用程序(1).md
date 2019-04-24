@@ -119,5 +119,5 @@ Client Secret: 前面步骤5中创建的密钥
 ![images](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/%E4%BD%BF%E7%94%A8Power%20BI%20RESTAPI%E6%8A%8A%E6%8A%A5%E8%A1%A8%E5%B5%8C%E5%85%A5%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F(1)12.webp)
 
 # 参考资源
-https://docs.microsoft.com/zh-cn/azure/active-directory/develop/v1-protocols-oauth-code
+https://docs.microsoft.com/zh-cn/azure/active-directory/develop/v1-protocols-oauth-code <br>
 https://docs.microsoft.com/en-us/rest/api/power-bi/
