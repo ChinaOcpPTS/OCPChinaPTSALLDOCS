@@ -108,4 +108,4 @@ $AllNic | select @{Name="Vmname";Expression={$_["Vmname"]}},@{Name="Vmsize";Expr
 
 ![images](https://github.com/CohenLyon/OCPChinaPTSALLDOCS/blob/patch-1/01.BLOG/images/Azure%20ASM%E6%A8%A1%E5%BC%8F%E4%B8%8B%E8%8E%B7%E5%8F%96VM%E4%BF%A1%E6%81%AF%EF%BC%88%E4%B8%80%EF%BC%8901.png)
 
-如上图可以非常清晰的看到所有VM的信息，这对于IT运维会很方便，尤其是大客户几百台机器需要统计，这可以节省大量时间。当然也可以直接导出到csv文件，添加端口等信息，这个供大家参考。如何固定IP可以参考：https://www.cnblogs.com/wangsongshare/p/8329051.html
+3. 如上图可以非常清晰的看到所有VM的信息，这对于IT运维会很方便，尤其是大客户几百台机器需要统计，这可以节省大量时间。当然也可以直接导出到csv文件，添加端口等信息，这个供大家参考。如何固定IP可以参考：https://www.cnblogs.com/wangsongshare/p/8329051.html
