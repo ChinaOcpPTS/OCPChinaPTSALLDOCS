@@ -80,5 +80,3 @@
 1. Azure Managed Identities 概述：https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview
 
 2. Azure Managed Identities 虚拟机获取令牌详解：https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/how-to-use-vm-token
-
-好文要顶 关注我 收藏该文    
