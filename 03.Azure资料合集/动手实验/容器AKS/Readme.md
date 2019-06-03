@@ -1,3 +1,206 @@
+# **集群建立部分** #
+
+AKS集群的部署方式可以通过Portal，CLI，PS，ARM等，本实验采用ARM Template进行部署。ARM是一种声明式编程方式，不需要考虑过程，只要把最终状态描述清楚即可。
+
+部署需要的条件：
+
+a.Azure 账号一个
+
+b.sp(Service Principal)一个
+
+c.ARM需要的配置文件，parameters.json（包含ARM所需要的参数定义），template.json（模板文件）
+
+
+1.先创建sp,本实验使用密码认证
+(注：appId和passwod是parameters.json需要使用的；默认创建的sp权限是contributor)
+
+    az ad sp create-for-rbac --name azcnakssp01 --password MicroSoft1234!
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/1.png)
+
+2.查看对应的Principleid(注：principalId也是parameters.json需要使用的)
+
+    az role assignment list --assignee 1f045ca3-e822-4010-9a95-5a59be646a1a
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/2.png)
+
+3.配置需要的ARM Template文件，创建parameters.json，附上示例配置文件，/* --- */为注释；
+[<Parameters.json>](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/parameters.json)
+
+4.创建template.json，附上示例配置文件，/* --- */为注释；
+[<template.json>](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/template.json)
+
+5.部署集群：cd切换到对应目录下，执行命令
+
+    az group deployment create --name azcnaks01 --resource-group akshandson --template-file template.json --parameters @parameters.json
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/3.png)
+
+# **AKS常规操作** #
+1.AKS Dashboard,打开Azure CN Portal，点击“View Kubernetes dashboard”，如下图所示：
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/4.png)
+
+2.按照下图所示步骤进行安装：
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/5.png)
+
+3.执行最后一步后，会在本地启动一个http服务，监听8001端口，即为AKS Dashboard
+
+
+# **集群收缩** #
+
+## 第一部分：手动集群伸缩 ##
+手动伸缩：可以通过Portal或者CLI进行AKS集群worker nodes横向扩展，本实验采用Portal方式；修改之后要稍等3 ~ 5分钟才可以生效。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/6.png)
+
+## 第二部分：自动收缩集群 ##
+自动伸缩：autoscaling，目前还在preview阶段，Mooncake还未支持，不过目前已经在roadmap上了，本实验此部分选择使用新加坡Global账号做测试，旨在做功能性演示
+1.安装 aks-preview CLI 扩展
+
+    az extension add --name aks-preview
+
+2.注册规模集功能提供程序
+
+要创建使用规模集的 AKS，还必须在订阅上启用功能标志。 若要注册 VMSSPreview 功能标志，请使用 
+az feature register 命令，如以下示例所示：
+
+
+    az feature register --name VMSSPreview --namespace Microsoft.ContainerService
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/9.png)
+
+
+状态显示为“已注册”需要几分钟时间。 可以使用 az feature list 命令检查注册状态：
+
+    az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/VMSSPreview')].{Name:name,State:properties.state}"
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/10.png)
+
+准备就绪后，使用 az provider register 命令刷新 Microsoft.ContainerService 资源提供程序的注册状态：
+
+    az provider register --namespace Microsoft.ContainerService
+
+3.集群autocaling缩放；
+缩放的方式有2种，1是在创建的时候指定autocaler，2是在现有集群上update，本实验演示在现有AKS集群上如何启用autocaler；
+使用 az aks update 命令并选择 --enable-cluster-autoscaler，然后指定节点 --min-count 和 --max-count。 下面的示例在使用最少 3 个且最多 5 个节点的现有群集上启用群集自动缩放程序：
+
+    az aks update \
+      --resource-group myResourceGroup \
+      --name myAKSCluster \
+      --enable-cluster-autoscaler \
+      --min-count 3 \
+      --max-count 5
+如果最小节点计数大于群集中的现有节点数，则创建附加节点需要花费几分钟时间。
+
+
+# **AKS与AAD集成** #
+本实验介绍如何部署 AKS 和 Azure AD 的先决条件、部署支持 Azure AD 的集群以及在 AKS 集群中创建简单的 RBAC 角色。需要注意以下2点：
+1.只有在创建新的启用 RBAC 的集群时，才能启用 Azure AD。 不能在现有 AKS 群集上启用 Azure AD。
+2.不支持 Azure AD 中的来宾用户，例如，从其他目录使用联合登录。
+## 第一步：创建服务器应用程序 ##
+a.选择“Azure Active Directory” > “应用注册” > “新应用程序注册”，为应用程序命名，选择“Web 应用/API”作为应用程序类型，然后为“登录 URL”输入采用 URI 格式的任何值。 完成后，选择“创建”。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/11.png)
+
+b.	选择“清单”，将 groupMembershipClaims 值编辑为 "All"。完成后保存更新。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/12.png)
+
+c.	返回 Azure AD 应用程序，选择“设置” > “密钥”。添加密钥说明，选择过期截止时间，然后选择“保存”。 记下密钥值。 部署支持 Azure AD 的 AKS 群集时，此值称为 Server application secret。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/13.png)
+
+d.	返回 Azure AD 应用程序，选择“设置” > “所需的权限” > “添加” > “选择 API” > “Microsoft Graph” > “选择”。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/14.png)
+
+e.	在“应用程序权限”下，勾选“读取目录数据”。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/15.png)
+
+f.	在“委派权限”下，勾选“登录并读取用户个人资料”和“读取目录数据”。 完成后保存更新。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/16.png)
+
+g.	从 API 列表中选择“Microsoft Graph”，然后选择“授予权限”。 如果当前帐户不是租户管理员，此步骤将会失败。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/17.png)
+
+h.	成功授予权限后，门户中会显示以下通知：
+
+i.	返回应用程序并记下“应用程序 ID”。 部署支持 Azure AD 的 AKS 群集时，此值称为 Server application ID。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/18.png)
+
+## 第二步：创建客户端应用程序 ##
+使用 Kubernetes CLI (kubectl) 登录时，将使用第二个 Azure AD 应用程序。
+
+a.	选择“Azure Active Directory” > “应用注册” > “新建应用程序注册”。为应用程序命名，选择“本机”作为应用程序类型，然后为“重定向 URI”输入采用 URI 格式的任何值。 完成后，选择“创建”。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/19.png)
+
+b.	在 Azure AD 应用程序中，选择“设置” > “所需的权限” > “添加” > “选择API”，并搜索本文档最后一个步骤中创建的服务器应用程序的名称。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/20.png)
+
+c.	Dasdsa勾选该应用程序，并单击“选择”。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/21.png)
+
+d.	从列表中选择服务器 API，然后选择“授予权限”
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/22.png)
+
+e.	返回 AD 应用程序并记下“应用程序 ID”。 部署支持 Azure AD 的 AKS 群集时，此值称为 Client application ID。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/23.png)
+
+## 第三步：获取租户 ID ##
+最后，获取 Azure 租户的 ID。 部署 AKS 集群时，也要使用此值。在 Azure 门户中，选择“Azure Active Directory” > “属性”并记下“目录 ID”。 部署支持 Azure AD 的 AKS 群集时，此值称为 Tenant ID。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/24.png)
+
+## 第四步：创建集群 ##
+
+a.	使用 az group create 命令为 AKS 群集创建资源组。
+
+    az group create --name aksrg01 --location chinanorth2
+
+b.	使用 az aks create 命令部署群集。 请将以下示例命令中的值替换为创建 Azure AD 应用程序时收集的值。
+
+    az aks create \
+      --resource-group aksrg01 \
+      --name azcnaks01 \
+      --generate-ssh-keys \
+      --aad-server-app-id b1220521-94c5-4ffe-809e-9d1dbc06b449 \	/* aksaadserver01 app ID */
+      --aad-server-app-secret jJoj1mI3GgsGuM9LJiFoWb+bWpv6cspJeY5pP22xD04=\/* aksaadserver01 app secret */
+      --aad-client-app-id 3cca8007-1056-4957-99bf-29d004d9a872 \	/* aksaadclient01 app ID */
+      --aad-tenant-id b362ae96-4a99-473b-9b8d-134bb79ec909		/* tenant ID */
+    
+## 第五步：创建 RBAC 绑定 ##
+a.	首先，使用管理员访问权限，结合 --admin 参数运行 az aks get-credentials 命令登录到群集。
+
+    az aks get-credentials --resource-group aksrg01 --name azcnaks01 --admin
+
+b.	接下来，使用以下清单为 Azure AD 帐户创建 ClusterRoleBinding。 此示例向该帐户授予对群集所有命名空间的完全访问权限。获取objectId的所需的用户帐户使用az ad 用户显示命令。 提供所需的帐户的用户主体名称 (UPN):
+
+    az ad user show --upn-or-object-id azcnaks01@smsptsp.partner.onmschina.cn --query objectId -o tsv
+
+c.	创建一个文件（例如 rbac-aad-user.yaml），然后粘贴以下内容。 使用你在上一步中获得的 Azure AD 中的用户帐户的对象 ID 更新用户名称
+
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: contoso-cluster-admins
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+    - apiGroup: rbac.authorization.k8s.io
+      kind: User
+      name: "11d8fafc-4088-48a5-acd7-0994e1b92bc4"	/* 上一步得到的UPN */
+
+
+d.	使用 kubectl apply 命令应用绑定，如以下示例所示：
+
+    kubectl apply -f rbac-aad-user.yaml
+
+## 第五步：使用 Azure AD 访问群集 ##
+
+a.	接下来，使用 az aks get-credentials 命令提取非管理员用户的上下文。
+
+
+    az aks get-credentials --resource-group aksrg01 --name azcnaks01
+得到Merged "azcnaks01" as current context in /root/.kube/config返回结果代表成功
+
+b.	运行任何 kubectl 命令后，系统会提示在 Azure 上进行身份验证。 请遵照屏幕说明操作。
+
+    kubectl get nodes
+
+
+
+
 # **网络部分** #
 
 使用静态IP绑定负载均衡器部署容器服务
