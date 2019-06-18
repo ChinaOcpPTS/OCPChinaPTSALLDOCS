@@ -62,7 +62,7 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
 
     ![image](./images/monitor/mon04.png)
 
-    用户可以针对不同类别的Activity Log进行告警设置，及早知道环境中发生的变化；可参照 [收集和分析 Azure Monitor 的 Log Analytics 工作区中的 Azure 活动日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-log-collect)将活动日志配置到特定的Log Analytics workspace中，并依照存储建议对数据进行存档;
+    用户可以针对不同类别的Activity Log进行告警设置，及早知道环境中发生的变化；可参照 [收集和分析 Azure Monitor 的 Log Analytics 工作区中的 Azure 活动日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-log-collect)将活动日志配置到特定的Log Analytics workspace中，并依照存储建议对数据进行存档; 默认 Activity Log的保存期为90天。
   
   - Azure Service Health : 服务运行状况的数据实际上是存放在活动日志中，用户可以登陆到特定页面 `Monitor - Service Health` 中了解到包括近一段环境中出现的服务相关的问题及RCA报告，平台计划的Maintenance等，并可设置响应的告警，以便第一时间知道平台的哪个服务出了问题，详细介绍请参照 [使用 Azure 门户查看服务运行状况通知](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/service-notifications)
 
@@ -88,9 +88,76 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
 
 #### 环境准备
 
+Step 1
+
+本次实验，是从既有的其他实验中，选取了两个实验部署脚本，目的是尽可能多的cover到不同类型的Azure服务，例如：虚机，存储，网络，PaaS，容器等。关于如何部署实验环境，可以参照：
+
+- [Before the HOL - Security baseline on Azure](https://github.com/microsoft/MCW-Security-baseline-on-Azure/blob/master/Hands-on%20lab/Before%20the%20HOL%20-%20Security%20baseline%20on%20Azure.md)
+
+- [Tailwind Traders Website](https://github.com/Microsoft/TailwindTraders-Website)
+
+目前实验环境暂时支持 Global Azure 的部署，如果需要部署在 Azure Mooncake, 需要重新 consolidate 下现有的部署脚本。
+
+Step 2 准备 Ansible 环境
+
+```
+# 准备WSL或一台Linux虚机，例如：Ubuntu 16.04
+
+# 安装 Ansible on Ubuntu 16.04 with Azure Module
+sudo apt-get update && sudo apt-get install -y libssl-dev libffi-dev python-dev python-pip
+sudo pip install ansible[azure]
+
+# 创建 Azure Service Principle
+az ad sp create-for-rbac
+
+# 在当前目录创建文件 
+touch ~/.azure/credentials
+
+# 在文件中填入以下值
+[default]
+subscription_id=<your-subscription_id>
+client_id=<security-principal-appid>
+secret=<security-principal-password>
+tenant=<security-principal-tenant>
+```
+
+由于Ansible不是本次Handson的主要介绍内容，更多资料请参照：
+
+- [Using Ansible with Azure](https://docs.microsoft.com/en-us/azure/ansible/ansible-overview)
+
+- [Ansible中支持的Azure Module](https://docs.ansible.com/ansible/latest/modules/list_of_cloud_modules#azure)
+
+- [一些Azure相关的Ansible Playbook](https://github.com/Azure-Samples/ansible-playbooks)
+
+__*注意 ：*__ 使用Ansible是为了更好的对部署的资源进行管理，与模板分离；很多时候我们部署的模板都是一个，但变量的名称各不相同，通过Azure Ansible的vars，结合Ansible Playbook可以更好的协调 Azure ARM Template 及 部署资源之间的管理。
+
 #### Challenge 00 创建 `Initiative - 计划策略`来检验某一订阅下是否正确设置并打开了数据收集
 
 #### Chn01 规划创建使用的 Log Analytics workspace
+
+本次实验，将会通过 `ARM Template` 结合 `Ansible`部署出环境需要的 `Log Analytics workspace`.
+
+本次实验的规划思路为：
+
+- 订阅级别的 Activity Log 建议放在单独的 Log Analytics workspace 中
+
+- 订阅下的 Azure Resources，建议以 Project 为单位进行划分
+
+本次实验，将创建名为 `activityLogWS` & `projectOne` 的两个 workspace。
+
+所有Workspace的创建，均通过 Ansible Playbook，所有需要创建的 workspace，均定义在 [loganalytics.yml](./files/monitor/monitor-ansible/vars/loganalytics.yml), 例如：
+
+ ![image](./images/monitor/mon06.JPG)
+
+```
+# 进入 Ansible Playbook 目录
+cd ./files/monitor/monitor-ansible
+
+# 预先定义好要创建的workspace后，运行playbook
+ansible-playbook ./deploy-loganalytics.yml
+```
+
+参考资料 : [使用 Azure CLI 2.0 创建 Log Analytics 工作区](https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/quick-create-workspace-cli)
 
 #### Challenge 01 配置将 Activity Log 发送至 Log Analytics workspace
 
@@ -144,3 +211,14 @@ DevOps Pipelines 中的 Continus Monitor
 - [Cloud Governance Tools及需求mapping](https://azure.microsoft.com/en-gb/product-categories/management-tools/)
 
 ---
+
+
+
+{
+  "appId": "3bbcad52-5b8d-4093-b392-d5a11c25fe4a",
+  "displayName": "azure-cli-2019-06-17-08-27-07",
+  "name": "http://azure-cli-2019-06-17-08-27-07",
+  "password": "3395c6ab-3547-408c-80ba-24c33333dcc0",
+  "tenant": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+}
+sysadm
