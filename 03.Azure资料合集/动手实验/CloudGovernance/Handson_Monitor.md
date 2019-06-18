@@ -63,7 +63,12 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
     ![image](./images/monitor/mon04.png)
 
     用户可以针对不同类别的Activity Log进行告警设置，及早知道环境中发生的变化；可参照 [收集和分析 Azure Monitor 的 Log Analytics 工作区中的 Azure 活动日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-log-collect)将活动日志配置到特定的Log Analytics workspace中，并依照存储建议对数据进行存档; 默认 Activity Log的保存期为90天。
-  
+
+    活动日志记录了包括在内的多种类型的事件，同时提供多种filter，帮助用户调查在Azure订阅级别下，资源或环境中发生的事情；
+
+    更多资料参考：
+    - [活动日志中的类别](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-logs-overview#categories-in-the-activity-log)
+
   - Azure Service Health : 服务运行状况的数据实际上是存放在活动日志中，用户可以登陆到特定页面 `Monitor - Service Health` 中了解到包括近一段环境中出现的服务相关的问题及RCA报告，平台计划的Maintenance等，并可设置响应的告警，以便第一时间知道平台的哪个服务出了问题，详细介绍请参照 [使用 Azure 门户查看服务运行状况通知](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/service-notifications)
 
     ![image](./images/monitor/mon05.png)
@@ -211,14 +216,3 @@ DevOps Pipelines 中的 Continus Monitor
 - [Cloud Governance Tools及需求mapping](https://azure.microsoft.com/en-gb/product-categories/management-tools/)
 
 ---
-
-
-
-{
-  "appId": "3bbcad52-5b8d-4093-b392-d5a11c25fe4a",
-  "displayName": "azure-cli-2019-06-17-08-27-07",
-  "name": "http://azure-cli-2019-06-17-08-27-07",
-  "password": "3395c6ab-3547-408c-80ba-24c33333dcc0",
-  "tenant": "72f988bf-86f1-41af-91ab-2d7cd011db47"
-}
-sysadm
