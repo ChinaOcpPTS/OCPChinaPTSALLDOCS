@@ -64,10 +64,12 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
 
     用户可以针对不同类别的Activity Log进行告警设置，及早知道环境中发生的变化；可参照 [收集和分析 Azure Monitor 的 Log Analytics 工作区中的 Azure 活动日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-log-collect)将活动日志配置到特定的Log Analytics workspace中，并依照存储建议对数据进行存档; 默认 Activity Log的保存期为90天。
 
-    活动日志记录了包括在内的多种类型的事件，同时提供多种filter，帮助用户调查在Azure订阅级别下，资源或环境中发生的事情；
+    活动日志记录了包括 `Administrative` & `Service Health` & `Resource Health` & `Alert` & `Autoscale` & `Recommendation` & `Security` & `Policy` 在内的多种类型的事件，同时提供多种filter，帮助用户调查在Azure订阅级别下，资源或环境中发生的事情；
 
     更多资料参考：
     - [活动日志中的类别](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-logs-overview#categories-in-the-activity-log)
+
+    - [Azure 活动日志事件架构](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-log-schema)
 
   - Azure Service Health : 服务运行状况的数据实际上是存放在活动日志中，用户可以登陆到特定页面 `Monitor - Service Health` 中了解到包括近一段环境中出现的服务相关的问题及RCA报告，平台计划的Maintenance等，并可设置响应的告警，以便第一时间知道平台的哪个服务出了问题，详细介绍请参照 [使用 Azure 门户查看服务运行状况通知](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/service-notifications)
 
@@ -77,7 +79,9 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
 
   - Metrics : 如上面介绍，指标是能够反应Azure服务可用性及性能的参考；大家比较好理解的是对虚机进行指标收集，Metrics除了支持IaaS资源外，还支持平台中的PaaS服务，且使用第一方的方式收集Metrics，更为简单，快速，稳定；部分IaaS服务&PaaS服务需要开启诊断日志，以支持指标的收集，用户在创建资源的时候记得打开诊断日志，以便更好的了解创建的服务；
 
-  - Logs ：主要针对诊断日志；Azure资源的诊断日志默认是不开启的，需要在创建过程中或使用过程中开启，且指定到特定的Log Analytics workspace中，并依照存储建议对数据进行存档；并不是所有的服务都支持诊断日志，具体支持列表请参考 [Azure 诊断日志支持的服务、架构和类别](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/diagnostic-logs-schema)
+  - Logs ：主要针对诊断日志，不需要代理并从 Azure 平台本身捕获特定于资源的数据；Azure资源的诊断日志默认是不开启的，需要在创建过程中或使用过程中开启，且指定到特定的Log Analytics workspace中，并依照存储建议对数据进行存档；并不是所有的服务都支持诊断日志，具体支持列表请参考 [Azure 诊断日志支持的服务、架构和类别](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/diagnostic-logs-schema)；
+
+    > __*注意：*__ 由于AzureDiagnostics 中列限制 “包含的列数不超过 500 个的任意给定 Azure 日志表具有明确的限制。 一旦达到该限制，在引入时，包含不属于前 500 个列的数据的行将被删除。”；当一个Project用到的资源类型过多，一定要计算一下需要的列数，并合理规划workspace；
 
   - Guest OS : 通过不同的 Extension 来收集 Guest OS 的指标数据，主要针对于 Azure VM 及 On-Prem VM
 
@@ -91,19 +95,37 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
 
 - Application 数据 ：Azure Monitor中的Application Insights是一款智能APM工具，能够提供对支持的框架开发的应用程序进行数据的收集，且不论应用程序部署在Azure还是本地；Application Insights安装检测包后，会收集与应用程序的性能和运行相关的指标和日志，并发送到Azure，保存在Application Insights Instance专属的Log Analytics workspace中；
 
+__*注意 将数据传入到Azure Monitor或是Log Analytics会存在一定时间的延迟*__
+
+[不同数据一般情况下延迟时间](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-ingestion-time)
+
+### 收集数据的手段
+
+- ToDo : 平台自身
+
+- ToDo : Agent https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/agents-overview
+
+- ToDo : 应用程序
+
+- ToDo : 自定义指标 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/metrics-custom-overview
+
+---
+
 #### 环境准备
 
-Step 1
+__*Step 1*__
 
 本次实验，是从既有的其他实验中，选取了两个实验部署脚本，目的是尽可能多的cover到不同类型的Azure服务，例如：虚机，存储，网络，PaaS，容器等。关于如何部署实验环境，可以参照：
 
-- [Before the HOL - Security baseline on Azure](https://github.com/microsoft/MCW-Security-baseline-on-Azure/blob/master/Hands-on%20lab/Before%20the%20HOL%20-%20Security%20baseline%20on%20Azure.md)
+- 
+
+- 安装MongoDB
 
 - [Tailwind Traders Website](https://github.com/Microsoft/TailwindTraders-Website)
 
 目前实验环境暂时支持 Global Azure 的部署，如果需要部署在 Azure Mooncake, 需要重新 consolidate 下现有的部署脚本。
 
-Step 2 准备 Ansible 环境
+__*Step 2 准备 Ansible 环境*__
 
 ```
 # 准备WSL或一台Linux虚机，例如：Ubuntu 16.04
@@ -136,8 +158,6 @@ tenant=<security-principal-tenant>
 
 __*注意 ：*__ 使用Ansible是为了更好的对部署的资源进行管理，与模板分离；很多时候我们部署的模板都是一个，但变量的名称各不相同，通过Azure Ansible的vars，结合Ansible Playbook可以更好的协调 Azure ARM Template 及 部署资源之间的管理。
 
-#### Challenge 00 创建 `Initiative - 计划策略`来检验某一订阅下是否正确设置并打开了数据收集
-
 #### Chn01 规划创建使用的 Log Analytics workspace
 
 本次实验，将会通过 `ARM Template` 结合 `Ansible`部署出环境需要的 `Log Analytics workspace`.
@@ -164,49 +184,185 @@ ansible-playbook ./deploy-loganalytics.yml
 
 参考资料 : [使用 Azure CLI 2.0 创建 Log Analytics 工作区](https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/quick-create-workspace-cli)
 
-#### Challenge 01 配置将 Activity Log 发送至 Log Analytics workspace
+#### Chn02 配置将 Activity Log 发送至 Log Analytics workspace
 
-#### Challenge 02 配置开启 HOL资源中的诊断日志，并将诊断日志配置到 Log Analytics workspace
+配置 Activity Log 到 workspace 只需要两步 ：
 
-#### Challenge 03 安装并收集 On-Prem 中虚机的性能指标及模拟安装MySQL，收集MySQL的指标
+__*Step 1 进入已创建的 workspace activityLogWS*__
 
-#### Challenge 04 针对 Azure VM & 非 Azure VM 开启 Azure Monitor for VM，并创建 Service Map
+![image](./images/monitor/mon07.png)
 
-#### Challenge 05 针对 AKS 监控数据的收集，包括AKS-Engine
+__*Step 2 点击 需要设置的订阅，点击 Connect，配置Log Analytics workspace的信息*__
 
-#### Challenge 06 针对自定义数据，如何通过Azure Monitor REST API，将指标及日志发送至Azure Monitor
+![image](./images/monitor/mon08.png)
+
+将活动日志保存在Log Analytics中是为了更好的进行数据的分析，活动日志到达Log Analytics存在一定的延迟，一般情况下，将活动日志数据发送到 Log Analytics 引入点大约需要 10 到 15 分钟。
+
+#### Chn03 配置开启资源中的诊断日志，并将诊断日志配置到 Log Analytics workspace
+
+并不是所有的资源都支持诊断日志，请参考上文中的链接，获取支持诊断日志的服务。
+
+建议在生产环境中开启资源的诊断日志，以便在出现问题时，能够有更多的数据分析根本原因。默认诊断日志是不开启的，因为开启诊断日志会需要选择存储的位置，会存在一些成本的开销。可以手动的开启诊断日志，且为了更为自动化的判定环境中哪些服务没有开启诊断日志，后续的实验中，有针对于使用Policy帮助Audit资源是否开启诊断日志，从而帮助我们监控环境中诊断日志的开启情况。
+
+诊断日志可以存储在 `存储账户` & `Event Hub` & `Log Analytics`，建议将诊断日志存储于Log Analytics workspace中，并按照统一的日志数据策略进行存档。
+
+我们可以通过 `Azure Monitor - Diagnostics Settings` 中查看到诊断日志的设置状态
+
+![image](./images/monitor/mon09.png)
+
+本次实验将通过 Azure CLI，实现针对 Diagnostics Settings 的设置；
+
+```
+# 设置某一资源的Diagnostics Setting
+az monitor diagnostic-settings create -n $yourSetName --workspace $yourWSName --resource $yourResourceId --logs '@$yourResourceSupportedLog.json' --metrics '@yourResourceSupportMetrics.json'
+```
+
+__*注意*__ 针对上面的模板命令，有两点需要强调
+
+- Diagnostic Settings 的名字建议以`Name-Resource-diag`这种类型，方便查询时直观理解
+
+- 命令中提到的有两个参数 `--logs` & `--metrics`，这两个参数并不一定所有的资源都支持，有的支持Logs，有的支持Metrics，有的都会支持，而且支持的Type各有不同; 如果环境中仅有少量的资源需要配置诊断日志，建议直接通过Portal进行配置，点击 `Azure Monitor - Diagnostis settings` 设置资源的诊断日志；如果有大量的资源，建议总结好 `--logs` & `--metrics` 的模板，以备后面复用；
+
+__*请将实验环境中的所有 Diagnostic Settings 全部设置好*__，接下来，我们将以环境中的 `KeyVault`为例，进行设置；
+
+KeyVault 支持的 Diagnostic settings 中需要设置的logs & metrics的模板，放入了 [keyvault-metric-diag.json](./files/monitor/diag-settings-sample/keyvault-metric-diag.json) & [keyvault-log-diag.json](./files/monitor/diag-settings-sample/keyvault-log-diag.json)
+
+```
+# 在实验环境中，我们包含了一个KeyVault，名为 'kvyfo4nigwm222u'
+# 查询这个 KeyVault的 Resource ID
+az keyvault show -n $your_kv_name -g $your_rg | jq -r .id
+
+# 打开 KeyVault的诊断设置
+az monitor diagnostic-settings create -n $kvName --workspace $wsName --resource '$resourceId' --logs '@demo-logs.json' --metrics '@demo-metrics.json'
+```
+
+资料参考：
+
+- [如何在Portal设置诊断日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/diagnostic-logs-stream-log-store#stream-diagnostic-logs-using-the-portal)
+
+#### Chn04 Service Fabric & VM 设置 Diagnostic settings 到存储账户，再设置Log Analytics从存储账户中读取数据
+
+Azure中有三个特殊资源，常用的主要为 `Service Fabric` & `VM`, 他们设置诊断日志的时候，只能存储在Storage Account中。为了将数据可以集中于Log Analytics，我们可以在设置到存储账户后，设置Log Analytics，从存储账户中读取日志信息，以供后续的分析。我们可以在环境中按照项目，设置存储账户用来收集诊断日志信息。
+
+配置VM诊断设置请参照 ：[在虚拟机中为事件日志和 IIS 日志收集启用 Azure 诊断](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/azure-storage-iis-table#enable-azure-diagnostics-in-a-virtual-machine-for-event-log-and-iis-log-collection)
+
+配置Log Analytics读取存储账户中的日志请参考 ：[使用 Azure 门户从 Azure 存储中收集日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/azure-storage-iis-table#use-the-azure-portal-to-collect-logs-from-azure-storage)
+
+#### Chn05 通过 Log Analytics agent，收集更多 VM 中的 日志及指标
+
+- ToDo 代理的介绍 : https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/performance-counters
+
+通过代理，可以收集更多的自定义的信息，可以在 [Azure Monitor 中的代理数据源](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/agent-data-sources)查看平台支持的数据源及格式；
+
+
+设置 Azure VM 中的 Log Analytics agent很简单，只需要两步
+
+Step 1 进入创建的workspace `projectOne`, 点击 `Workspace Data Sources下的Virtual machiens`
+
+你会发下 VM `db-1` 没有配置agent，连接到Log Analytics
+
+![image](./images/monitor/mon09.png)
+
+Step 2 进入后，点击 `Connect` 即可，系统会自动帮VM配置并安装 Log Analytics agent
+
+![image](./images/monitor/mon10.png)
 
 ---
 
-### HOL 设计定制化的监控指标大屏
+- ToDo : 收集 Syslog https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-syslog
 
+- ToDo : 收集 MySQL 应用程序性能 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-linux-applications
 
-### HOL 完善环境中的警报机及后期采取的行动
+- ToDo : 收集 自定义日志 (MongoDB) https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-custom-logs
 
-警报的作用是在问题出现的第一时间知晓，及时处理，尽可能避免大范围的影响。
+#### Chn06 通过 InfluxData Telegraf 代理收集 Linux VM的自定义指标
 
-Tips:
+- ToDo : 收集自定义指标 （MongoDB） https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/collect-custom-metrics-linux-telegraf
 
-- 动态阈值 / 不同警报的处理方式 / Webhook连接高级管理系统 / Automation&Logic APP完成自动化运维 / Workbook
+#### Chn06 开启 AKS 的监控插件
 
+- ToDo : 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
 
-Chn： 通过Activity Log中的Resource Health及 Service Health, 及早了解平台的动向
+#### Chn07 通过 Application Insights 监控应用程序
 
+- ToDo 引入SDK，标准的收集HTTP信息 https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/asp-net
+- ToDo 自定义收集信息
+- ToDo 收集业务信息 https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/usage-send-user-context
+- ToDo 监控Kubernetes中的应用程序 https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/kubernetes  / https://github.com/Microsoft/Application-Insights-Istio-Adapter/blob/master/SETUP.md#faq
 
-### HOL 监控数据生命周期管理建议及数据安全性说明
+Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/azure-web-apps
 
-### HOL 通过资源管理器模板 Enable 监控
+---
+
+### HOL 了解环境中运行资源的Insights
+
+#### Chn01 总体环境监控
+
+- ToDo 环境中的概况 （资源的数量，各类型资源的数量，警报数量，服务健康数量）
+
+#### Chn02 虚机监控
+
+- ToDo https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/vminsights-overview
+
+#### Chn03 网络性能监控
+
+- ToDo : https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/network-performance-monitor
+
+#### Chn04 容器监控
+
+- ToDo AKS 容器的监控 Insights https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-overview
+
+- ToDo AKS-Engine 容器的监控 Insights https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/containers
+
+### HOL 完善环境中的警报机制及后期采取的行动
+
+#### Chn01 规划 Action Group
+
+- ToDo : Email / SMS https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/action-groups
+
+- ToDo : WebHook https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-log-alerts-webhook
+
+- ToDo : LogicApp https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-common-schema-integrations
+
+#### Chn02 设置警报规则
+
+- ToDo 活动日志警报
+
+- ToDo 平台警报 （基于虚机及容器的监控指标，基于Log日志）
+
+- ToDo 显示平台中警报的情况
+
+### HOL 结合 Service Health & Resource Health，及时了解环境动态并设置告警
+
+- ToDo ： 服务运行状况 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/service-notifications
+2
+### HOL 做好工作簿的建设
+
+- ToDo : 工作簿 : https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/vminsights-workbooks
+
+### HOL 监控数据的生命周期管理及数据安全
+
+建议数据放在 Log Analytics 存放60天，以便实时的了解环境中的状况；将超过60天的数据导出到Storage Account保存6个月到1年，以便进行长期的分析
+
+https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-security
+https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/tutorial-archive-data
+
+- ToDo : 数据自动化从 LA to SA https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/archive-diagnostic-logs
+
+### HOL 实时了解监控的存储使用情况及成本
+
+- ToDo https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/usage-estimated-costs
 
 ### HOL 与 Azure DevOps 结合的 持续监控（Continus Monitor）
 
+https://docs.microsoft.com/zh-cn/azure/azure-monitor/continuous-monitoring
+
+- ToDo : 应用程序的连续监控 （Azure DevOps Pipeline 与 Azure Application Insights）https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/continuous-monitoring
 DevOps Pipelines 中的 Continus Monitor
-
-
 
 ### HOL 规划监控数据的生命周期
 
 出于符合性、审核或脱机报告目的，对资源的性能或运行状况历史记录进行 https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/tutorial-archive-data
-
 
 ---
 ### 参考资料
@@ -215,4 +371,5 @@ DevOps Pipelines 中的 Continus Monitor
 
 - [Cloud Governance Tools及需求mapping](https://azure.microsoft.com/en-gb/product-categories/management-tools/)
 
+- [将Azure Monitor中的数据通过Eventhub导出到外部平台](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/stream-monitoring-data-event-hubs)
 ---
