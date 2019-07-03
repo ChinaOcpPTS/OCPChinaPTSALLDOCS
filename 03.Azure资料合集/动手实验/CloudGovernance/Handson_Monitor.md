@@ -95,11 +95,21 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
 
 - Application 数据 ：Azure Monitor中的Application Insights是一款智能APM工具，能够提供对支持的框架开发的应用程序进行数据的收集，且不论应用程序部署在Azure还是本地；Application Insights安装检测包后，会收集与应用程序的性能和运行相关的指标和日志，并发送到Azure，保存在Application Insights Instance专属的Log Analytics workspace中；
 
-__*注意 将数据传入到Azure Monitor或是Log Analytics会存在一定时间的延迟*__
+__*注意 : 将数据传入到Azure Monitor或是Log Analytics会存在一定时间的延迟*__
 
 [不同数据一般情况下延迟时间](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-ingestion-time)
 
-### 收集数据的手段
+
+
+
+
+
+
+
+
+
+
+# 收集数据的手段 - WIP with ZJ
 
 - ToDo : 平台自身
 
@@ -109,17 +119,58 @@ __*注意 将数据传入到Azure Monitor或是Log Analytics会存在一定时�
 
 - ToDo : 自定义指标 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/metrics-custom-overview
 
----
 
-#### 环境准备
 
-__*Step 1*__
 
-本次实验，是从既有的其他实验中，选取了两个实验部署脚本，目的是尽可能多的cover到不同类型的Azure服务，例如：虚机，存储，网络，PaaS，容器等。关于如何部署实验环境，可以参照：
 
-- 
 
-- 安装MongoDB
+
+
+
+
+
+# 环境准备 - WIP with ZJ
+
+本次实验，选取了两个既有的部署脚本，分别部署了基于 `IaaS (虚机&SQL VM) + MongoDB VM` 进行构建的网站，以及基于 `AKS & Azure PaaS` 构建的网站，作为Cover以下实验的运行环境。
+
+#### Demo Project02 Tailwind Traders Website (前端使用 Azure Web Apps, 后端基于 AKS & Azure SQL & Azure CosmosDB)
+
+__*Step 1 Setup Azure Infrastructure for Tailwind Traders Website*__
+
+```
+# 如果还未准备好 Azure Service Principle, 请创建一个
+az ad sp create-for-rbac -n "monsp"
+
+# 查看区域支持的Kubernetes版本，ARM模板中默认的版本已经 out of scope，以区域 westus2 为例
+az aks get-versions -l westus2 -o table
+
+# 点击 Guide 中的 Deploy to Azure，部署到 Global Azure 中
+
+# 在 PostgreSQL 中创建 DB stockdb
+az postgres db create -g $yourRG -s $yourPostgreSQL -n stockdb
+
+# 连接创建的AKS集群
+az aks get-credentials -n $yourAKS -g $yourRG
+
+# 配置 Helm Tiller
+
+```
+
+
+
+
+__*参考资料：*__
+
+- [Deployment Guide for Azure Infrastructure](https://github.com/microsoft/TailwindTraders-Backend/blob/master/Documents/Azure-Deployment.md)
+
+- [Deployment Guide for Backend on AKS](https://github.com/microsoft/TailwindTraders-Backend/blob/master/Documents/DeploymentGuide.md)
+
+
+
+
+- https://github.com/rkuehfus/AzureMonitoringHackathon 
+
+- 安装MongoDB https://github.com/olmosleo/mongodb-replica-set-centos/blob/master/nested/primary-resources.json
 
 - [Tailwind Traders Website](https://github.com/Microsoft/TailwindTraders-Website)
 
@@ -267,21 +318,49 @@ Step 2 进入后，点击 `Connect` 即可，系统会自动帮VM配置并安装
 
 ![image](./images/monitor/mon10.png)
 
+
+
+
+
+
+
+
+
 ---
+# WIP with WXS
 
-- ToDo : 收集 Syslog https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-syslog
+- ToDo : 收集 Syslog https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-syslog - with WXS
 
-- ToDo : 收集 MySQL 应用程序性能 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-linux-applications
+- ToDo : 收集 MySQL 应用程序性能 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-linux-applications - with WXS
 
-- ToDo : 收集 自定义日志 (MongoDB) https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-custom-logs
+- ToDo : 收集 自定义日志 (MongoDB) https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-custom-logs - with WXS
 
-#### Chn06 通过 InfluxData Telegraf 代理收集 Linux VM的自定义指标
+#### Chn06 通过 InfluxData Telegraf 代理收集 Linux VM的自定义指标 - with WXS
 
 - ToDo : 收集自定义指标 （MongoDB） https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/collect-custom-metrics-linux-telegraf
 
-#### Chn06 开启 AKS 的监控插件
+
+
+
+
+
+
+
+
+---
+# WIP with ZJ
+
+#### Chn06 开启 AKS 的监控插件 with ZJ
 
 - ToDo : 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
+
+
+
+
+
+
+---
+# WIP with ZRJ
 
 #### Chn07 通过 Application Insights 监控应用程序
 
@@ -294,15 +373,26 @@ Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azur
 
 ---
 
-### HOL 了解环境中运行资源的Insights
+
+
+
+
+
+
+---
+# With ZJ
+
+### HOL 了解环境中运行资源的Insights 
 
 #### Chn01 总体环境监控
 
 - ToDo 环境中的概况 （资源的数量，各类型资源的数量，警报数量，服务健康数量）
 
-#### Chn02 虚机监控
+#### Chn02 虚机&存储监控
 
-- ToDo https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/vminsights-overview
+- ToDo https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/vminsights-overview / https://github.com/asheniam/azure-grafana-dashboard-templates/tree/master/microsoft-compute-virtualmachines/overview
+
+- ToDo https://github.com/asheniam/azure-grafana-dashboard-templates/tree/master/microsoft-storage-storageaccounts-blobservices/overview / https://github.com/asheniam/azure-grafana-dashboard-templates/tree/master/microsoft-storage-storageaccounts/overview 
 
 #### Chn03 网络性能监控
 
@@ -313,6 +403,29 @@ Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azur
 - ToDo AKS 容器的监控 Insights https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-overview
 
 - ToDo AKS-Engine 容器的监控 Insights https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/containers
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Later 
 
 ### HOL 完善环境中的警报机制及后期采取的行动
 
@@ -373,3 +486,4 @@ DevOps Pipelines 中的 Continus Monitor
 
 - [将Azure Monitor中的数据通过Eventhub导出到外部平台](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/stream-monitoring-data-event-hubs)
 ---
+
