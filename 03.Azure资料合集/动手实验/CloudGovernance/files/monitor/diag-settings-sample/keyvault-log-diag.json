@@ -1,0 +1,10 @@
+[
+    {
+        "category": "AuditEvent",
+        "enabled": true,
+        "retentionPolicy": {
+        "enabled": false,
+        "days": 0
+        }
+    }
+]
