@@ -377,16 +377,16 @@ Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azur
 
 1.	在Portal中选择创建AKS集群，注意选择的Node节点要稍微选内存和CPU大一点的型号，因为之后用到的Istio会用到比较多的资源。
 
-    ![image](./images/monitor/AppInsights (1).png)
+    ![image](./images/monitor/AppInsights%20(1).png)
 
 
 2.	建立集群的选择用Service Principle作为认证机制，这样对连接之后的ACR也会比较方便
 
-    ![image](./images/monitor/AppInsights\ (2).png)
+    ![image](./images/monitor/AppInsights%20(2).png)
 
 3.	网络的工作模式选在高级的模式，这样可以直接支持CNI。
 
-    ![image](./images/monitor/AppInsights\ (3).png)
+    ![image](./images/monitor/AppInsights%20(3).png)
 
 4.	当AKS集群建立之后，通过Kubectl命令（需要事先在客户端安装好），获得Secret。此处使用Powershell Console
 
@@ -394,7 +394,7 @@ Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azur
 
 5.	创建Application Insights，并且记下instruments，之后在配置中会用到。
 
-    ![image](./images/monitor/AppInsights\ (5).png)
+    ![image](./images/monitor/AppInsights%20(4).png)
 
 
 
@@ -487,7 +487,7 @@ https://github.com/Microsoft/Application-Insights-Istio-Adapter/releases/
 
 6.	打开application insights的实时展现数据的页面，观察到已经有一个server链接上了，这个就是我们刚刚部署的adapter
 
-    ![image](./images/monitor/AppInsights\ (5).png)
+    ![image](./images/monitor/AppInsights%20(5).png)
 
 7.	现在我们来部署两个应用，一个叫sleep，一个叫httpbin。先进入之前下载并解压的Istio根目录，执行下面的部署命令。
 ```
@@ -505,7 +505,7 @@ https://github.com/Microsoft/Application-Insights-Istio-Adapter/releases/
 
 10.	我们回到application insights的界面，可以观测到之前发送的这个请求已经被adapter发送到了app insights，并且实施展现在了仪表盘上。
 
-    ![image](./images/monitor/AppInsights\ (6).png)
+    ![image](./images/monitor/AppInsights%20(6).png)
 
 
 
