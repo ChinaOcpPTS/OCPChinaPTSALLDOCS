@@ -377,7 +377,7 @@ Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azur
 
 1.	在Portal中选择创建AKS集群，注意选择的Node节点要稍微选内存和CPU大一点的型号，因为之后用到的Istio会用到比较多的资源。
 
-    ![image](./images/monitor/AppInsights\ (1).png)
+    ![image](./images/monitor/AppInsights (1).png)
 
 
 2.	建立集群的选择用Service Principle作为认证机制，这样对连接之后的ACR也会比较方便
