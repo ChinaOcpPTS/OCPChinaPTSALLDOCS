@@ -371,24 +371,30 @@ Step 2 进入后，点击 `Connect` 即可，系统会自动帮VM配置并安装
 
 Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/azure-web-apps
 
-
 # Application Insights Container Part Hands-on Lab
 
-**第一部分 准备AKS集群，ACR，Application Insights**
+**第一部分 准备AKS集群，Application Insights**
 
 1.	在Portal中选择创建AKS集群，注意选择的Node节点要稍微选内存和CPU大一点的型号，因为之后用到的Istio会用到比较多的资源。
+
+    ![image](./images/monitor/AppInsights\ (1).png)
 
 
 2.	建立集群的选择用Service Principle作为认证机制，这样对连接之后的ACR也会比较方便
 
+    ![image](./images/monitor/AppInsights\ (2).png)
 
 3.	网络的工作模式选在高级的模式，这样可以直接支持CNI。
+
+    ![image](./images/monitor/AppInsights\ (3).png)
 
 4.	当AKS集群建立之后，通过Kubectl命令（需要事先在客户端安装好），获得Secret。此处使用Powershell Console
 
     ``` az aks get-credentials --resource-group <myResourceGroup> --name <myAKSCluster> ```
 
 5.	创建Application Insights，并且记下instruments，之后在配置中会用到。
+
+    ![image](./images/monitor/AppInsights\ (5).png)
 
 
 
@@ -404,7 +410,8 @@ Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azur
 
 2.	创建Helm使用的Service Account，使用yaml文件进行创建
 
-    <helm-rbac.yaml>地址
+    [helm-rbac.yaml](./files/monitor/AppInsights/helm-rbac.yaml)
+
     
     ```kubectl apply -f helm-rbac.yaml```
 
@@ -444,7 +451,7 @@ $PATH = [environment]::GetEnvironmentVariable("PATH", "User") + "; C:\Istio\"
 
 6.	Istio通过CRD来管理它的配置信息，下面通过helm来安装CRD，注意的是要在之前下载并解压的Itsio的根目录下运行命令。此处使用Powershell Console
 
-```helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system```
+    ```helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system```
 
 7.	安装Istio，此处使用Powershell Console
 ```
@@ -480,6 +487,7 @@ https://github.com/Microsoft/Application-Insights-Istio-Adapter/releases/
 
 6.	打开application insights的实时展现数据的页面，观察到已经有一个server链接上了，这个就是我们刚刚部署的adapter
 
+    ![image](./images/monitor/AppInsights\ (5).png)
 
 7.	现在我们来部署两个应用，一个叫sleep，一个叫httpbin。先进入之前下载并解压的Istio根目录，执行下面的部署命令。
 ```
@@ -496,6 +504,11 @@ https://github.com/Microsoft/Application-Insights-Istio-Adapter/releases/
     ```kubectl exec -it $(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name}) -c sleep -- curl -v httpbin:8000/status/418```
 
 10.	我们回到application insights的界面，可以观测到之前发送的这个请求已经被adapter发送到了app insights，并且实施展现在了仪表盘上。
+
+    ![image](./images/monitor/AppInsights\ (6).png)
+
+
+
 
 
 
