@@ -1,10 +1,11 @@
 
-## WIP - Azure 监控平台 Whitepaper & Handson
+# WIP - Azure 监控平台 Whitepaper & Handson
 
 ---
-### HOL01 了解Azure中监控数据平台的层次，及各层次能够收集到的数据
 
-Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租户)` & `Subscription（）` & `IaaS()` & `Container()` & `PaaS（）` & `客户自定义数据`等不同层级的资源，
+## 了解Azure中监控数据平台的层次，及各层次能够收集到的数据
+
+Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租户)` & `Subscription` & `IaaS` & `Container` & `PaaS` & `客户自定义数据`等不同层级的资源，
   提供一致性的`监控` & `分析` & `可视化` & `警报`等功能。
 
 ![image](./images/monitor/mon01.png)
@@ -25,17 +26,17 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
   
   `Metrics` 大多数资源的指标数据保留93天，用户可以导出到存储账户进行存档保存；
   
-  更多详细信息 ： 
+  更多详细信息 ：
   - [Azure中的Metrics介绍](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-platform-metrics)  
   - [Azure平台中不同服务支持的 Metrics](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/metrics-supported)
 
 - `Logs` 是详细的信息记录，包含更多的信息，主要用于对出现的问题进行具体的分析；日志不同于指标，虽然按照时间顺序进行汇总，但不是按固定事件间隔进行收集发送； 建议将所近期日志
       （一个月或三个月）放入 `Log Analytics` 中保存分析，这样可以多维度的分析问题或获取见解，将长期数据（三个月以上）放入存储账户进行存储，以符合不同要求的合规性，审查或用于长期
-    分析。 
+    分析。
   
   Azure Monitor中提供了 `Log Analytics` 的服务，用于对日志进行查询分析； `Log Analytics` 使用Kusto语言进行查询； `Log Analytics`的日志数据均存储在`Log Analytics workspace`
       中，且 `Application Insights` & `Azure Security Center` & `Azure Sentinel` 收集的日志存储在其内置的workspace中，但可以跨workspace进行分析；
-    
+
   Azure中的日志主要包括 管理层的 `Azure AD Audit Logs` & `Azure Activity Log`; 资源层面的 `支持Diagnostics Settings的资源的诊断日志` & `虚拟机 Extension收集的性能及自定义日志`
     & `容器的日志数据` & `Application Insights中收集的应用程序请求&异常等详细数据， 使用情况等`； 支持通过多种手段将第三方日志导入到 `Log Analytics`;
   
@@ -95,121 +96,34 @@ Azure中监控的数据主要为 `Metrics` & `Logs`， 监控包括 `Tenant(租�
 
 - Application 数据 ：Azure Monitor中的Application Insights是一款智能APM工具，能够提供对支持的框架开发的应用程序进行数据的收集，且不论应用程序部署在Azure还是本地；Application Insights安装检测包后，会收集与应用程序的性能和运行相关的指标和日志，并发送到Azure，保存在Application Insights Instance专属的Log Analytics workspace中；
 
-__*注意 : 将数据传入到Azure Monitor或是Log Analytics会存在一定时间的延迟*__
+__*注意 : 将数据传入到Azure Monitor或是Log Analytics会存在一定时间的延迟*__ ，请参阅 ：[不同数据一般情况下延迟时间](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-ingestion-time)
 
-[不同数据一般情况下延迟时间](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-ingestion-time)
+---
+## HOL 00  环境准备
 
+### Phase 1 被监控资源的环境准备
 
+环境准备，需要预先搭建准备的环境，并准备相应的数据，以便在实验中更为形象的展示监控的能力。环境准备并不是本次白皮书的重点，请参照以下列出的材料进行准备或寻求相关的帮助。
 
+本次实验预先准备了两个环境，分别为两个网站，分别部署了基于 `IaaS (虚机&SQL VM) + MongoDB VM` 进行构建的网站，以及基于 `AKS & Azure PaaS` 构建的网站，同时，单独手动创建了 `MongoDB` 用于模拟自定义数据的收集。在创建资源时，请将`环境一（IaaS [虚机&SQL VM) + MongoDB VM]`放入资源组`Project01`, 将`环境二[基于 AKS & Azure PaaS]`放入资源组`Project02`;资源组名称后续实验有涉及。
 
+#### 实验环境一 相关资料
 
+>Part 1 : 请参照 [Azure Monitoring Hackathon Deployment Guide](./docs/Deployment Setup Guide.docx) 完成环境的构建
 
+>Part 2 : 请参照 [Install MongoDB Replica Set](https://github.com/olmosleo/mongodb-replica-set-centos) 完成 MongoDB 环境的构建
 
+#### 实验环境二 相关资料
 
+> 请参照 [Tailwind Traders - Sample Reference Applications](https://github.com/Microsoft/TailwindTraders) 完成 `Tailwind Traders Backend Services` & `Tailwind Traders Website` 部分的构建
 
+实验一&实验二的环境暂时以 `Global Azure` 为基准，如果部署在 `Azure Mooncake`，需要做适当的调整。
 
+---
 
-# 收集数据的手段 - WIP with ZJ
+## HOL 01 配置并收集 实验环境中 各资源的监控数据
 
-- ToDo : 平台自身
-
-- ToDo : Agent https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/agents-overview
-
-- ToDo : 应用程序
-
-- ToDo : 自定义指标 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/metrics-custom-overview
-
-
-
-
-
-
-
-
-
-
-
-# 环境准备 - WIP with ZJ
-
-本次实验，选取了两个既有的部署脚本，分别部署了基于 `IaaS (虚机&SQL VM) + MongoDB VM` 进行构建的网站，以及基于 `AKS & Azure PaaS` 构建的网站，作为Cover以下实验的运行环境。
-
-#### Demo Project02 Tailwind Traders Website (前端使用 Azure Web Apps, 后端基于 AKS & Azure SQL & Azure CosmosDB)
-
-__*Step 1 Setup Azure Infrastructure for Tailwind Traders Website*__
-
-```
-# 如果还未准备好 Azure Service Principle, 请创建一个
-az ad sp create-for-rbac -n "monsp"
-
-# 查看区域支持的Kubernetes版本，ARM模板中默认的版本已经 out of scope，以区域 westus2 为例
-az aks get-versions -l westus2 -o table
-
-# 点击 Guide 中的 Deploy to Azure，部署到 Global Azure 中
-
-# 在 PostgreSQL 中创建 DB stockdb
-az postgres db create -g $yourRG -s $yourPostgreSQL -n stockdb
-
-# 连接创建的AKS集群
-az aks get-credentials -n $yourAKS -g $yourRG
-
-# 配置 Helm Tiller
-
-```
-
-
-
-
-__*参考资料：*__
-
-- [Deployment Guide for Azure Infrastructure](https://github.com/microsoft/TailwindTraders-Backend/blob/master/Documents/Azure-Deployment.md)
-
-- [Deployment Guide for Backend on AKS](https://github.com/microsoft/TailwindTraders-Backend/blob/master/Documents/DeploymentGuide.md)
-
-
-
-
-- https://github.com/rkuehfus/AzureMonitoringHackathon 
-
-- 安装MongoDB https://github.com/olmosleo/mongodb-replica-set-centos/blob/master/nested/primary-resources.json
-
-- [Tailwind Traders Website](https://github.com/Microsoft/TailwindTraders-Website)
-
-目前实验环境暂时支持 Global Azure 的部署，如果需要部署在 Azure Mooncake, 需要重新 consolidate 下现有的部署脚本。
-
-__*Step 2 准备 Ansible 环境*__
-
-```
-# 准备WSL或一台Linux虚机，例如：Ubuntu 16.04
-
-# 安装 Ansible on Ubuntu 16.04 with Azure Module
-sudo apt-get update && sudo apt-get install -y libssl-dev libffi-dev python-dev python-pip
-sudo pip install ansible[azure]
-
-# 创建 Azure Service Principle
-az ad sp create-for-rbac
-
-# 在当前目录创建文件 
-touch ~/.azure/credentials
-
-# 在文件中填入以下值
-[default]
-subscription_id=<your-subscription_id>
-client_id=<security-principal-appid>
-secret=<security-principal-password>
-tenant=<security-principal-tenant>
-```
-
-由于Ansible不是本次Handson的主要介绍内容，更多资料请参照：
-
-- [Using Ansible with Azure](https://docs.microsoft.com/en-us/azure/ansible/ansible-overview)
-
-- [Ansible中支持的Azure Module](https://docs.ansible.com/ansible/latest/modules/list_of_cloud_modules#azure)
-
-- [一些Azure相关的Ansible Playbook](https://github.com/Azure-Samples/ansible-playbooks)
-
-__*注意 ：*__ 使用Ansible是为了更好的对部署的资源进行管理，与模板分离；很多时候我们部署的模板都是一个，但变量的名称各不相同，通过Azure Ansible的vars，结合Ansible Playbook可以更好的协调 Azure ARM Template 及 部署资源之间的管理。
-
-#### Chn01 规划创建使用的 Log Analytics workspace
+### Chn01 规划创建使用的 Log Analytics workspace
 
 本次实验，将会通过 `ARM Template` 结合 `Ansible`部署出环境需要的 `Log Analytics workspace`.
 
@@ -219,23 +133,25 @@ __*注意 ：*__ 使用Ansible是为了更好的对部署的资源进行管理�
 
 - 订阅下的 Azure Resources，建议以 Project 为单位进行划分
 
-本次实验，将创建名为 `activityLogWS` & `projectOne` 的两个 workspace。
-
-所有Workspace的创建，均通过 Ansible Playbook，所有需要创建的 workspace，均定义在 [loganalytics.yml](./files/monitor/monitor-ansible/vars/loganalytics.yml), 例如：
-
- ![image](./images/monitor/mon06.JPG)
+本次实验，将创建名为 `activityLogWS` & `project01WS` & `projectTwo` 三个 Workspace。部署的模板请参阅 ：[loganalytics_deploy.json](./files/monitor/arm-templates/loganalytics_deploy.json)
 
 ```
-# 进入 Ansible Playbook 目录
-cd ./files/monitor/monitor-ansible
+# 通过 az cli 创建 activityLogWS
+az group create -n $yourGroupName -l westus2
+az group deployment create --resource-group $yourGroupName --name deploy01 --template-file loganalytics_deploy.json  --parameters workspaceName=activityLogWS
 
-# 预先定义好要创建的workspace后，运行playbook
-ansible-playbook ./deploy-loganalytics.yml
+# 通过 az cli 创建 project01WS
+az group create -n $yourGroupName -l westus2
+az group deployment create --resource-group $yourGroupName --name deploy01 --template-file loganalytics_deploy.json  --parameters workspaceName=project01WS
+
+# 通过 az cli 创建 project02WS
+az group create -n $yourGroupName -l eastus
+az group deployment create --resource-group $yourGroupName --name deploy01 --template-file loganalytics_deploy.json  --parameters workspaceName=project01WS
 ```
 
-参考资料 : [使用 Azure CLI 2.0 创建 Log Analytics 工作区](https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/quick-create-workspace-cli)
+>参考资料 : [使用 Azure CLI 2.0 创建 Log Analytics 工作区](https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/quick-create-workspace-cli)
 
-#### Chn02 配置将 Activity Log 发送至 Log Analytics workspace
+### Chn02 配置将 Activity Log 发送至 Log Analytics workspace
 
 配置 Activity Log 到 workspace 只需要两步 ：
 
@@ -249,74 +165,107 @@ __*Step 2 点击 需要设置的订阅，点击 Connect，配置Log Analytics wo
 
 将活动日志保存在Log Analytics中是为了更好的进行数据的分析，活动日志到达Log Analytics存在一定的延迟，一般情况下，将活动日志数据发送到 Log Analytics 引入点大约需要 10 到 15 分钟。
 
-#### Chn03 配置开启资源中的诊断日志，并将诊断日志配置到 Log Analytics workspace
+### Chn03 配置开启资源中的诊断日志，并将诊断日志配置到 Log Analytics workspace
 
-并不是所有的资源都支持诊断日志，请参考上文中的链接，获取支持诊断日志的服务。
-
-建议在生产环境中开启资源的诊断日志，以便在出现问题时，能够有更多的数据分析根本原因。默认诊断日志是不开启的，因为开启诊断日志会需要选择存储的位置，会存在一些成本的开销。可以手动的开启诊断日志，且为了更为自动化的判定环境中哪些服务没有开启诊断日志，后续的实验中，有针对于使用Policy帮助Audit资源是否开启诊断日志，从而帮助我们监控环境中诊断日志的开启情况。
+并不是所有的资源都支持诊断日志，请参考上文中的链接，获取支持诊断日志的服务。建议在生产环境中开启重要资源的诊断日志，以便在出现问题时，能够有更多的数据分析根本原因。默认诊断日志是不开启的。
 
 诊断日志可以存储在 `存储账户` & `Event Hub` & `Log Analytics`，建议将诊断日志存储于Log Analytics workspace中，并按照统一的日志数据策略进行存档。
 
-我们可以通过 `Azure Monitor - Diagnostics Settings` 中查看到诊断日志的设置状态
+我们可以通过 `Azure Monitor - Diagnostics Settings` 中查看到诊断日志的设置状态。
 
 ![image](./images/monitor/mon09.png)
 
-本次实验将通过 Azure CLI，实现针对 Diagnostics Settings 的设置；
+>Step 1 在 Portal 中，通过`Azure Monitor`设置`Diagnostic Settings`
 
-```
-# 设置某一资源的Diagnostics Setting
-az monitor diagnostic-settings create -n $yourSetName --workspace $yourWSName --resource $yourResourceId --logs '@$yourResourceSupportedLog.json' --metrics '@yourResourceSupportMetrics.json'
-```
+本次实验将通过 Azure Portal，实现针对 Diagnostics Settings 的设置; 对于所有状态为 `Disabled` 的资源，都可以通过Portal完成诊断日志的设置，以 `PostgreSQL ttpgjw5cvwr2oe6bu` 为例：
 
-__*注意*__ 针对上面的模板命令，有两点需要强调
+选择 `Add diagnostic setting`
 
-- Diagnostic Settings 的名字建议以`Name-Resource-diag`这种类型，方便查询时直观理解
+![image](./images/monitor/mon12.png)
 
-- 命令中提到的有两个参数 `--logs` & `--metrics`，这两个参数并不一定所有的资源都支持，有的支持Logs，有的支持Metrics，有的都会支持，而且支持的Type各有不同; 如果环境中仅有少量的资源需要配置诊断日志，建议直接通过Portal进行配置，点击 `Azure Monitor - Diagnostis settings` 设置资源的诊断日志；如果有大量的资源，建议总结好 `--logs` & `--metrics` 的模板，以备后面复用；
+设置相应参数，将诊断日志保存在 Log Analytics 中，针对诊断日志，建议的命名方式为 `name-resource-diag`，便于后续的维护人员确认。
 
-__*请将实验环境中的所有 Diagnostic Settings 全部设置好*__，接下来，我们将以环境中的 `KeyVault`为例，进行设置；
+![image](./images/monitor/mon13.png)
 
-KeyVault 支持的 Diagnostic settings 中需要设置的logs & metrics的模板，放入了 [keyvault-metric-diag.json](./files/monitor/diag-settings-sample/keyvault-metric-diag.json) & [keyvault-log-diag.json](./files/monitor/diag-settings-sample/keyvault-log-diag.json)
-
-```
-# 在实验环境中，我们包含了一个KeyVault，名为 'kvyfo4nigwm222u'
-# 查询这个 KeyVault的 Resource ID
-az keyvault show -n $your_kv_name -g $your_rg | jq -r .id
-
-# 打开 KeyVault的诊断设置
-az monitor diagnostic-settings create -n $kvName --workspace $wsName --resource '$resourceId' --logs '@demo-logs.json' --metrics '@demo-metrics.json'
-```
-
-资料参考：
-
-- [如何在Portal设置诊断日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/diagnostic-logs-stream-log-store#stream-diagnostic-logs-using-the-portal)
-
-#### Chn04 Service Fabric & VM 设置 Diagnostic settings 到存储账户，再设置Log Analytics从存储账户中读取数据
+>Step 2 通过 Azure CLI 为 VM 配置诊断设置，并读取到 `Log Analytics`
 
 Azure中有三个特殊资源，常用的主要为 `Service Fabric` & `VM`, 他们设置诊断日志的时候，只能存储在Storage Account中。为了将数据可以集中于Log Analytics，我们可以在设置到存储账户后，设置Log Analytics，从存储账户中读取日志信息，以供后续的分析。我们可以在环境中按照项目，设置存储账户用来收集诊断日志信息。
 
-配置VM诊断设置请参照 ：[在虚拟机中为事件日志和 IIS 日志收集启用 Azure 诊断](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/azure-storage-iis-table#enable-azure-diagnostics-in-a-virtual-machine-for-event-log-and-iis-log-collection)
+本次实验的对象为 VM `mongodb-primaryvm`，为实验一环境中的`MongoDB服务器`，且本次实验针对Linux服务器，Windows服务器请参考文档。由于VM的诊断配置中，需要配置存储账户，会将所有的数据（Metrics&Logs）存放于此，因此，建议一个Project中使用一个存储账户存储所有VM的数据，便于管理。
 
-配置Log Analytics读取存储账户中的日志请参考 ：[使用 Azure 门户从 Azure 存储中收集日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/azure-storage-iis-table#use-the-azure-portal-to-collect-logs-from-azure-storage)
+设置 `VM Diagnostic Settings` 需要用到Settings的模板，详细标记了需要收集的Metrics&Logs的信息，可根据实际需求自行调整，具体可参见 [linuxvm-diagsettings-template.json](./file/monitor/diag-settings-sample/linuxvm-diagsettings-template.json)
 
-#### Chn05 通过 Log Analytics agent，收集更多 VM 中的 日志及指标
+```
+# 创建存储账户 storageaccdiagvms, 用于存储Project01中VM的诊断设置
+az storage account create -n storageaccdiagvms -g project01WS --sku Standard_LRS
 
-- ToDo 代理的介绍 : https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/performance-counters
+# 获取 VM ID
+az vm show -n mongodb-primaryvm -g project01WS --query "id" -o tsv
 
-通过代理，可以收集更多的自定义的信息，可以在 [Azure Monitor 中的代理数据源](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/agent-data-sources)查看平台支持的数据源及格式；
+# 替换 linuxvm-diagsettings-template.json 中存储账号的名称及VM ID，并Enable VM 诊断设置
+
+# 获取 Storage Account SAS Token
+az storage account generate-sas --account-name storageaccdiagvms --expiry 2037-12-31T23:59:00Z --permissions acuw --resource-types co --services bt --https-only --output tsv
+
+# 开启 VM 诊断设置
+az vm diagnostics set --settings linuxvm-diagsettings-template.json --protected-settings "{'storageAccountName': 'storageaccdiagvms','storageAccountSasToken': 'se=2037-12-31T23%3A59%3A00Z&sp=wacu&spr=https&sv=2018-03-28&ss=bt&srt=co&sig=JcpYUIVppnyf13sIUFt2ISOLq9HYu3cd0xhcF7z1tgI%3D'}" --resource-group project01WS --vm-name mongodb-primaryvm
+```
+
+设置好所有的VM之后，通过 Azure Portal，将存储账号与Log Analytics进行设置连接，这样，就可以通过Log Analytics统一接收并分析多个资源的日志数据。
+
+进入 Log Analytics 工作区 `project01WS`, 并点击`Storage accounts log`, 添加`Add`
+
+![image](./images/monitor/mon14.png)
+
+![image](./images/monitor/mon15.png)
+
+初次设置，需要等待30mins，就可以在 Log Analytics中看到数据。
+
+>资料参考：
+>- [如何在Portal设置诊断日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/diagnostic-logs-stream-log-store#stream-diagnostic-logs-using-the-portal)
+>- [在虚拟机中为事件日志和 IIS 日志收集启用 Azure 诊断](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/azure-storage-iis-table#enable-azure-diagnostics-in-a-virtual-machine-for-event-log-and-iis-log-collection)
+>- [使用 Azure 门户从 Azure 存储中收集日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/azure-storage-iis-table#use-the-azure-portal-to-collect-logs-from-azure-storage)
+>- [az vm diagnostics 详细解释](https://docs.microsoft.com/en-us/cli/azure/vm/diagnostics?view=azure-cli-latest)
+
+### Chn04 开启 AKS 的监控插件
+
+AKS的监控默认是关闭的，可以选择在创建集群时开启，或者通过命令行进行开启。AKS的监控作为`Addons`存在，开启非常简单，只需要一条命令，即可了解集群的运行状况信息。
+
+```
+# 检查 AKS 集群是否 Enable Addon Monitoring，如果结果为False，证明集群并未Enable Monitoring Addon
+az aks show -n tailwindtradersaksjw5cvwr2oe6bu -g project02WS --query "addonProfiles.omsagent.enabled"
+
+# 获取 Log Analytics project02WS 的ResourceID (需要将CLI版本升级到2.0.68及以上)
+az resource show -n project02WS -g project01WS --resource-type "microsoft.operationalinsights/workspaces" --query "id" -o tsv
+
+# Enable Monitoring Addon for AKS
+az aks enable-addons --addons monitoring --workspace-resource-id $yourLAID -n tailwindtradersaksjw5cvwr2oe6bu -g project02WS
+```
+
+>资料参考：
+>- 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
 
 
-设置 Azure VM 中的 Log Analytics agent很简单，只需要两步
 
-Step 1 进入创建的workspace `projectOne`, 点击 `Workspace Data Sources下的Virtual machiens`
 
-你会发下 VM `db-1` 没有配置agent，连接到Log Analytics
 
-![image](./images/monitor/mon09.png)
 
-Step 2 进入后，点击 `Connect` 即可，系统会自动帮VM配置并安装 Log Analytics agent
 
-![image](./images/monitor/mon10.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -327,19 +276,79 @@ Step 2 进入后，点击 `Connect` 即可，系统会自动帮VM配置并安装
 
 
 ---
-# WIP with WXS
+## HOL02 了解环境中运行资源的Insights
 
-- ToDo : 收集 Syslog https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-syslog - with WXS
+在上一个章节，我们通过各种`Challenge`完成了对于不同资源，不同环境下的数据的收集工作，接下来，我们需要做的是通过可视化的手段，呈现资源目前的一个状态，对于运维人员来说，可以直观的了解到环境中的健康状况。
 
-- ToDo : 收集 MySQL 应用程序性能 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-linux-applications - with WXS
+### Chn01 虚机&存储监控
 
-- ToDo : 收集 自定义日志 (MongoDB) https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-sources-custom-logs - with WXS
+本次实验是创建一个Dashboard，用于定制化环境中虚机及存储指标的监控
 
-#### Chn06 通过 InfluxData Telegraf 代理收集 Linux VM的自定义指标 - with WXS
+创建一个`Dashboard for Project01`中的`VM&StorageAccount`,名为`Project01-VM&Storage`
 
-- ToDo : 收集自定义指标 （MongoDB） https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/collect-custom-metrics-linux-telegraf
+![image](./images/monitor/mon16.png)
+
+添加 `Metrics chart`
+
+![image](./images/monitor/mon17.png)
+
+设置添加的`Metrics chart`, 配置 Title为 `VMs - Percentage CPU`，对象为 VM `mongodb-primaryvm` & `mongodb-secondary0vm`
+
+![image](./images/monitor/mon18.png)
+
+![image](./images/monitor/mon19.png)
+
+在 Dashboard 中，我们就可以实时的观测到整个环境中虚机的情况，同时，可以根据需要，Drill down到每台虚机去查看具体情况。接下来，按照上述方式，设置 `VMs- Percentage Memory`, `VMs - Network In`, `VMs - Network Out`, `VMs - Disk Read Bytes`, `VMs - Disk Write Bytes`
+
+![image](./images/monitor/mon20.png)
+
+接下来，按照同样的方式，添加存储账户的监控指标，分别为`Storage Account - Availability`, `Storage Account - Transactions`, `Storage Account - Ingress`, `Storage Account - Egress`, `Storage Account - Success E2E Latency(ms)`
+
+![image](./images/monitor/mon21.png)
+
+#### Chn02 容器监控
+
+开启 Monitoring 插件之后， Azure Monitor会通过 Metrics API 从 Kubernetes 中的Controller，Nodes，Containers收集相关的Metrics及Logs。
+
+![image](./images/monitor/mon22.png)
+
+通过 `Azure Monitor - Insights Containers`, 我们可以概括性的了解到环境中不同AKS集群目前的监控状态，同时，可以针对特定的集群进行深入的调查，监视集群的性能及容器环境的使用状态。
+
+![image](./images/monitor/mon23.png)
+
+当然也可以根据实际的需要，自定义容器的监控`Dashboard`, 本次实验就是针对实验环境中的集群，设计自定义的监控`Dashboard`.
+
+创建名为 `Project02 - Containers Monitoring` 的Dashboard, 并先将已有的可以描述集群性能的Metrics添加到Dashboard, `Node count` & `Active Pod count` & `Node Memory utilization` & `Node CPU utilization`
+
+![image](./images/monitor/mon24.png)
+
+除了系统提供的Metrics外，我们可以借助于`Log Analytics`完成更多自定义的监控页面定制。
+
+进入Project02的Log Analytics `project02WS`, 运行如下的查询语句，获取当前环境中各容器CPU的使用占比，并将结果固定于Dashboard中
+
+```
+Perf
+| where ObjectName == "K8SContainer" and CounterName == "cpuUsageNanoCores" | summarize AvgCPUUsageNanoCores = avg(CounterValue) by bin(TimeGenerated, 30m), InstanceName
+```
+
+![image](./images/monitor/mon25.png)
+
+运行如下语句，获取当前环境中不同Namespace的服务数量的比例，并将结果固定于Dashboard中
+
+```
+KubeServices | summarize AggregatedValue = dcount(ServiceName) by Namespace | order by AggregatedValue desc
+```
+
+![image](./images/monitor/mon26.png)
+
+> 资料参考：
+> [用于容器的 Azure Monitor 概述](https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-overview)
+> [如何查询 Azure 监视器中的容器的日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-log-search)
+
+---
 
 
+服务运行状况
 
 
 
@@ -348,75 +357,104 @@ Step 2 进入后，点击 `Connect` 即可，系统会自动帮VM配置并安装
 
 
 ---
-# WIP with ZJ
 
-#### Chn06 开启 AKS 的监控插件 with ZJ
+## HOL03 完善环境中的警报机制及后期采取的行动
 
-- ToDo : 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
+经过以上两组实验，我们针对实验环境收集了数据，并建立了监控大屏，让用户可以直观的了解环境目前的运行情况。但运维人员不能一刻不停的盯着大屏，运维人员需要的是能够在环境出问题的时候，第一时间获得通知，并按照归纳总结的操作手册或自动化脚本，快速修复问题，这是提高环境自动化，优化环境可用性的一个关键。警报是监控系统的一种关键手段，合理的设置关键数据的警报，能够帮助运维人员更好且自动化的监控云端环境。
 
+如下展示了一个警报的产生过程，和处理方式：
 
+![image](./images/monitor/mon28.png)
 
+任何一个警报，都有几个关键的部分：`所针对的资源` & `触发的条件` & `警报级别` & `所采取的操作`
 
+`Azure Alerts`支持为Azure中资源产生的`Metrics` & `Logs from Log Analytics` & `Activity Log` & `Azure 平台运行状况`等作为触发警报的数据源
 
+`Azure Alerts`支持用户将警报定义为 `Sev0` & `Sev1` & `Sev2` & `Sev3` & `Sev4`五个等级，分别代表警报涉及的资源对当前环境的影响大小，`Sev0`最为严重
 
----
-# WIP with ZRJ
+`Azure Alerts`支持用户设置不同的`Action Group`来相应不同级别的警报，响应手段包括`Email\SMS\电话` & `Webhook` & `Azure Function` & `Azure Logic Apps` & `Automation Runbook`等
 
-#### Chn07 通过 Application Insights 监控应用程序
+### Chn01 预先规划好环境中的 Action Group
 
-- ToDo 引入SDK，标准的收集HTTP信息 https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/asp-net
-- ToDo 自定义收集信息
-- ToDo 收集业务信息 https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/usage-send-user-context
-- ToDo 监控Kubernetes中的应用程序 https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/kubernetes  / https://github.com/Microsoft/Application-Insights-Istio-Adapter/blob/master/SETUP.md#faq
+`Action Group`与`Alert Rules`是多对多的关系，双方可以互相匹配。因此在规划监控系统时，可以预先设定一些常用的通知手段，且随着自动化水平的增加，逐渐更新。
 
-Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/azure-web-apps
+本次实验，先预先设定一些`Action Group`，主要针对环境中的警报提供`邮件/短信/电话`报警的支持。本次实验会设置三个`Action Group`，分别针对于`General` & `Project01` & `Project02`, 且`General`的只使用Email，`Project01`使用`Email & SMS`，`Project02`使用`Email&Voice`. 将完成`General` `Action Group`的设置，留下另外两个自行完成。
 
----
+```
+# 通过 Azure CLI 完成 Action Group的创建
+az monitor action-group create -n General -g zjmon01 --short-name general --action email operation01 jianzsh0821@163.com
 
+# 如果希望创建SMS的Action Group, 可通过如下命令查看完整参数
+az monitor action-group create -h
+```
 
+![image](./images/monitor/mon29.png)
 
+__*参考资料：*__
 
+- [语音、短信、电子邮件、Azure 应用推送通知和 webhook 帖子的速率限制](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-rate-limiting)
 
+- [在 Azure 门户中创建和管理器操作组](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/action-groups)
 
+### Chn02 设置警报规则
 
----
-# With ZJ
+__*针对活动日志设置警报*__
 
-### HOL 了解环境中运行资源的Insights 
+本次实验，针对活动日志设置警报，对于环境中所有`删除虚机`的操作，都需要邮件通知系统管理员，即通过`General - Action Group`来处理。除此之外，`重启虚机` & `关闭虚机`同样需要通知系统管理员，这两个警报的设置请自行完成。
 
-#### Chn01 总体环境监控
+![image](./images/monitor/mon30.png)
 
-- ToDo 环境中的概况 （资源的数量，各类型资源的数量，警报数量，服务健康数量）
+创建 Activity Log Alert 主要分三步：
 
-#### Chn02 虚机&存储监控
+Step 1 确定 `Scope`
 
-- ToDo https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/vminsights-overview / https://github.com/asheniam/azure-grafana-dashboard-templates/tree/master/microsoft-compute-virtualmachines/overview
+![image](./images/monitor/mon31.png)
 
-- ToDo https://github.com/asheniam/azure-grafana-dashboard-templates/tree/master/microsoft-storage-storageaccounts-blobservices/overview / https://github.com/asheniam/azure-grafana-dashboard-templates/tree/master/microsoft-storage-storageaccounts/overview 
+Step 2 确定 `触发条件`
 
-#### Chn03 网络性能监控
+![image](./images/monitor/mon32.png)
 
-- ToDo : https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/network-performance-monitor
+![image](./images/monitor/mon33.png)
 
-#### Chn04 容器监控
+Step 3 确定 `Action Group`
 
-- ToDo AKS 容器的监控 Insights https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-overview
+![image](./images/monitor/mon34.png)
 
-- ToDo AKS-Engine 容器的监控 Insights https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/containers
-
----
-
-
-
-
-
-
-
-
-
+当我们去删除任意资源组下面的一个虚机时，指定的邮箱就会收到一封如下的邮件
 
 
 
+本次实验，将针对`Project01`,默认情况下，`Project01`项目中所使用的虚机不会被关闭，如果某个虚机被关闭，需要触发`Automation Runbook`来快速重新启动。
+
+#### 创建 Azure Automation Runbook
+
+创建实验所需的 Automation Account `Administrative-Operations`
+
+![image](./images/monitor/mon35.png)
+
+创建实验所需的 Automation Runbook `StartVM_WhenVMStopped`
+
+![image](./images/monitor/mon36.png)
+
+编写 Automation Runbook, 具体内容可参考 [StartVM_WhenVMStopped.ps1](./files/monitor/scripts/StartVM_WhenVMStopped.ps1), 并发布
+
+![image](./images/monitor/mon37.png)
+
+#### 创建 Action Group 使用 Azure Automation Runbook
+
+![image](./images/monitor/mon38.png)
+
+![image](./images/monitor/mon39.png)
+
+#### 创建报警规则，使用此 Action Group
+
+
+
+__*参考资料：*__
+
+- [创建、 查看和管理通过使用 Azure Monitor 活动日志警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-activity-log)
+
+- [使用警报触发 Azure 自动化 Runbook](https://docs.microsoft.com/zh-cn/azure/automation/automation-create-alert-triggered-runbook)
 
 
 
@@ -425,40 +463,152 @@ Tips : 找到支持的应用配置 : https://docs.microsoft.com/zh-cn/azure/azur
 
 
 
-# Later 
 
-### HOL 完善环境中的警报机制及后期采取的行动
 
-#### Chn01 规划 Action Group
 
-- ToDo : Email / SMS https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/action-groups
 
-- ToDo : WebHook https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-log-alerts-webhook
 
-- ToDo : LogicApp https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-common-schema-integrations
 
-#### Chn02 设置警报规则
 
-- ToDo 活动日志警报
+__*针对Azure资源设置警报*__
 
-- ToDo 平台警报 （基于虚机及容器的监控指标，基于Log日志）
+本次实验，将模拟几个经常会遇到的场景，针对虚拟机，当`CPU超过75%`时，通知相应的人员进行处理；针对容器，当环境中出现`Pending的Pod`时，通知相应的人员进行处理；
 
-- ToDo 显示平台中警报的情况
+本次实验所使用到的模板均存在于 [arm-templates](./files/monitor/arm-templates/) 下
 
-### HOL 结合 Service Health & Resource Health，及时了解环境动态并设置告警
+```
+# 本次实验将使用 Azure CLI 结合 ARM 模板完成
+# 针对虚拟机，设置CPU报警
+# 获取ResourceID，将针对RG下面的所有VM进行警报设置
+az group show -n $Project01 --query id -o tsv
 
-- ToDo ： 服务运行状况 https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/service-notifications
+# 获取 Action Group ResourceID
+az monitor action-group show -n Project01 -g $Project01 --query 'id' -o tsv
+
+# 创建针对CPU过高的告警
+az group deployment create --name VMCPUAlertDeploy -g zjmon --template-file monitor-vms-in-rg.json --parameters @vm-cpu-high.parameters.json --parameters targetResourceRegion="EastUS" --parameters '{ "targetResourceGroup": {"value": ["$rgID"]}}' --parameters actionGroupId='$actionGroupID'
+```
+
+当警报生效后，环境中的虚机出现CPU过高时，邮箱及手机就会收到如下警告：
+
+![image](./images/monitor/mon41.png)
+
+![image](./images/monitor/mon42.png)
+
+![image](./images/monitor/mon43.png)
+
+大部分平台提供的指标，针对平台已经可以提供很好的监视，但有些时候，我们还是需要根据`Log Analytics`的查询结果，设置相应的警报，本次实验，将通过`Log Analytics`查询容器的信息，当环境中出现`Pending Pod`，就需要发送警报给相应的同事。本次实验将使用`Azure Portal`完成。
+
+Step 1 选取监视源
+
+![image](./images/monitor/mon44.png)
+
+Step 2 选取监视触发条件
+
+![image](./images/monitor/mon45.png)
+
+Step 3 设置`Action Group`
+
+![image](./images/monitor/mon46.png)
+
+__*参考资料：*__
+
+- [使用 Azure Monitor 创建、查看和管理指标警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-metric)
+
+- [使用 Resource Manager 模板创建指标警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-metric-create-templates)
+
+- [使用 Azure Monitor 创建、查看和管理日志警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-log)
+
+- [Azure Monitor 中的日志警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-unified-log)
+
+### Chn03 结合 Service Health & Resource Health，及时了解环境动态并设置告警
+
+本次实验，将结合两个服务`Service Health` & `Resource Health`，设置相应的警报，确保当云平台或资源出现问题时，第一时间知晓。
+
+`Service Health`是集中了解云平台中资源是否可用，或当平台出现问题时，及时了解问题进站及下载事故分析的地方
+
+![image](./images/monitor/mon47.png)
+
+`Service Health`会提供包括`Service issue` & `Planned maintenance` & `Health advisories`在内的三种指标，建议在实际的生产环境中，针对这三种指标设置三个警报，分别对应特定`Action Group`, 确保不同问题能够找到合适处理的人。
+
+本次实验将针对`Service issue`进行设置，另外两个的设置请自行练习。
+
+![image](./images/monitor/mon48.png)
+
+Step 1 选择需要涉及的订阅，区域，服务以及事件类别
+
+![image](./images/monitor/mon49.png)
+
+Step 2 选择Alert关联的`Action Group` 并进行创建
+
+这样当下一次平台中选中的服务出现问题或出现维护公告时，你会第一时间收到消息，确保可以及早处理突发事件。
+
+`Resource Health`是能够及时反映正在使用的某一个Azure资源是否因为平台出现的问题，达到`Limitation`, 或性能出现显著降低的一种监控指标
+
+![image](./images/monitor/mon50.png)
+
+资源是指Azure提供的服务，例如：`Virtual Machines` & `Application Gateway`等, 资源的状态会在 `Available` & `Unavailable` & `Unknown` & `Degraded` 之间转换，只要资源不处于 `Available` 状态，除非是一些已知的原因，比如：`手动停机`，都应该发送相应的警报引起负责人员的重视，资源处于非`Available`状态证明当前环境中正存在一种或多种资源不能正常使用。
+
+本次实验将针对资源组下的所有资源类型`Resource Health`设置警报，有关涉及到的 ARM Template 请参阅 [arm-templates](./files/monitor/arm-templates/) 下的相应文件。
+
+```
+# 本次实验将使用 Azure CLI 结合 ARM 模板完成
+# 针对 Resource Health 进行告警设置，当资源组下的某一资源状态从Available改变成Unavailable,Unknown,Degraded时，发送警报通知运维人员
+# 获取ResourceID
+az group show -n $Project01 --query id -o tsv
+
+# 获取 Action Group ResourceID
+az monitor action-group show -n Project01 -g $Project01 --query 'id' -o tsv
+
+# 设置Resource Health的警报
+az group deployment create --name ResourceHealth01 -g $Project01 --template-file monitor-resources-health.json --parameters activityLogAlertName="ResourceHealthAlert_Project01" --parameters '{ "scopes": {"value": ["$rgID"]}}' --parameters actionGroupResourceId='$actionGroupID'
+```
+
+设置完成后，当出现平台性问题导致资源状态变化，就会发送告警信息。
+
+
+
+
+```
+
+# 针对虚拟机，设置CPU报警
+# 获取ResourceID，将针对RG下面的所有VM进行警报设置
+az group show -n $Project01 --query id -o tsv
+
+# 获取 Action Group ResourceID
+az monitor action-group show -n Project01 -g $Project01 --query 'id' -o tsv
+
+# 创建针对CPU过高的告警
+az group deployment create --name VMCPUAlertDeploy -g zjmon --template-file monitor-vms-in-rg.json --parameters @vm-cpu-high.parameters.json --parameters targetResourceRegion="EastUS" --parameters '{ "targetResourceGroup": {"value": ["$rgID"]}}' --parameters actionGroupId='$actionGroupID'
+```
+
+
+__*参考资料：*__
+
+- [服务运行状况概述](https://docs.microsoft.com/zh-cn/azure/service-health/service-health-overview)
+
+- [资源运行状况概述](https://docs.microsoft.com/zh-cn/azure/service-health/resource-health-overview)
+
+- [Azure 资源运行状况中的资源类型和运行状况检查](https://docs.microsoft.com/zh-cn/azure/service-health/resource-health-checks-resource-types)
+
+- [使用资源管理器模板创建资源运行状况警报](https://docs.microsoft.com/zh-cn/azure/service-health/resource-health-alert-arm-template-guide)
+
+
+
+
+
+
+
+
+
+
 2
 ### HOL 做好工作簿的建设
 
 - ToDo : 工作簿 : https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/vminsights-workbooks
 
-### HOL 监控数据的生命周期管理及数据安全
 
-建议数据放在 Log Analytics 存放60天，以便实时的了解环境中的状况；将超过60天的数据导出到Storage Account保存6个月到1年，以便进行长期的分析
 
-https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-security
-https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/tutorial-archive-data
 
 - ToDo : 数据自动化从 LA to SA https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/archive-diagnostic-logs
 
@@ -466,12 +616,27 @@ https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/tutorial-archive-data
 
 - ToDo https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/usage-estimated-costs
 
-### HOL 与 Azure DevOps 结合的 持续监控（Continus Monitor）
 
-https://docs.microsoft.com/zh-cn/azure/azure-monitor/continuous-monitoring
 
-- ToDo : 应用程序的连续监控 （Azure DevOps Pipeline 与 Azure Application Insights）https://docs.microsoft.com/zh-cn/azure/azure-monitor/app/continuous-monitoring
-DevOps Pipelines 中的 Continus Monitor
+
+
+
+
+
+
+
+
+
+
+
+
+
+### HOL 监控数据的生命周期管理及数据安全
+
+建议数据放在 Log Analytics 存放60天，以便实时的了解环境中的状况；将超过60天的数据导出到Storage Account保存6个月到1年，以便进行长期的分析
+
+https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/data-security
+https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/tutorial-archive-data
 
 ### HOL 规划监控数据的生命周期
 
