@@ -261,14 +261,8 @@ az aks show -n $yourAKSName -g Prj02 --query "addonProfiles.omsagent.enabled"
 
 >资料参考：
 >- 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
-<<<<<<< HEAD
 
 ## Application Insights Container Part Hands-on Lab
-=======
->___
-
-### Application Insights Container Part Hands-on Lab
->>>>>>> 2cf611d6184a93103b7cfafe554cb0b1a64d68e1
 
 **第一部分 准备AKS集群，Application Insights**
 
@@ -675,8 +669,4 @@ __*参考资料：*__
 
 - [将Azure Monitor中的数据通过Eventhub导出到外部平台](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/stream-monitoring-data-event-hubs)
 
-<<<<<<< HEAD
 - [Kusto Query Language (KQL) from Scratch](https://www.pluralsight.com/courses/kusto-query-language-kql-from-scratch)
-=======
-- [Kusto Query Language (KQL) from Scratch](https://www.pluralsight.com/courses/kusto-query-language-kql-from-scratch)
->>>>>>> 2cf611d6184a93103b7cfafe554cb0b1a64d68e1
