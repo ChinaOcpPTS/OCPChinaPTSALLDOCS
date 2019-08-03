@@ -47,6 +47,10 @@ c.ARM需要的配置文件，parameters.json（包含ARM所需要的参数定义
 
 ## 第一部分：手动集群伸缩 ##
 手动伸缩：可以通过Portal或者CLI进行AKS集群worker nodes横向扩展，本实验采用Portal方式；修改之后要稍等3 ~ 5分钟才可以生效。
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/26.png)
+
+修改节点个数后，点击save即可，本实验演示从3节点变为4节点：修改之后要稍等3 ~ 5分钟才可以生效
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/27.png)
 
 ## 第二部分：自动收缩集群 ##
 自动伸缩：autoscaling，目前还在preview阶段，Mooncake还未支持，不过目前已经在roadmap上了，本实验此部分选择使用新加坡Global账号做测试，旨在做功能性演示
@@ -126,6 +130,7 @@ a.	选择“Azure Active Directory” > “应用注册” > “新建应用程�
 b.	在 Azure AD 应用程序中，选择“设置” > “所需的权限” > “添加” > “选择API”，并搜索本文档最后一个步骤中创建的服务器应用程序的名称。
 ![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/20.png)
 
+c.	勾选该应用程序，并单击“选择”。
 ![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/21.png)
 
 d.	从列表中选择服务器 API，然后选择“授予权限”
