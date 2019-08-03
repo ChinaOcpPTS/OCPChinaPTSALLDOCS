@@ -41,13 +41,12 @@ c.ARM需要的配置文件，parameters.json（包含ARM所需要的参数定义
 ![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/5.png)
 
 3.执行最后一步后，会在本地启动一个http服务，监听8001端口，即为AKS Dashboard
-
+![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/6.png)
 
 # **集群收缩** #
 
 ## 第一部分：手动集群伸缩 ##
 手动伸缩：可以通过Portal或者CLI进行AKS集群worker nodes横向扩展，本实验采用Portal方式；修改之后要稍等3 ~ 5分钟才可以生效。
-![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/6.png)
 
 ## 第二部分：自动收缩集群 ##
 自动伸缩：autoscaling，目前还在preview阶段，Mooncake还未支持，不过目前已经在roadmap上了，本实验此部分选择使用新加坡Global账号做测试，旨在做功能性演示
@@ -127,7 +126,6 @@ a.	选择“Azure Active Directory” > “应用注册” > “新建应用程�
 b.	在 Azure AD 应用程序中，选择“设置” > “所需的权限” > “添加” > “选择API”，并搜索本文档最后一个步骤中创建的服务器应用程序的名称。
 ![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/20.png)
 
-c.	Dasdsa勾选该应用程序，并单击“选择”。
 ![](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/%E5%AE%B9%E5%99%A8AKS/Media/Basic/21.png)
 
 d.	从列表中选择服务器 API，然后选择“授予权限”
@@ -212,7 +210,7 @@ b.	运行任何 kubectl 命令后，系统会提示在 Azure 上进行身份验�
 
     git clone https://github.com/Azure-Samples/azure-voting-app-redis.git
 
-2.换到克隆目录。使用 Docker Compose，可自动生成容器映像和部署多容器应用程序。使用示例 docker-compose.yaml 文件创建容器映像、下载 Redis 映像和启动应用程序：
+2.换到克隆目录。使用 Docker Compose，可自动生成容器映像和部署多容器应用程序。使用示例 docker-compose.yaml 文件创建容器映像、下载 Redis 映像和启动应用程序：(请提前安装好docker-compose)
 
     docker-compose up -d
 
@@ -230,6 +228,9 @@ b.	运行任何 kubectl 命令后，系统会提示在 Azure 上进行身份验�
 6.若要使用 ACR 实例，必须先登录。 使用 az acr login 命令并提供一个唯一名称，该名称是在上一步提供给容器注册表的
 
     az acr login --name <acrName>
+    
+7. 最后，在ACR的Access Control里加入之前建立AKS使用的service principle，这样在拉取镜像的时候就会有相应的权限。
+
 
 ## 第二部分：主要操作部分 ##
 1.首先获取节点的资源组名称，因为节点所在的资源组名称与AKS创建的资源组名称并不是一致的。
@@ -268,7 +269,7 @@ b.	运行任何 kubectl 命令后，系统会提示在 Azure 上进行身份验�
 
 9.列出注册表中的映像。若要返回已推送到 ACR 实例的映像列表，请使用 az acr repository list 命令。 按如下所示提供自己的 <acrName>：
 
-    az acr repository list --name <acrName--output table
+    az acr repository list --name <acrName> --output table
 
 
 10.在目录中编辑yaml文件
@@ -646,7 +647,7 @@ helm install mc/redis
 ```
 # 列出环境中部署的Helm资源
 helm list
-helm status -n joyous-umbrellabird
+helm status joyous-umbrellabird
 ```
 
 ![](./Media/monitor/y06.png)
