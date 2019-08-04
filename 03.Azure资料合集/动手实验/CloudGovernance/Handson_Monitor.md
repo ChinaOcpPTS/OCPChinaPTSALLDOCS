@@ -261,9 +261,8 @@ az aks show -n $yourAKSName -g Prj02 --query "addonProfiles.omsagent.enabled"
 
 >资料参考：
 >- 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
->___
 
-### Application Insights Container Part Hands-on Lab
+## Application Insights Container Part Hands-on Lab
 
 **第一部分 准备AKS集群，Application Insights**
 

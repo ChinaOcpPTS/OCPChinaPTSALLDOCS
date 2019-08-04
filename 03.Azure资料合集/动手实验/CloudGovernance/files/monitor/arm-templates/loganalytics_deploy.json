@@ -26,6 +26,15 @@
             "metadata": {
             "description": "Specifies the service tier of the workspace: Standalone, PerNode, Per-GB"
             }
+        },
+        "dataRetention": {
+            "type": "int",
+            "defaultValue": 30,
+            "minValue": 7,
+            "maxValue": 730,
+            "metadata": {
+              "description": "Number of days of retention. Workspaces in the legacy Free pricing tier can only have 7 days."
+            }
         }
     },
     "resources": [
@@ -40,7 +49,8 @@
                 },
                 "features": {
                     "searchVersion": 1
-                }
+                },
+                "retentionInDays": "[parameters('dataRetention')]"
             }
         }
     ]
