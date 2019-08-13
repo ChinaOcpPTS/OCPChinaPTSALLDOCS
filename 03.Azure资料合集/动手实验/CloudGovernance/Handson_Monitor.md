@@ -262,6 +262,55 @@ az aks show -n $yourAKSName -g Prj02 --query "addonProfiles.omsagent.enabled"
 >资料参考：
 >- 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
 
+
+## Application Insights SDK Part Hands-on Lab
+
+**第一部分 准备部署应用**
+1.	到github下载本次动手实验需要用到的文件
+https://github.com/rkuehfus/AzureMonitoringHackathon 
+    ![image](./images/monitor/AppInsightsSDK01.png)
+
+
+2.	解压后，打开其中的DeployMonHackEnv.ps1，可以使用vscode，也可以使用任何文本工具。随后更新最新的powershell
+
+    ```Install-Module -Name AzureRM -Force -Scope CurrentUser -AllowClobber```
+
+3.	首先在脚本文件中更改5个小写字符的名字
+    ```Example: $MonitoringHackName = 'mon17'```
+
+4.	在powershell中登录你的azure订阅
+    ```Connect-AzureRmAccount```
+
+    ![image](./images/monitor/AppInsightsSDK02.png)
+
+5.	跑脚本文件中的前面两行，建立keyvault
+
+    ![image](./images/monitor/AppInsightsSDK03.png)
+
+6.	随后会跳出输出用户密码，输入你想用的密钥，并且记住
+
+    ![image](./images/monitor/AppInsightsSDK04.png)
+
+7.	接下来跑脚本中的这条命令，并且复制结果中的高亮部分。
+    ![image](./images/monitor/AppInsightsSDK05.png)
+
+8.	把高亮复制的内容，黏贴到azuredeploy.parameters.json文件中，并且注意更新对应的prefix
+
+    ![image](./images/monitor/AppInsightsSDK06.png)
+    ![image](./images/monitor/AppInsightsSDK07.png)
+
+9.	跑脚本中最后的一条命令，估计要等半小时左右，所有的资源会部署完毕。
+
+    ![image](./images/monitor/AppInsightsSDK08.png)
+
+
+**第二部分**
+
+
+
+
+
+
 ## Application Insights Container Part Hands-on Lab
 
 **第一部分 准备AKS集群，Application Insights**
