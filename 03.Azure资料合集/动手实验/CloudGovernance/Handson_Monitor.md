@@ -263,7 +263,12 @@ az aks show -n $yourAKSName -g Prj02 --query "addonProfiles.omsagent.enabled"
 >- 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
 
 
+
+
+
 ## Application Insights SDK Part Hands-on Lab
+
+
 
 **第一部分 准备部署应用**
 1.	到github下载本次动手实验需要用到的文件
@@ -304,7 +309,145 @@ https://github.com/rkuehfus/AzureMonitoringHackathon
     ![image](./images/monitor/AppInsightsSDK08.png)
 
 
-**第二部分**
+
+
+
+**第二部分** 在App Insights中观测应用的数据
+
+
+1.	在Portal中新建一个App Insights的Workspace
+
+    ![image](./images/monitor/AppInsightsSDK09.png)
+
+2.	进入之前部署的跳板机
+
+    ![image](./images/monitor/AppInsightsSDK10.png)
+
+3.	在Visual Studio里打开相对应的project
+
+    ![image](./images/monitor/AppInsightsSDK11.png)
+
+    ![image](./images/monitor/AppInsightsSDK12.png)
+
+    ![image](./images/monitor/AppInsightsSDK13.png)
+
+
+    接下来就能看到打开的eshop网站了。
+    
+    ![image](./images/monitor/AppInsightsSDK14.png)
+
+
+4.	接下来让我们来安装一下application insights的SDK。在右侧“Web”那里点击邮件，然后点击安装sdk。
+
+    ![image](./images/monitor/AppInsightsSDK15.png)
+
+    ![image](./images/monitor/AppInsightsSDK16.png)
+
+
+5.	注意选择相对应的subscription等信息
+
+    ![image](./images/monitor/AppInsightsSDK17.png)
+
+    ![image](./images/monitor/AppInsightsSDK18.png)
+
+
+6.	测试一下安装了SDK的程序是否正常运行，同时观测一下app insights的telemetry有没有正常运作。可以尝试做一些商品浏览，登录，添加商品到购物车等操作，然后观测app insights里面的信息。
+
+    ![image](./images/monitor/AppInsightsSDK19.png)
+
+    ![image](./images/monitor/AppInsightsSDK20.png)
+
+
+7.	好了，现在来更新一下applicaton insights的Nuget Packege。装完之后再运行一遍程序，保证一切都没有问题。
+
+    ![image](./images/monitor/AppInsightsSDK21.png)
+
+    ![image](./images/monitor/AppInsightsSDK22.png)
+
+    ![image](./images/monitor/AppInsightsSDK23.png)
+
+
+8.	把加入SDK的程序重新发布一下，我们吧这个程序发布到后端的VMSS里面，分别在1号机器，和2号机器做相同的操作。
+
+    ![image](./images/monitor/AppInsightsSDK24.png)
+
+    ![image](./images/monitor/AppInsightsSDK25.png)
+
+
+    先选择第一台vmss的主机
+    
+    ![image](./images/monitor/AppInsightsSDK26.png)
+
+    ![image](./images/monitor/AppInsightsSDK27.png)
+
+    ![image](./images/monitor/AppInsightsSDK28.png)
+
+    ![image](./images/monitor/AppInsightsSDK29.png)
+    
+    ![image](./images/monitor/AppInsightsSDK30.png)
+
+    把vmss里面第二台机器也部署一下
+
+    ![image](./images/monitor/AppInsightsSDK31.png)
+
+
+9.	现在我们在portal里试一下ping的test，查看事件有没有被捕捉到。
+    
+    ![image](./images/monitor/AppInsightsSDK32.png)
+
+    ![image](./images/monitor/AppInsightsSDK33.png)
+
+    ![image](./images/monitor/AppInsightsSDK34.png)
+
+
+10.	通过手工的脚本，在你的笔记本或者jump server上运行一下，把脚本中的url替换成你部署的eshop当中的url。在尝试看一下app insights的数据收集。
+    ```
+    for ($i = 0 ; $i -lt 100; $i++)
+    {
+    Invoke-WebRequest -uri http:// mon19webscalesetlb.eastus.cloudapp.azure.com/
+    }
+    ```
+
+    ![image](./images/monitor/AppInsightsSDK35.png)
+
+    
+    Sclaeout 的规则
+
+    ![image](./images/monitor/AppInsightsSDK36.png)
+
+
+    Scalein的规则
+
+    ![image](./images/monitor/AppInsightsSDK37.png)
+
+    ![image](./images/monitor/AppInsightsSDK38.png)
+
+11.	过5分钟之后，应该可以看到性能数据了，并且可以看到vmss按照规则开始自动扩展。
+
+
+    ![image](./images/monitor/AppInsightsSDK39.png)
+
+    ![image](./images/monitor/AppInsightsSDK40.png)
+
+
+12.	尝试触发一个登录错误。打开网站的主页
+
+    ![image](./images/monitor/AppInsightsSDK41.png)
+
+    ![image](./images/monitor/AppInsightsSDK42.png)
+
+    尝试更新一下密码
+
+    ![image](./images/monitor/AppInsightsSDK43.png)
+
+    ![image](./images/monitor/AppInsightsSDK44.png)
+
+    从app insights里找到这个错误
+
+    ![image](./images/monitor/AppInsightsSDK45.png)
+
+    ![image](./images/monitor/AppInsightsSDK46.png)
+
 
 
 
@@ -312,6 +455,8 @@ https://github.com/rkuehfus/AzureMonitoringHackathon
 
 
 ## Application Insights Container Part Hands-on Lab
+
+
 
 **第一部分 准备AKS集群，Application Insights**
 
@@ -334,6 +479,8 @@ https://github.com/rkuehfus/AzureMonitoringHackathon
 5.	创建Application Insights，并且记下instruments，之后在配置中会用到。
 
     ![image](./images/monitor/AppInsights%20(4).png)
+
+
 
 **第二部分 安装Helm，Istio**
 1.	在本地客户端安装Helm，根据不同的的本地操作系统可以选择相应的安装方法
@@ -396,6 +543,8 @@ helm install install/kubernetes/helm/istio --name istio --namespace istio-system
 8.	通过下面的命令查看Istio相关的Pods是不是都正常启动了。
 
     ```kubectl get pods --namespace istio-system```
+
+
 
 **第三部分 使用Application Insights监控AKS里的服务**
 
