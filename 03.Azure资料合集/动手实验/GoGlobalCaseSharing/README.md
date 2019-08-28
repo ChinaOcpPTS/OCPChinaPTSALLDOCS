@@ -1,2 +1,1 @@
-# Readme
-test
+# Go Global Case Sharing
