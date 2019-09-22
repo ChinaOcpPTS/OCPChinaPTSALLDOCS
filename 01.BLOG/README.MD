@@ -87,18 +87,18 @@
 | 83 | [AKS使用Azure Disk实现动态持久化存储(上)](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Ruijun_Chang/AKS使用Azure%20Disk实现动态持久化存储(上).md) | Ruijun Chang | 6月份 | 2019/9/21  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Ruijun_Chang |
 | 84 | [AKS使用Azure File实现动态持久化存储](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Ruijun_Chang/AKS使用Azure%20File实现动态持久化存储.md) | Ruijun Chang | 6月份 | 2019/9/21  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Ruijun_Chang |
 | 85 | [AKS初体验（2）：登录到node节点的几种方式](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Ruijun_Chang/AKS初体验%EF%BC%882%EF%BC%89%EF%BC%9A登录到node节点的几种方式.md) | Ruijun Chang | 6月份 | 2019/9/21  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Ruijun_Chang |
-| 86 | [我的地盘我做主——Azure Private DNS Zone ](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Yuan_Han/我的地盘我做主——Azure%20Private%20DNS%20Zone.md) | Yuan Han | 7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Yuan_Han |
-| 87 | [借我一双慧眼吧——浅析Azure内置DNS ](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Yuan_Han/借我一双慧眼吧——浅析Azure内置DNS%20.md) | Yuan Han | 7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Yuan_Han |
-| 88 | [尘归尘土归土，一切为有法——Azure的数据生命周期管理](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Yuan_Han/尘归尘土归土%EF%BC%8C一切为有法——Azure的数据生命周期管理.md) | Yuan Han | 7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Yuan_Han |
-| 89 | [Application Insights 完成应用程序的全链路监控 ](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Jian_Zhao/Application%20Insights%20完成应用程序的全链路监控%20.md) | Jian Zhao | 7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Jian_Zhao |
-| 90 | [Azure 数据资源管理器 -- 当 ADX 遇上 ML](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Wei_Kang/Azure%20数据资源管理器%20--%20当%20ADX%20遇上%20ML.md) | Wei Kang | 7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Wei_Kang/ |
-| 91 | [多快好省 -- Azure VMSS AI 推理篇](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Wei_Kang/多快好省%20--%20Azure%20VMSS%20AI%20推理篇.md) | Wei Kang | 7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Wei_Kang/ |
-| 92 | [微软智能云携Game Stack和PlayFab助力游戏出海](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Robert_Yang/微软智能云携Game%20Stack和PlayFab助力游戏出海.md) | Robert Yang | 8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Robert_Yang/ |
-| 93 | [现代游戏开发必备利器之微软Game Stack](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Robert_Yang/现代游戏开发必备利器之微软Game%20Stack%20.md) | Robert Yang | 8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Robert_Yang/ |
-| 94 | [及时了解Azure云平台健康状况，有事早知道](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Jian_Zhao/及时了解Azure云平台健康状况%EF%BC%8C有事早知道%20.md) | Jian Zhao | 8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Jian_Zhao |
-| 95 | [Azure Security Center--赋能每一台服务器，对不正当访问say no](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Jiayu_Zhu/Azure%20Security%20Center--赋能每一台服务器%EF%BC%8C对不正当访问say%20no.md) | Jiayu Zhu | 8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Jiayu_Zhu |
-| 96 | [AZ-900考试基本知识点梳理 & Azure基础知识概要](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/tree/master/01.BLOG/Simeng_Zhang) | Simeng Zhang | 8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Simeng_Zhang |
+| 86 | [我的地盘我做主——Azure Private DNS Zone ](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Yuan_Han/我的地盘我做主——Azure%20Private%20DNS%20Zone.md) | Yuan Han | 2019年7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Yuan_Han |
+| 87 | [借我一双慧眼吧——浅析Azure内置DNS ](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Yuan_Han/借我一双慧眼吧——浅析Azure内置DNS%20.md) | Yuan Han | 2019年7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Yuan_Han |
+| 88 | [尘归尘土归土，一切为有法——Azure的数据生命周期管理](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Yuan_Han/尘归尘土归土%EF%BC%8C一切为有法——Azure的数据生命周期管理.md) | Yuan Han | 2019年7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Yuan_Han |
+| 89 | [Application Insights 完成应用程序的全链路监控 ](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Jian_Zhao/Application%20Insights%20完成应用程序的全链路监控%20.md) | Jian Zhao | 2019年7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Jian_Zhao |
+| 90 | [Azure 数据资源管理器 -- 当 ADX 遇上 ML](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Wei_Kang/Azure%20数据资源管理器%20--%20当%20ADX%20遇上%20ML.md) | Wei Kang | 2019年7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Wei_Kang/ |
+| 91 | [多快好省 -- Azure VMSS AI 推理篇](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Wei_Kang/多快好省%20--%20Azure%20VMSS%20AI%20推理篇.md) | Wei Kang | 2019年7月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Wei_Kang/ |
+| 92 | [微软智能云携Game Stack和PlayFab助力游戏出海](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Robert_Yang/微软智能云携Game%20Stack和PlayFab助力游戏出海.md) | Robert Yang | 2019年8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Robert_Yang/ |
+| 93 | [现代游戏开发必备利器之微软Game Stack](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Robert_Yang/现代游戏开发必备利器之微软Game%20Stack%20.md) | Robert Yang | 2019年8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Robert_Yang/ |
+| 94 | [及时了解Azure云平台健康状况，有事早知道](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Jian_Zhao/及时了解Azure云平台健康状况%EF%BC%8C有事早知道%20.md) | Jian Zhao | 2019年8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Jian_Zhao |
+| 95 | [Azure Security Center--赋能每一台服务器，对不正当访问say no](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Jiayu_Zhu/Azure%20Security%20Center--赋能每一台服务器%EF%BC%8C对不正当访问say%20no.md) | Jiayu Zhu | 2019年8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Jiayu_Zhu |
+| 96 | [AZ-900考试基本知识点梳理 & Azure基础知识概要](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/tree/master/01.BLOG/Simeng_Zhang) | Simeng Zhang | 2019年8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Simeng_Zhang |
 
 Jalen Hu
 
-2019-04-28
+2019-09-22
