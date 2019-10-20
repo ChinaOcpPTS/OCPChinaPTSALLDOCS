@@ -28,37 +28,37 @@
  
 
 Intune条件访问新建策略
-
-输入对应的名称。【分配】的【用户和组】选项，【包括】选所有，【排除】这里勾选之前设置的全局管理员。
 ![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-4.jpg)    
-【云应用与操作】【条件】按照如下配置：
+输入对应的名称。【分配】的【用户和组】选项，【包括】选所有，【排除】这里勾选之前设置的全局管理员。
 ![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-6.jpg)    
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-8.jpg)   
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-10.jpg)    
+【云应用与操作】【条件】按照如下配置：
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-8.jpg)    
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-10.jpg)   
 ![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-12.jpg)    
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-14.jpg)    
  
 访问控制配置如图：
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-14.jpg)    
-设置完成后，【启用策略】选择【打开】，【创建】。
 ![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-16.jpg)    
+设置完成后，【启用策略】选择【打开】，【创建】。
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-18.jpg)    
 2.	配置win10设备的自动注册
 回到https://portal.azure.com，点击【Azure Active Directory】-> 移动性（MDM和MAM）-> Microsoft Intune
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-18.jpg)    
-红框部分选择要启动自助注册的用户或组（这里可以自定义一个组，把除了全局管理员之外的其他用户都放在同一个组里进行一键勾选）
 ![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-20.jpg)    
+红框部分选择要启动自助注册的用户或组（这里可以自定义一个组，把除了全局管理员之外的其他用户都放在同一个组里进行一键勾选）
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-22.jpg)    
 其余值选择默认，【保存】。
 该策略创建成功后，会要求除了两位全局管理员之外的所有用户在设备上登录O365 应用的时候启用设备注册和认证。
 3.	验证。
 此处我们用虚拟机建一台win 10（不必是服务器，系统满足即可）来模拟BYOD的设备。VM建好之后，使用之前选择的mdm组中的任意一个账户登陆https://office.com ，会发现如下告警：
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-22.jpg)   
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-24.jpg)   
  
 点击“设置>账户>访问工作或学校”根据指引我们输入账号相关信息进行验证：
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-24.jpg)  
 ![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-26.jpg)  
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-28.jpg)  
 配置完成后需要后台同步一段时间，我们回到Intune的管理界面看一下：
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-28.jpg)    
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-30.jpg)    
 当出现如上信息，表明刚刚的win10已经注册上来了，此时它已是一个符合策略的设备。点击这个设备：我们可以进行远程控制。
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-30.jpg)   
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-32.jpg)   
 另：做完以上操作后，我们如果是登录移动端，会要求你先下载【公司门户】的app进行设备注册，注册完之后方可登录O365 Apps。 
 
 参考文档：
