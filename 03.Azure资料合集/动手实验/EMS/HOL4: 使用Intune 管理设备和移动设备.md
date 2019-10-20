@@ -20,11 +20,11 @@
 ![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-2.jpg)
  
 进入后，如发现有以下红框内的提示，则需要启用设备管理，点击框住的部分。
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL3-34.jpg)  
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-34.jpg)  
 在划出的页面上，选择“Intune MDM机构”，保存。
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL3-36.jpg)   
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-36.jpg)   
 然后在Intune的页卡上，选择租户状态，当“MDM机构“变成图示状态时，则说明设置生效，才可以继续进行下一步。
-![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL3-38.jpg)   
+![image](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/03.Azure资料合集/动手实验/image/EMS%20HOL4-38.jpg)   
  
 
 Intune条件访问新建策略
