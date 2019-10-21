@@ -6,49 +6,49 @@
 
 ### 操作步骤
 
-1. 首先登录AWS账户，在 Amazon Web Services 控制台中, 在 "安全性" 下, 单击 "标识 & 符合性", 然后选择IAM。
+1. 首先登录AWS账户，在 `Amazon Web Services` 控制台中, 在 `"安全性"` 下, 单击 `"标识 & 符合性"`, 然后选择 `IAM`。
 
 ![image](./images/AWSCloudtrail/01.png)
 
-2. 选择 "角色" 并选择 "创建角色"。
+2. 选择 `"角色"` 并选择 `"创建角色"`。
 
 ![image](./images/AWSCloudtrail/02.png)
 
-3. 请选择“其他 AWS 帐户”:
+3. 请选择 `“其他 AWS 帐户”`:
 
 ![image](./images/AWSCloudtrail/03.png)
 
-4. 在 "帐户 id " 字段中, 输入可在 Azure Sentinel 门户的 AWS 连接器页中找到的Microsoft 帐户 id (197857026523)。
+4. 在 `"帐户 id"` 字段中, 输入可在 `Azure Sentinel` 门户的 AWS 连接器页中找到的 `Microsoft 帐户 id (197857026523)`。
 
 ![image](./images/AWSCloudtrail/04.png)
 
-5. 请确保选择 "需要外部 id ", 然后输入可在 Azure Sentinel 门户的 AWS 连接器页中找到的外部 Id (工作区 id):
+5. 请确保选择 `"需要外部 id"`, 然后输入可在 `Azure Sentinel 门户`的 AWS 连接器页中找到的`外部 Id` (工作区 id):
 
 ![image](./images/AWSCloudtrail/05.png)
 
-6. 在 "附加权限策略" 下选择 " AWSCloudTrailReadOnlyAccess"，点击”Next:Tag”:
+6. 在 `"附加权限策略"` 下选择 `"AWSCloudTrailReadOnlyAccess"`，点击 `”Next:Tag”`:
  
 ![image](./images/AWSCloudtrail/06.png)
 
-7. 输入标记Tags (可选)
+7. 输入标记 `Tags` (可选)
 
 ![image](./images/AWSCloudtrail/07.png)
 
-8. 然后, 输入角色名称并选择 "创建角色" 按钮。
+8. 然后, 输入角色名称并选择 `"创建角色"` 按钮。
  
 ![image](./images/AWSCloudtrail/08.png)
 
-9. 复制角色 ARN。 在 Azure Sentinel 门户的 "Amazon Web Services 连接器" 屏幕上, 将其粘贴到 "要添加的角色Role to add" 字段, 然后单击 "添加"。
+9. 复制 `角色 ARN`。 在 `Azure Sentinel 门户` 的 `"Amazon Web Services 连接器"` 屏幕上, 将其粘贴到 `"要添加的角色Role to add"` 字段, 然后单击 `"添加"`。
 
 ![image](./images/AWSCloudtrail/09.png)
 
-将ARN ID复制, 输入标红框处, 点击add, 如下图:
+将 `ARN ID` 复制, 输入标红框处, 点击 `add`, 如下图:
 
 ![image](./images/AWSCloudtrail/10.png)
 
 10. 在AWS门户中做些操作，如登录，创建虚机等。
 
-11. Azure portal中切换至Azure Sentinel – Logs, 在Query中输入AWSCloudTrail查看之前在AWS中做的操作:
+11. Azure portal中切换至 `Azure Sentinel` – `Logs`, 在Query中输入 `AWSCloudTrail` 查看之前在AWS中做的操作:
 
 ![image](./images/AWSCloudtrail/11.png)
 
