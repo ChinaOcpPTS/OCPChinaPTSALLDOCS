@@ -2,7 +2,7 @@
 
 > AWS CloudTrail 是一项 AWS 服务，可对 AWS 账户进行监管、合规性检查、操作审核和风险审核。用户、角色或 AWS 服务执行的操作将记录为 CloudTrail 中的事件。事件包括在 AWS 管理控制台、AWS Command Line Interface 和 AWS 开发工具包和 API 中执行的操作。可以通过CloudTrail 来查看、搜索、下载、归档、分析和响应您的 AWS 基础设施中的账户活动。您可以确定谁或哪个组件对哪些资源执行了哪些操作、事件发生的时间以及其他细节，来帮助您分析和响应 AWS 账户中的活动。
 
-Azure Sentinel可接入AWS Cloudtrail数据，从而在Azure Sentinel中查看并监控AWS账户活动。
+`Azure Sentinel` 可接入 `AWS Cloudtrail` 数据，从而在 `Azure Sentinel` 中查看并监控AWS账户活动。
 
 ### 操作步骤
 
