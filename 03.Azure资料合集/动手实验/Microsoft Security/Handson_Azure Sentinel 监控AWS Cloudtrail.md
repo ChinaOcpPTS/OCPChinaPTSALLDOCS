@@ -26,7 +26,7 @@
 
 ![image](./images/AWSCloudtrail/05.png)
 
-6. 在 `"附加权限策略"` 下选择 `"AWSCloudTrailReadOnlyAccess"`，点击 `”Next:Tag”`:
+6. 在 `"附加权限策略"` 下选择 `"AWSCloudTrailReadOnlyAccess"`，点击 `"Next:Tag"`:
  
 ![image](./images/AWSCloudtrail/06.png)
 
