@@ -5,9 +5,9 @@
  `Hunting` 是集成了很多微软默认提供的能针对很多通用场景的 `Kusto` 查询语句, 用来给用户提供一些参考, 也可以自定义查询语句。
 
 
-## 运行所有查询语句 
+***运行所有查询语句***
 
-***进入 `Azure Sentinel`, 选择相应的LA workspace，左侧点击 `Hunting`***
+进入 `Azure Sentinel`, 选择相应的LA workspace，左侧点击 `Hunting`
 
 ![image](./images/Hunting/01.png)
  
