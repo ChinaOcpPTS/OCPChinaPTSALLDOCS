@@ -66,12 +66,6 @@
 通过编辑 `kusto` 语句，对安全事件的 `log` 进行筛选和格式调整；
 
 ![image](./images/WindowsSecurityEvent/10.png)
- 
-可以点击 `View query results` 预先分析验证 `Alter Query` 的运行结果
-
-![image](./images/WindowsSecurityEvent/11.png)
- 
-在 `Alert Query` 中可以查看到 windows 详细的 `EventID`，我们刚刚多次尝试的登陆失败，在事件中可以看到多条 `EventID` 为 4625 的事件产生（ `EventID` = 4625表示 `Failed logon`）。利用这种方式对管理员账户登陆失败进行实时监测，可以有效防止服务器被恶意攻击。在日常生活中，管理员账户登陆出现多次失败往往事攻击的早期现象，并可以通过添加 `playbooks` 配置安全措施。
 
 为了对Alert的事件进行筛选，我们配置Kusto语句如下：
 
@@ -84,6 +78,12 @@ SecurityEvent
 | project ChangeType, ImpactedGroup=TargetAccount, ChangeMaker=Account, DC=Computer, Activity , IpAddress
 ```
 上述代码可以直接复制，但要注意验证一下结果。
+ 
+可以点击 `View query results` 预先分析验证 `Alter Query` 的运行结果
+
+![image](./images/WindowsSecurityEvent/11.png)
+ 
+在 `Alert Query` 中可以查看到 windows 详细的 `EventID`，我们刚刚多次尝试的登陆失败，在事件中可以看到多条 `EventID` 为 4625 的事件产生（ `EventID` = 4625表示 `Failed logon`）。利用这种方式对管理员账户登陆失败进行实时监测，可以有效防止服务器被恶意攻击。在日常生活中，管理员账户登陆出现多次失败往往事攻击的早期现象，并可以通过添加 `playbooks` 配置安全措施。
 
 Map Entity选择：
 
