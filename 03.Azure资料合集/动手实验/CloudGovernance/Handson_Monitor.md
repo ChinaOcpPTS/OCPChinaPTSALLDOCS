@@ -622,68 +622,6 @@ https://github.com/Microsoft/Application-Insights-Istio-Adapter/releases/
 
 ![image](./images/monitor/monx21.png)
 
-### 容器 AKS 监控 Dashboard
-
-Azure Monitor专门针对AKS提供了一套完备的解决方案，`Azure Monitor for Containers`, 用来实现针对容器化环境实现端到端的监控与分析。
-
-![image](./images/monitor/monx22.png)
-
-通过 `Azure Monitor - Insights Containers`，可以看到整个订阅下集群的统计信息及健康情况
-
-![image](./images/monitor/monx24.png)
-
-点击单个集群，可以看到此集群详细的监控信息
-
-![image](./images/monitor/monx25.png)
-
-可以看到针对于每个Container的详细信息
-
-![image](./images/monitor/monx26.png)
-
-我们完全可以通过 `Azure Monitor - Insights Containers` 来监控每一个AKS集群，并在出现问题时快速定位问题
-
-![image](./images/monitor/monx23.png)
-
-当然，我们也可以借助 `Azure Dashboard`, 定制针对于容器监控的 Dashboard, 呈现我们想要看到的信息；所有的监控信息，均通过开启 AKS Monitoring 插件实现，通过Agent，收集相关的Metrics及Logs信息。
-
-![image](./images/monitor/mon22.png)
-
-创建名为 `Prj02 - Containers Monitoring` 的Dashboard, 并先将已有的可以描述集群性能的Metrics添加到Dashboard, `Node count` & `Active Pod count` & `Node Memory utilization` & `Node CPU utilization`
-
-![image](./images/monitor/mon24.png)
-
-除了系统提供的Metrics外，我们可以借助于`Log Analytics`完成更多自定义的监控页面定制。
-
-进入Prj02的Log Analytics `Prj02LAWS`, 运行如下的查询语句，获取当前环境中各容器CPU的使用占比，并将结果固定于Dashboard中
-
-```
-Perf
-| where ObjectName == "K8SContainer" and CounterName == "cpuRequestNanoCores"
-| summarize AvgCPUUsageNanoCores = avg(CounterValue)/1000000000 by bin(TimeGenerated, 30m), InstanceName
-```
-
-![image](./images/monitor/mon25.png)
-
-__*注意：*__ 当我们将Metrics与Logs混合放入Dashboard中时，一定要先将Dashboard变为Share Dashboard
-
-![image](./images/monitor/monx30.png)
-
-运行如下语句，获取当前环境中不同Namespace的服务数量的比例，并将结果固定于Dashboard中
-
-```
-KubeServices 
-| summarize AggregatedValue = dcount(ServiceName) by Namespace 
-| order by AggregatedValue desc
-```
-
-![image](./images/monitor/mon26.png)
-
-![image](./images/monitor/monx31.png)
-
-> 资料参考：
-> [用于容器的 Azure Monitor 概述](https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-overview)
-> [如何查询 Azure 监视器中的容器的日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-log-search)
-
 ### 环境中通用信息
 
 最后，我们创建一个 Dashboard, 名为`General - Dashboard`，用来设置环境中的快捷键，比如：`始终` & `Service Health` & `Help + Support`, 以及环境中各资源的数量。

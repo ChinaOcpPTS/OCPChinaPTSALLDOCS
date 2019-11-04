@@ -242,13 +242,3 @@ InsightsMetrics
 ![image](./images/aks_monitor_images/x24.png)
 
 更多日志查询的Query Sample, 请参照 [使用日志查询分析数据](https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-log-search)
-
----
-
-
-
-> 资料参考：
-> [用于容器的 Azure Monitor 概述](https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-overview)
-> [如何查询 Azure 监视器中的容器的日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-log-search)
-
-
