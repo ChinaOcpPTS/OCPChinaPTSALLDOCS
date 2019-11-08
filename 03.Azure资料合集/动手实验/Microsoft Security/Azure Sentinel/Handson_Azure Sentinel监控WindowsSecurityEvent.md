@@ -42,17 +42,40 @@
 ![image](./images/WindowsSecurityEvent/05.png)
 
  
-在连接器页面中，我们将agent安装到需要检测的Windows机器中。之前我们已经在Azure中创建了一台Windows VM，因此我们选择 `Download & install agent for Azure Windows virtual machine`;
+在连接器页面中，我们将monitoring agent安装到需要检测的Windows机器中，完成虚拟机与Sentinel的连接。
+
+之前我们已经在Azure中创建了一台Windows VM，因此我们选择 `Download & install agent for Azure Windows virtual machine`;
+
+为了在测试效果，我们选择监测所有Security Events事件，因此在第二步中选择“All Event“
 
 ![image](./images/WindowsSecurityEvent/06.png)
  
-点击 `Connect`, 然后 `Connect` 会变成灰色，表示正在连接Connecting
+点击 `Connect`, 然后 `Connect` 会变成灰色，表示正在连接Connecting,连接过程需要等待片刻。
 
 ![image](./images/WindowsSecurityEvent/07.png)
+
+连接成功之后，请在之前创建的那台VM页面，点击连接        `Connect` ->  `Download RDP File`
+
+![image](./images/WindowsSecurityEvent/07.1.png)
+
  
+尝试进行多次错误登陆
+
+![image](./images/WindowsSecurityEvent/07.2.png)
+
+
 ## Step 4: 配置Analytics Rule
 
-接下来，我们来配置监测Windows密码登陆失败的Analytics规则，点击侧边栏中的 `Analytics`，然后点击  `+create`
+在进行验证之前，我们检查一下虚拟机的链接情况，在Sentinel的workspace中点击 `virtual machines`， 请确保刚才您创建的那台虚拟机连接状态是 `"This workspace"`
+
+![image](./images/WindowsSecurityEvent/07.3.png)
+ 
+在配置Sentinel 正式的规则之前，我们也可以通过 `Logs` 进行测试，点击 `Logs` 然后输入
+`SecurityEvent` 点击 `Run`，然后观察是否有数据输出。
+
+![image](./images/WindowsSecurityEvent/07.4.png)
+
+接下来，我们来配置监测Windows密码登陆失败的Analytics规则，点击侧边栏中的 `Analytics`，然后点击  `+create` 选择 `Scheduled query rule`
 
 ![image](./images/WindowsSecurityEvent/08.png)
 
