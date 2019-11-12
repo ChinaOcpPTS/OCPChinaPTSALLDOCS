@@ -74,9 +74,6 @@ Azure 活动日志定义了订阅级别的Azure资源相关事件, 即此资源�
 
 ![image](./images/activity_log_images/x10.png)
 
-
-
-
 ### 参考资料
 
 - [Azure 活动日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/activity-logs-overview)
