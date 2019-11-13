@@ -68,30 +68,6 @@ az storage account create -n storageaccdiagvms -g project01WS --sku Standard_LRS
 
 >参考资料 : [使用 Azure CLI 2.0 创建 Log Analytics 工作区](https://docs.microsoft.com/zh-cn/azure/azure-monitor/learn/quick-create-workspace-cli)
 
-### 配置将 Activity Log 发送至 Log Analytics workspace, 并同时备份到 Storage Account，长期存储
-
->配置 Activity Log 到 workspace 只需要两步 ：
-
-__*Step 1 进入已创建的 workspace CentralLAWS*__
-
-![image](./images/monitor/mon07.png)
-
-__*Step 2 点击 需要设置的订阅，点击 Connect，配置Log Analytics workspace的信息*__
-
-![image](./images/monitor/mon08.png)
-
-将活动日志保存在Log Analytics中是为了更好的进行数据的分析，活动日志到达Log Analytics存在一定的延迟，一般情况下，将活动日志数据发送到 Log Analytics 引入点大约需要 10 到 15 分钟。
-
->配置 Activity Log 备份到 Storage Account 只需要两步 ：
-
-__*Step 1 进入Azure Monitor - Activity Log, 选择 Export to EventHub*__
-
-![image](./images/monitor/monx09.png)
-
-__*Step 2 设置Storage Account信息*__
-
-![image](./images/monitor/monx10.png)
-
 ### 配置开启资源中的诊断日志，并将诊断日志配置到 Log Analytics workspace & Storage Account
 
 并不是所有的资源都支持诊断日志，请参考上文中的链接，获取支持诊断日志的服务。建议在生产环境中开启重要资源的诊断日志，以便在出现问题时，能够有更多的数据分析根本原因。默认诊断日志是不开启的。
@@ -144,30 +120,6 @@ Azure中有一些特殊资源，例如 `Service Fabric` & `VM`, 他们设置诊�
 >- [使用 Azure 门户从 Azure 存储中收集日志](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/azure-storage-iis-table#use-the-azure-portal-to-collect-logs-from-azure-storage)
 >- [az vm diagnostics 详细解释](https://docs.microsoft.com/en-us/cli/azure/vm/diagnostics?view=azure-cli-latest)
 >___
-
-### 开启 AKS 的监控插件
-
-AKS的监控可以选择在创建集群时开启，或者通过命令行进行开启。AKS的监控作为`Addons`存在，开启非常简单，只需要一条命令，即可了解集群的运行状况信息。
-
-```
-# 检查 AKS 集群是否 Enable Addon Monitoring，如果并未查询到结果，证明集群并未Enable Monitoring Addon
-az aks show -n $yourAKSName -g Prj02 --query "addonProfiles.omsagent.enabled"
-
-# 获取 Log Analytics Prj02LAWS 的ResourceID (需要将CLI版本升级到2.0.68及以上)
-az resource show -n Prj02LAWS -g Prj02 --resource-type "microsoft.operationalinsights/workspaces" --query "id" -o tsv
-
-# Enable Monitoring Addon for AKS
-az aks enable-addons --addons monitoring --workspace-resource-id $yourLAID -n zjprj02 -g Prj02
-
-# 复查 AKS 集群是否 Enable Addon Monitoring
-az aks show -n $yourAKSName -g Prj02 --query "addonProfiles.omsagent.enabled"
-```
-
->资料参考：
->- 如何开启AKS监控（现有集群）https://docs.microsoft.com/zh-cn/azure/azure-monitor/insights/container-insights-onboard
-
-
-
 
 
 ## Application Insights SDK Part Hands-on Lab
@@ -580,28 +532,6 @@ __*参考资料：*__
 
 ### 设置警报规则
 
-#### 针对活动日志设置警报
-
-本次实验，针对活动日志设置警报，对于`Prj01`环境中所有`删除虚机`的操作，都需要邮件通知系统管理员，即通过`Prj01 - Action Group`来处理。除此之外，`重启虚机` & `关闭虚机`同样需要通知系统管理员，这两个警报的设置请自行完成。
-
-![image](./images/monitor/mon30.png)
-
-创建 Activity Log Alert 主要分三步：
-
-Step 1 确定 `Scope`
-
-![image](./images/monitor/mon31.png)
-
-Step 2 确定 `触发条件`
-
-![image](./images/monitor/mon32.png)
-
-![image](./images/monitor/mon33.png)
-
-Step 3 确定 `Action Group`
-
-![image](./images/monitor/mon34.png)
-
 #### 针对Azure资源设置警报
 
 本次实验，将模拟几个经常会遇到的场景，针对虚拟机，当`CPU超过75%`时，通知相应的人员进行处理；针对容器，当环境中出现`Pending的Pod`时，通知相应的人员进行处理；
@@ -638,67 +568,3 @@ __*参考资料：*__
 - [使用 Azure Monitor 创建、查看和管理日志警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-log)
 
 - [Azure Monitor 中的日志警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-unified-log)
-
-### 结合 Service Health & Resource Health，及时了解环境动态并设置告警
-
-本次实验，将结合两个服务`Service Health` & `Resource Health`，设置相应的警报，确保当云平台或资源出现问题时，第一时间知晓。
-
-`Service Health`是集中了解云平台中资源是否可用，或当平台出现问题时，及时了解问题进站及下载事故分析的地方
-
-![image](./images/monitor/mon47.png)
-
-`Service Health`会提供包括`Service issue` & `Planned maintenance` & `Health advisories`在内的三种指标，建议在实际的生产环境中，针对这三种指标设置三个警报，分别对应特定`Action Group`, 确保不同问题能够找到合适处理的人。
-
-本次实验将针对`Service issue`进行设置，另外两个的设置请自行练习。
-
-![image](./images/monitor/mon48.png)
-
-Step 1 选择需要涉及的订阅，区域，服务以及事件类别
-
-![image](./images/monitor/mon49.png)
-
-Step 2 选择Alert关联的`Action Group` 并进行创建
-
-![image](./images/monitor/mon50.png)
-
-这样当下一次平台中选中的服务出现问题或出现维护公告时，你会第一时间收到消息，确保可以及早处理突发事件。
-
-`Resource Health`是能够及时反映正在使用的某一个Azure资源是否因为平台出现的问题，达到`Limitation`, 或性能出现显著降低的一种监控指标
-
-资源是指Azure提供的服务，例如：`Virtual Machines` & `Application Gateway`等, 资源的状态会在 `Available` & `Unavailable` & `Unknown` & `Degraded` 之间转换，只要资源不处于 `Available` 状态，除非是一些已知的原因，比如：`手动停机`，都应该发送相应的警报引起负责人员的重视，资源处于非`Available`状态证明当前环境中正存在一种或多种资源不能正常使用。
-
-![image](./images/monitor/mon51.png)
-
-本次实验将针对资源组下的所有资源类型`Resource Health`设置警报，有关涉及到的 ARM Template 请参阅 [arm-templates](./files/monitor/arm-templates/) 下的相应文件。
-
-```
-# 本次实验将使用 Azure CLI 结合 ARM 模板完成
-# 针对 Resource Health 进行告警设置，当资源组下的某一资源状态从Available改变成Unavailable,Unknown,Degraded时，发送警报通知运维人员
-# 获取ResourceID
-az group show -n Prj01 --query id -o tsv
-
-# 获取 Action Group ResourceID
-az monitor action-group show -n Prj01 -g Prj01 --query 'id' -o tsv
-
-# 设置Resource Health的警报
-az group deployment create --name ResourceHealth01 -g Prj01 --template-file monitor-resources-health.json --parameters activityLogAlertName="ResourceHealthAlert_Prj01" --parameters '{ "scopes": {"value": ["$rgID"]}}' --parameters actionGroupResourceId='$actionGroupID'
-```
-
-设置完成后，当出现平台性问题导致资源状态变化，或如实验中，手动触发停止VM，就会发送告警信息。
-
-![image](./images/monitor/mon52.png)
-
-![image](./images/monitor/mon53.png)
-
-__*参考资料：*__
-
-- [服务运行状况概述](https://docs.microsoft.com/zh-cn/azure/service-health/service-health-overview)
-
-- [资源运行状况概述](https://docs.microsoft.com/zh-cn/azure/service-health/resource-health-overview)
-
-- [Azure 资源运行状况中的资源类型和运行状况检查](https://docs.microsoft.com/zh-cn/azure/service-health/resource-health-checks-resource-types)
-
-- [使用资源管理器模板创建资源运行状况警报](https://docs.microsoft.com/zh-cn/azure/service-health/resource-health-alert-arm-template-guide)
-
----
-
