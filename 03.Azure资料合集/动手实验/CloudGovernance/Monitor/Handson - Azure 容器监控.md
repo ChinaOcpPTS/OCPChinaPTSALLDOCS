@@ -63,7 +63,7 @@ AKS自身提供了一个监控方案, 通过集群内的监控页面, 可以查�
 
 #### 创建 Demo 资源
 
-创建 Demo资源所使用的YML文件请参照 [demo_azure_vote.yml](./files/aks_monitor_files/demo_azure.vote.yml)
+创建 Demo资源所使用的YML文件请参照 [demo_azure_vote.yml](./files/aks_monitor_files/demo_azure_vote.yml)
 
 ```
 # 连接 AKS Cluster, 获取Credential信息
