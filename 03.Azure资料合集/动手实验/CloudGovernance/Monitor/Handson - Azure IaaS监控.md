@@ -31,39 +31,39 @@
 
 虚机的诊断日志是Azure中比较特殊的. Azure VM 没有办法直接设置 Log Analytics；只能设置保存到存储账号.
 
-开启诊断日志很简单, 只需按照如下方式进行：
+开启诊断设置很简单, 只需按照如下方式进行：
 
-![image](./images/iaas_files/x01.png)
+![image](./images/iaas_images/x01.png)
 
 #### 针对虚机, 设置 Log Analytics Data Sources 的连接, 并配置从存储账号中读取日志文件
 
 进入 workspace `zjIaaSMonitor`, 点击 `Workspace Data Sources`, 选择 `Virtual machines`
 
-![image](./images/iaas_files/x02.png)
+![image](./images/iaas_images/x02.png)
 
 确保连接状态OK, 如果是Disconnect的状态, 可手动点击 `Connect`, 进行连接
 
 点击 `Workspace Data Sources`, 选择 `Storage account logs`, 点击添加 (由于本次实验使用的是Linux虚机, 选择相对应的Linux日志文件)
 
-![image](./images/iaas_files/x05.png)
+![image](./images/iaas_images/x05.png)
 
 #### 配置存储账号的诊断设置
 
 存储账号的诊断设置是另外一个比较特殊的资源, 需要单独进行设置. 点击进入存储账户 `zjdemosa`, 选择诊断设置; 注意：请配置所有类型 - Blob & File & Table & Queue
 
-![image](./images/iaas_files/x04.png)
+![image](./images/iaas_images/x04.png)
 
 #### 开启其他资源的诊断设置
 
 除虚机以外, 所有资源诊断设置是否Enable, 可以从 `Azure Monitor -> Diagnostics Settings` 查看, 可以根据特定的信息进行过滤, 找到关心的资源;
 
-![image](./images/iaas_files/x03.png)
+![image](./images/iaas_images/x03.png)
 
 点击相应的资源, 开启诊断设置, 我们以 NSG `demoVM01-nsg`为例, 进行设置；__**请大家自行设置其他两个资源**__
 
-![image](./images/iaas_files/x06.png)
+![image](./images/iaas_images/x06.png)
 
-### 实践 Ad-hoc 查询, 并创建监控大屏
+### 实践 Ad-hoc 查询, 并创建监控大屏 - 使用 Azure Dashboard
 
 数据收集之后, 接下来需要做的就是展现. 由于Azure目前平台中的数据主要以 `Metrics & Logs` 为主, 所以相对应的查询展现方式也有两种: 1) 通过 `Azure Metrics` 查看指标数据; 2) 通过 `Azure Log Analytics` 查看日志数据；
 
@@ -71,42 +71,171 @@
 
 如果希望通过 Azure 完成云平台中资源的监控, Azure Dashboard 可以允许你定义一个数据企业内部的监控大屏.
 
-![image](./images/iaas_files/x07.png)
+![image](./images/iaas_images/x07.png)
 
 创建监控大屏很简单, 从 `All Services - Dashboard`, 选择新建 Dashboard, 左侧提供了很多插件, 可以帮助你定义比较Fancy的画面
 
-![image](./images/iaas_files/x08.png)
+![image](./images/iaas_images/x08.png)
 
 将创建好的Dashboard, 设置Share, 这样后续接触到的Log Analytics的部分, 可以将通过`Kusto`语句完成的监控, 也放在同一个Dashboard中.
 
-![image](./images/iaas_files/x09.png)
+![image](./images/iaas_images/x09.png)
 
 #### 实践如何使用 Metrics Explorer
 
 Metrics Explorer, 点击 `Monitor -> Metrics`, 找到后, 可以根据资源类型及名称, 查找这个资源支持的指标数据, 并且可以根据查询的数据, 添加到监控大屏 `Pin to dashboard`；
 
-![image](./images/iaas_files/x10.png)
+![image](./images/iaas_images/x10.png)
 
 我们先来看看虚机的`Percentage CPU`, 目前使用的CPU有多少
 
-![image](./images/iaas_files/x11.png)
+![image](./images/iaas_images/x11.png)
 
 我们再来看看Storage Account的`E2E Latency`
 
-![image](./images/iaas_files/x12.png)
+![image](./images/iaas_images/x12.png)
 
 #### 实践如何使用 Log Analytics, 使用KUSTO语言, 可视化日志数据
 
 在设置完整个环境的监控数据收集配置后, 日志数据全部存在了Log Analytics中, 我们可以利用KUSTO语言, 实时的分析展现环境中的信息.
 
+点击进入 Log Analytics `zjIaaSMonitor` workspace, 点击 `Log`, 即可执行 `Ad-hoc` 查询; 在左侧 `Active - LogManagement` 下提供了所有可用的日志Table以及相对用可用的Items
+
+![image](./images/iaas_images/x13.png)
+
+首先, 通过 Log Analytics, 来查看CPU的使用, 并将获得的查询视图添加到监控大屏; 
+
+__**目前Azure China暂时还无法实现此功能, 如需通过Log Analytics来完成Dashboard的制作,请使用 Log Analytics View Designer**__
+
+![image](./images/iaas_images/x19.png)
 
 
+查询语言如下：
 
+```
+Perf
+| where Computer startswith "demo" 
+| where CounterName == @"% Processor Time"
+| summarize avg(CounterValue) by Computer, bin(TimeGenerated, 1m) 
+```
 
+![image](./images/iaas_images/x18.png)
 
+接下来, 我们来查看NSG日志中, 有多少外界的访问被`Rules Block`, 并将获得的查询视图添加到监控大屏
 
+__**目前Azure China暂时还无法实现此功能, 如需通过Log Analytics来完成Dashboard的制作,请使用 Log Analytics View Designer**__
 
+![image](./images/iaas_images/x19.png)
 
+查询语言如下：
+
+```
+AzureDiagnostics
+| where ResourceType == "NETWORKSECURITYGROUPS" and Category == "NetworkSecurityGroupRuleCounter" and type_s == "block"
+| summarize AggregatedValue = sum(matchedConnections_d) by ruleName_s , bin(TimeGenerated, 1h)
+| where AggregatedValue >0
+|render timechart
+```
+
+![image](./images/iaas_images/x14.png)
+
+我们可以查看下目前我们的监控大屏上已经存在了做好的4张图表.
+
+#### (Homework) 制作一个适合于自己环境的监控大屏 (60-90Mins)
+
+根据工作经验及实际环境, 制作一个适合自己环境的监控大屏; 需要确认需要哪些Metrics/Logs, 如何写KUSTO查询语句.
+
+### (Optional) 创建监控大屏 - 使用 Grafana
+
+除了Azure Dashboard之外, 我们也可以将Azure Monitor中的Metrics/Logs数据显示在 Grafana 中. Azure Monitor作为数据源, 已经收到 Grafana 的全面支持.
+
+请按照 [Prerequisite - Grafana 环境 for Azure Monitor Handson](./Prerequisite - 容器化 Grafana环境.md)搭建环境, 并配置数据源.
+
+创建一个 Dashboard 名为 `Monitor Dashboard`, 并按照上一章节的四个Section, 在Grafana中制作可视化页面
+
+#### 添加第一个Section, 查看虚机的Percentage CPU
+
+![image](./images/iaas_images/x15.png)
+
+#### 添加第二个Section, 查看StorageAccount的E2E Latency
+
+![image](./images/iaas_images/x16.png)
+
+#### 添加第三个Section, 通过Log Analytics Query, 查看虚机的Percentage CPU
+
+Grafana除了接收Azure Metrics作为数据以外, 也可直接运行 KUSTO Query, 实现查询
+
+![image](./images/iaas_images/x20.png)
+
+#### 添加第四个Section, 查看NSG Block Rules的数量
+
+![image](./images/iaas_images/x17.png)
+
+#### (Homework) 制作一个适合于自己环境的监控大屏 (60-90Mins)
+
+任选一种方式(Azure Dashboard/Grafana), 根据工作经验及实际环境, 制作一个适合自己环境的监控大屏; 需要确认需要哪些Metrics/Logs, 如何写KUSTO查询语句
+
+### 建立环境中的报警机制, 出现问题, 及时通知相关人员
+
+运维人员不能一刻不停的盯着大屏，运维人员需要的是能够在环境出问题的时候，第一时间获得通知，快速修复问题，这是提高环境自动化，优化环境可用性的一个关键。警报是监控系统的一种关键手段，合理的设置关键数据的警报，能够帮助运维人员更好且自动化的监控云端环境。
+
+如下展示了一个警报的产生过程，和处理方式：
+
+![image](./images/iaas_images/mon28.png)
+
+任何一个警报，都有几个关键的部分：`所针对的资源` & `触发的条件` & `警报级别` & `所采取的操作`
+
+`Azure Alerts`支持为Azure中资源产生的`Metrics` & `Logs from Log Analytics` & `Activity Log` & `Azure 平台运行状况`等作为触发警报的数据源
+
+`Azure Alerts`支持用户将警报定义为 `Sev0` & `Sev1` & `Sev2` & `Sev3` & `Sev4`五个等级，分别代表警报涉及的资源对当前环境的影响大小，`Sev0`最为严重
+
+`Azure Alerts`支持用户设置不同的`Action Group`来相应不同级别的警报，响应手段包括`Email\SMS\电话` & `Webhook` & `Azure Function` & `Azure Logic Apps` & `Automation Runbook`等
+
+### 针对 IaaS 环境, 建立 Action Group, 设置警报
+
+`Action Group`与`Alert Rules`是多对多的关系，双方可以互相匹配。因此在规划监控系统时，可以预先设定一些常用的通知手段，且随着自动化水平的增加，逐渐更新。
+
+#### 设定一个 Action Group IaaSOps, 当环境中出现告警, 第一时间发送邮件给相应的运维人员
+
+点击进入 `Azure Monitor - Alerts`, 选择 `Manage actions`, 创建 Action Group
+
+![image](./images/iaas_images/x21.png)
+
+![image](./images/iaas_images/x22.png)
+
+或通过命令行创建
+
+```
+# 通过 Azure CLI 完成 Action Group的创建
+az monitor action-group create -n IaaSOps -g zjIaaSMonitor --short-name iaasops --action email sendEmail jianzsh0821@163.com
+
+# 如果希望创建SMS的Action Group, 可通过如下命令查看完整参数
+az monitor action-group create -h
+```
+
+设置生效后, 邮箱会收到相应的邮件
+
+![image](./images/iaas_images/x23.png)
+
+__*参考资料：*__
+
+- [语音、短信、电子邮件、Azure 应用推送通知和 webhook 帖子的速率限制](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-rate-limiting)
+
+- [在 Azure 门户中创建和管理器操作组](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/action-groups)
+
+#### 设置警报规则
+
+针对VM的Percentage CPU, 设置警报规则, 当`CPU超过75%`时，通知相应的人员进行处理
+
+点击进入 `Azure Monitor - Alerts`, 选择`New alert rule`, 添加一条报警规则
+
+![image](./images/iaas_images/x24.png)
+
+![image](./images/iaas_images/x25.png)
+
+为了触发报警, 我们把 `Percentage CPU` 的告警Interval调成 1%, 来触发警报, 可以看到我们设定的邮箱会收到如下告警
+
+![image](./images/iaas_images/x26.png)
 
 ### 参考资料
 
@@ -125,89 +254,3 @@ Metrics Explorer, 点击 `Monitor -> Metrics`, 找到后, 可以根据资源类�
 - [使用 Azure Monitor 创建、查看和管理日志警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-log)
 
 - [Azure Monitor 中的日志警报](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-unified-log)
-
-
-
-
-
-
-
-
-
-
----
-
-## 完善环境中的警报机制及后期采取的行动
-
-经过以上两组实验，我们针对实验环境收集了数据，并建立了监控大屏，让用户可以直观的了解环境目前的运行情况。但运维人员不能一刻不停的盯着大屏，运维人员需要的是能够在环境出问题的时候，第一时间获得通知，快速修复问题，这是提高环境自动化，优化环境可用性的一个关键。警报是监控系统的一种关键手段，合理的设置关键数据的警报，能够帮助运维人员更好且自动化的监控云端环境。
-
-如下展示了一个警报的产生过程，和处理方式：
-
-![image](./images/monitor/mon28.png)
-
-任何一个警报，都有几个关键的部分：`所针对的资源` & `触发的条件` & `警报级别` & `所采取的操作`
-
-`Azure Alerts`支持为Azure中资源产生的`Metrics` & `Logs from Log Analytics` & `Activity Log` & `Azure 平台运行状况`等作为触发警报的数据源
-
-`Azure Alerts`支持用户将警报定义为 `Sev0` & `Sev1` & `Sev2` & `Sev3` & `Sev4`五个等级，分别代表警报涉及的资源对当前环境的影响大小，`Sev0`最为严重
-
-`Azure Alerts`支持用户设置不同的`Action Group`来相应不同级别的警报，响应手段包括`Email\SMS\电话` & `Webhook` & `Azure Function` & `Azure Logic Apps` & `Automation Runbook`等
-
-### 预先规划好环境中的 Action Group
-
-`Action Group`与`Alert Rules`是多对多的关系，双方可以互相匹配。因此在规划监控系统时，可以预先设定一些常用的通知手段，且随着自动化水平的增加，逐渐更新。
-
-本次实验，先预先设定一些`Action Group`，主要针对环境中的警报提供`邮件/短信/电话`报警的支持。本次实验会设置三个`Action Group`，分别针对于`Admin` & `Prj01` & `Prj02`, 且`Admin`的只使用Email，`Prj01`使用`Email & SMS`，`Prj02`使用`Email`. 将完成`Admin` `Action Group`的设置，留下另外两个自行完成。
-
-```
-# 通过 Azure CLI 完成 Action Group的创建
-az monitor action-group create -n General -g zjmon01 --short-name general --action email operation01 jianzsh0821@163.com
-
-# 如果希望创建SMS的Action Group, 可通过如下命令查看完整参数
-az monitor action-group create -h
-```
-
-![image](./images/monitor/mon29.png)
-
-且设置生效后，相对应的邮箱或手机会收到设置成功的通知
-
-![image](./images/monitor/monz29.png)
-
-![image](./images/monitor/mony29.png)
-
-__*参考资料：*__
-
-- [语音、短信、电子邮件、Azure 应用推送通知和 webhook 帖子的速率限制](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/alerts-rate-limiting)
-
-- [在 Azure 门户中创建和管理器操作组](https://docs.microsoft.com/zh-cn/azure/azure-monitor/platform/action-groups)
-
-### 设置警报规则
-
-#### 针对Azure资源设置警报
-
-本次实验，将模拟几个经常会遇到的场景，针对虚拟机，当`CPU超过75%`时，通知相应的人员进行处理；针对容器，当环境中出现`Pending的Pod`时，通知相应的人员进行处理；
-
-本次实验所使用到的模板均存在于 [arm-templates](./files/monitor/arm-templates/) 下
-
-```
-# 本次实验将使用 Azure CLI 结合 ARM 模板完成
-# 针对虚拟机，设置CPU报警
-# 获取ResourceID，将针对RG下面的所有VM进行警报设置
-az group show -n Prj01 --query id -o tsv
-
-# 获取 Action Group ResourceID
-az monitor action-group show -n Prj01 -g Prj01 --query 'id' -o tsv
-
-# 创建针对CPU过高的告警
-az group deployment create --name VMCPUAlertDeploy -g Prj01 --template-file monitor-vms-in-rg.json --parameters @vm-cpu-high.parameters.json --parameters targetResourceRegion="EastUS" --parameters '{ "targetResourceGroup": {"value": ["$rgID"]}}' --parameters actionGroupId='$actionGroupID'
-```
-
-当警报生效后，环境中的虚机出现CPU过高时，邮箱及手机就会收到如下警告：
-
-![image](./images/monitor/mon41.png)
-
-![image](./images/monitor/mon42.png)
-
-![image](./images/monitor/mon43.png)
-
-__*参考资料：*__
