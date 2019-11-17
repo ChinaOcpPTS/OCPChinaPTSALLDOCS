@@ -56,12 +56,6 @@ Perf| where ObjectName == "K8SContainer" and CounterName == "cpuUsageNanoCores" 
 ```
 ---
 
-
-
-
-
-
-
 ### Option 2 For Azure Mooncake, 通过 IaaS VM 构建 Grafana
 
 #### 安装&配置 Grafana
