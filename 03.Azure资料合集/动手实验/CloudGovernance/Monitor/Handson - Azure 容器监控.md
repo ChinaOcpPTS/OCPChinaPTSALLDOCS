@@ -239,7 +239,7 @@ ContainerInventory
 #示例查询展示了正在运行的Container CPU Usage, 使用Azure提供的监控数据
 Perf
 | where ObjectName == "K8SContainer" and CounterName == "cpuUsageNanoCores" 
-| summarize AvgCPUUsageNanoCores = avg(CounterValue) by bin(TimeGenerated, 30m), InstanceNameD) by ContainerState
+| summarize AvgCPUUsageNanoCores = avg(CounterValue) by bin(TimeGenerated, 30m), InstanceName
 ```
 
 ![image](./images/aks_monitor_images/x23.png)
