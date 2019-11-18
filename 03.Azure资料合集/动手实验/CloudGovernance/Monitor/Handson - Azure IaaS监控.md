@@ -149,7 +149,7 @@ AzureDiagnostics
 
 除了Azure Dashboard之外, 我们也可以将Azure Monitor中的Metrics/Logs数据显示在 Grafana 中. Azure Monitor作为数据源, 已经收到 Grafana 的全面支持.
 
-请按照 [Prerequisite - 创建Grafana环境](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/CloudGovernance/Monitor/Prerequisite%20-%20%E5%AE%B9%E5%99%A8%E5%8C%96%20Grafana%E7%8E%AF%E5%A2%83.md) 搭建环境, 并配置数据源.
+请按照 [Prerequisite - 容器化 Grafana 环境 for Azure Monitor Handson](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/CloudGovernance/Monitor/Prerequisite%20-%20%E5%AE%B9%E5%99%A8%E5%8C%96%20Grafana%E7%8E%AF%E5%A2%83.md) 搭建环境, 并配置数据源.
 
 创建一个 Dashboard 名为 `Monitor Dashboard`, 并按照上一章节的四个Section, 在Grafana中制作可视化页面
 
