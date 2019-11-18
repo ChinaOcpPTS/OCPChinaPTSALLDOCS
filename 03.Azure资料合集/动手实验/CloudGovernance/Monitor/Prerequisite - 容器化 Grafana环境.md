@@ -143,11 +143,15 @@ systemctl restart grafana-server
 
 #### 验证监控数据是否已经可以显示在 Grafana Dashboard 中
 
+首先新建一个Graph的Dashboard, 然后点击标题 `Panel Title` 出现下拉菜单，点击 `Edit` :
+
+![image](./images/prerequisite_images/x10(2).png)
+
 随机添加一条环境中已有资源的Metrics信息, 在Dashboard中创建一个新的Query, 发现数据已经可以在Dashboard中显示
 
 ![image](./images/prerequisite_images/x11.png)
 
-随机验证一条 Log Analytics 的查询语句, 发现数据已经在Dashboard中显示
+随机验证一条 Log Analytics 的查询语句 (这里新建一个Table的Dashboard), 发现数据已经在Dashboard中显示
 
 ![image](./images/prerequisite_images/x12.png)
 
