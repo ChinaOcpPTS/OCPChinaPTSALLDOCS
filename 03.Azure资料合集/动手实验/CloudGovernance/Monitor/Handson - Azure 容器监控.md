@@ -77,6 +77,13 @@ kubectl apply -f ./files/aks_monitor_files/demo_azure_vote.yml
 
 ![image](./images/aks_monitor_images/x08.png)
 
+
+应用程序运行时，Kubernetes 服务将向 Internet 公开应用程序前端，用 `kubectl get service` 查看：
+
+![image](./images/aks_monitor_images/x08(2).png)
+
+可以看到应用程序外网IP为 `52.253.81.108`.
+
 #### 开启 AKS 内容器的实时日志
 
 AKS为客户提供了查看容器内实时日志的页面, 通过接收标准的 `stderr/stdout`, 查看容器内部的状况.
@@ -87,6 +94,10 @@ AKS为客户提供了查看容器内实时日志的页面, 通过接收标准的
 kubectl apply -f ./files/aks_monitor_files/live_logs_rbac.yml
 ```
 
+若要查看 Azure Vote 应用的实际效果，请打开 Web 浏览器并转到服务的外部 IP 地址 `52.253.81.108`。
+
+![image](./images/aks_monitor_images/x08(3).png)
+
 这样我们就可以从页面上实时的查看Pod中的容器,实时的日志信息
 
 ![image](./images/aks_monitor_images/x09.png)
@@ -96,12 +107,11 @@ kubectl apply -f ./files/aks_monitor_files/live_logs_rbac.yml
 ![image](./images/aks_monitor_images/x10.png)
 
 ```
-# Query Sample 如下
+# Query Sample 如下, 注意修改成自己的ContainerName和ClusterID等。
 let ContainerIdList = KubePodInventory
 | where ContainerName =~ '17eb9449-fd76-11e9-baf5-6a826853ae74/omsagent'
 | where ClusterId =~ '/subscriptions/6e6bc337-cf5b-4001-88fe-d75dab242f4f/resourceGroups/zjMonitorDemo/providers/Microsoft.ContainerService/managedClusters/zjaksMon01'
 | distinct ContainerID;
-
 ContainerLog
 | where ContainerID in (ContainerIdList)
 | project LogEntrySource, LogEntry, TimeGenerated, Computer, Image, Name, ContainerID
@@ -149,6 +159,13 @@ Azure Monitor中的监控信息收集, 主要是通过以DaemonSet运行在各�
 ![image](./images/aks_monitor_images/x16.png)
 
 Prometheus收集Kubernetes监控信息有很多个维度, 社区也提供了多个开源的exporter供用户选择；接下来, 我们将安装 [Prometheus Node Exporter](https://github.com/helm/charts/tree/master/stable/prometheus-node-exporter) & [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics), 来收集Kubernetes集群监控的信息
+
+
+**安装Helm**
+
+[在本地客户端安装Helm](https://helm.sh/docs/using_helm/#installing-helm)，根据不同的的本地操作系统可以选择相应的安装方法。比如windows可以选择用Choclolate安装: `choco install kubernetes-helm`
+
+> 注意：以下命令使用Helm V2。最新的Helm V3版本取消了init, --name等命令参数，请查阅官网。
 
 ```
 # 创建Helm所使用的RBAC, Helm相关的RBAC请参阅 helm_rbac.yml
