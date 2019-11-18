@@ -36,7 +36,7 @@
 
 2.	创建Helm使用的Service Account，使用yaml文件进行创建
 
-    [helm-rbac.yaml](./files/app_insight_container_images/AppInsights/helm-rbac.yaml)
+    [helm-rbac.yaml](./files/appInsights/helm-rbac.yaml)
 
     ```kubectl apply -f helm-rbac.yaml```
 
