@@ -32,7 +32,7 @@
 
     比如windows可以选择用Choclolate安装
 
-    ```choco install kubernetes-helm```
+    ```choco install kubernetes-helm --version=2.16.0```
 
 2.	创建Helm使用的Service Account，使用yaml文件进行创建
 
@@ -56,10 +56,13 @@ $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -URI "https://github
 Expand-Archive -Path "istio-$ISTIO_VERSION.zip" -DestinationPath .
 ```
 
+或直接下载：[istio-1.1.3-win.zip](https://github.com/istio/istio/releases/download/1.1.3/istio-1.1.3-win.zip)
+
 5.	安装Istio，此处使用Powershell Console
 
 ```
-# Copy istioctl.exe to C:\Istio
+# Copy istioctl.exe to C:\Istio - C盘新建Istio文件夹，把刚才解压出来的istioctl.exe复制过去
+
 cd istio-$ISTIO_VERSION
 New-Item -ItemType Directory -Force -Path "C:\Istio"
 Copy-Item -Path .\bin\istioctl.exe -Destination "C:\Istio\"
@@ -88,6 +91,10 @@ helm install install/kubernetes/helm/istio --name istio --namespace istio-system
     ```kubectl get pods --namespace istio-system```
 
 
+    ![image](./images/app_insight_container_images/AppInsights%20(4.1).png)
+
+
+
 
 **第三部分 使用Application Insights监控AKS里的服务**
 
@@ -98,7 +105,7 @@ helm install install/kubernetes/helm/istio --name istio --namespace istio-system
 2.	下载Application Insights adapter，链接地址如下
 https://github.com/Microsoft/Application-Insights-Istio-Adapter/releases/
 
-3.	进入这个目录/src/kubernetes/  ， 找到“ISTIO_MIXER_PLUGIN_AI_INSTRUMENTATIONKEY“，并且把这个替换成之前在Application insights里记下的Instrument Key。
+3.	进入这个目录/src/kubernetes/，编辑文件 `application-insights-istio-mixer-adapter-deployment.yaml`， 找到“ISTIO_MIXER_PLUGIN_AI_INSTRUMENTATIONKEY“，并且把这个替换成之前在Application insights里记下的Instrument Key。
 
 4.	在之前的目录下执行命令，让所有的yaml文件部署
 
@@ -108,7 +115,10 @@ https://github.com/Microsoft/Application-Insights-Istio-Adapter/releases/
 
     ```kubectl get pods -n istio-system -l "app=application-insights-istio-mixer-adapter"```
 
-6.	打开application insights的实时展现数据的页面，观察到已经有一个server链接上了，这个就是我们刚刚部署的adapter
+    ![image](./images/app_insight_container_images/AppInsights%20(4.2).png)
+
+
+6.	打开application insights的实时展现数据的页面 `Live Metrics Stream`，观察到已经有一个server链接上了，这个就是我们刚刚部署的adapter
 
     ![image](./images/app_insight_container_images/AppInsights%20(5).png)
 
@@ -125,6 +135,9 @@ https://github.com/Microsoft/Application-Insights-Istio-Adapter/releases/
 9.	从 sleep 向 httpbin 发送一个请求，这个命令在Bash里运行。（你可以使用WSL）
 
     ```kubectl exec -it $(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name}) -c sleep -- curl -v httpbin:8000/status/418```
+
+    ![image](./images/app_insight_container_images/AppInsights%20(5.1).png)
+
 
 10.	我们回到application insights的界面，可以观测到之前发送的这个请求已经被adapter发送到了app insights，并且实施展现在了仪表盘上。
 
