@@ -7,7 +7,7 @@ https://github.com/rkuehfus/AzureMonitoringHackathon
     ![image](./images/app_insight_sdk_images/AppInsightsSDK01.png)
 
 
-2.	解压后，打开其中的DeployMonHackEnv.ps1，可以使用vscode，也可以使用任何文本工具。随后更新最新的powershell
+2.	解压后，进入 `AzureMonitoringHackathon-master\Student\Resources`, 打开其中的DeployMonHackEnv.ps1，可以使用vscode，也可以使用任何文本工具。随后更新最新的powershell
 
     ```Install-Module -Name AzureRM -Force -Scope CurrentUser -AllowClobber```
 
@@ -17,17 +17,37 @@ https://github.com/rkuehfus/AzureMonitoringHackathon
 4.	在powershell中登录你的azure订阅
     ```Connect-AzureRmAccount```
 
+    创建资源组：
+    ```shell
+    $MonitoringHackName = 'mon17'
+    New-AzureRMResourceGroup -Name $MonitoringHackName -Location 'East US'
+    $rg = get-AzureRmresourcegroup -Name $MonitoringHackName
+
+    ```
+
     ![image](./images/app_insight_sdk_images/AppInsightsSDK02.png)
 
-5.	跑脚本文件中的前面两行，建立keyvault
+5.	跑脚本文件中接下来的两行，建立keyvault
 
+    ```shell
+    $MonitoringHackVaultName = $MonitoringHackName + 'MonitoringHackVault'
+    New-AzureRmKeyVault -VaultName $MonitoringHackVaultName -ResourceGroupName $rg.ResourceGroupName -Location $rg.Location -EnabledForTemplateDeployment
+    ```
     ![image](./images/app_insight_sdk_images/AppInsightsSDK03.png)
 
 6.	随后会跳出输出用户密码，输入你想用的密钥，并且记住
 
+    ```shell
+    Set-AzureKeyVaultSecret -VaultName $MonitoringHackVaultName -Name "VMPassword" -SecretValue (Get-Credential).Password
+    ```
+
     ![image](./images/app_insight_sdk_images/AppInsightsSDK04.png)
 
 7.	接下来跑脚本中的这条命令，并且复制结果中的高亮部分。
+
+    ```shell
+    (Get-AzureRmKeyVault -VaultName $MonitoringHackVaultName).ResourceId
+    ```
     ![image](./images/app_insight_sdk_images/AppInsightsSDK05.png)
 
 8.	把高亮复制的内容，黏贴到azuredeploy.parameters.json文件中，并且注意更新对应的prefix
@@ -54,21 +74,29 @@ https://github.com/rkuehfus/AzureMonitoringHackathon
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK10.png)
 
+    接下来都在win server跳板机里进行操作。
+
 3.	在Visual Studio里打开相对应的project
+
+    首先下载project [eShopOnWeb](https://github.com/dotnet-architecture/eShopOnWeb)，解压。
+
+    点击 `eShopOnWeb`, 用Visual Studio打开，
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK11.png)
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK12.png)
+
+    选择 `Web`，点击运行 `IIS Express`。
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK13.png)
 
 
     接下来就能看到打开的eshop网站了。
     
-    ![image](./images/app_insight_sdk_images/AppInsightsSDK14.png)
+    ![image](./images/app_insight_sdk_images/wms01.png)
 
 
-4.	接下来让我们来安装一下application insights的SDK。在右侧“Web”那里点击邮件，然后点击安装sdk。
+4.	接下来让我们来安装一下application insights的SDK。在右侧“Web”那里点击右键 -> `add` -> `Application Insights Telemetry`, 然后点击安装sdk。
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK15.png)
 
@@ -89,7 +117,8 @@ https://github.com/rkuehfus/AzureMonitoringHackathon
     ![image](./images/app_insight_sdk_images/AppInsightsSDK20.png)
 
 
-7.	好了，现在来更新一下applicaton insights的Nuget Packege。装完之后再运行一遍程序，保证一切都没有问题。
+7.	好了，现在来更新一下applicaton insights的Nuget Package。装完之后再运行一遍程序，保证一切都没有问题。
+    先停止应用程序。然后点击 `Tools` -> `NuGet Package Manager` -> `Manage NuGet Packages for Solution`.
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK21.png)
 
@@ -97,15 +126,23 @@ https://github.com/rkuehfus/AzureMonitoringHackathon
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK23.png)
 
+    然后再运行下程序。
 
-8.	把加入SDK的程序重新发布一下，我们吧这个程序发布到后端的VMSS里面，分别在1号机器，和2号机器做相同的操作。
+
+8.	把加入SDK的程序重新发布一下，我们把这个程序发布到后端的VMSS里面，分别在1号机器，和2号机器做相同的操作。
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK24.png)
 
     ![image](./images/app_insight_sdk_images/AppInsightsSDK25.png)
 
 
-    先选择第一台vmss的主机
+    先选择第一台vmss的主机。如何查看Server: 进入 `<xxx>webScaleSet`
+
+    ![image](./images/app_insight_sdk_images/wms02.png)
+
+    ![image](./images/app_insight_sdk_images/wms03.png)
+
+    ![image](./images/app_insight_sdk_images/wms04.png)
     
     ![image](./images/app_insight_sdk_images/AppInsightsSDK26.png)
 
