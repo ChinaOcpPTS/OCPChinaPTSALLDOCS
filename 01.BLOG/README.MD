@@ -98,7 +98,7 @@
 | 94 | [及时了解Azure云平台健康状况，有事早知道](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Jian_Zhao/及时了解Azure云平台健康状况%EF%BC%8C有事早知道%20.md) | Jian Zhao | 2019年8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Jian_Zhao |
 | 95 | [Azure Security Center--赋能每一台服务器，对不正当访问say no](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/blob/master/01.BLOG/Jiayu_Zhu/Azure%20Security%20Center--赋能每一台服务器%EF%BC%8C对不正当访问say%20no.md) | Jiayu Zhu | 2019年8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Jiayu_Zhu |
 | 96 | [AZ-900考试基本知识点梳理 & Azure基础知识概要](https://github.com/JanlenHu/OCPChinaPTSALLDOCS/tree/master/01.BLOG/Simeng_Zhang) | Simeng Zhang | 2019年8月份 | 2019/9/22  00:00:00 | 项 | OCPChinaPTSALLDOCS/01.BLOG/Simeng_Zhang |
-
+| 97 | [Accelerate Games with Azure Front Door](https://www.cnblogs.com/royang/p/11963432.html) | Robert Yang | 2019年9月份 | 2019/9/22  00:00:00 | 项 |  |
 Jalen Hu
 
 2019-09-22
