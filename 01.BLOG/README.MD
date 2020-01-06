@@ -115,8 +115,8 @@
 | 110 | [Azure DevOps如何将繁重的手工部署转化成安全可靠的自动化流程](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247484236&idx=1&sn=56c53d0c2894272ebaeeca0a6483d7ff&chksm=fbadf159ccda784f38ab473bb8b02407528a35cb92c1dcb26c31fa783698119fab1aeb0f0c85&token=1153280102&lang=en_US#rd) | Jian Zhao | 2019年11月份 | 2019/12/18  00:00:00 | 项 |  |
 | 111 | [新一代大数据计算框架 Flink 与 Microsoft Azure Kubernetes 集成来做流批计算](https://theodorew.github.io/wxsblog.github.io/2019/11/17/2019-11-18-FlinkonAKS/) | Xinsheng Wang | 2019年11月份 | 2019/12/18  00:00:00 | 项 |  |
 | 112 | [学习笔记-Azure机器学习服务](https://www.cnblogs.com/royang/articles/11832847.html) | Robert Yang | 2019年11月份 | 2019/12/18  00:00:00 | 项 |  |
+| 113 | [Azure + MongoDB - NoSQL数据库集群初探(实践篇)](http://mp.weixin.qq.com/s?__biz=MzI1ODI0Nzk0MQ==&mid=2247483711&idx=1&sn=13a22f7caa50d5fc2c9cbdc238cc7e46&chksm=ea0a5d55dd7dd4438d406a7a3b432feae71f51c05f21222d5866932fefb9745e44325fc4de05&token=843883345&lang=zh_CN#rd) | Minsheng Wang | 2019年11月份 | 2020/01/06  00:00:00 | 项 |  |
 
+Mason Wang
 
-Jalen Hu
-
-2019-12-18
+2020-01-06
