@@ -133,7 +133,9 @@
 | 128 | [EMS 动手实验2:用户自助密码重设&条件访问策略强制用户使用MFA二次验证&启用标识保护配置风险检测](https://www.cnblogs.com/changruijun/p/12122162.html) | Ruijun Chang | 2019年12月份 | 2020/01/17  00:00:00 | 项 |  |
 | 129 | [EMS 动手实验3:使用 Privileged Identity Management建立管理角色的审批和授权](https://www.cnblogs.com/changruijun/p/12122262.html) | Ruijun Chang | 2019年12月份 | 2020/01/17  00:00:00 | 项 |  |
 | 130 | [EMS 动手实验4:使用Intune 管理设备和移动设备](https://www.cnblogs.com/changruijun/p/12123770.html) | Ruijun Chang | 2019年12月份 | 2020/01/17  00:00:00 | 项 |  |
+| 131 | [如何从AWS Redshift迁移到Azure Synapse Analytics](https://www.cnblogs.com/royang/p/12331866.html) | Robert Yang | 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
+| 132 | [Power BI快速上手干货指南](https://mp.weixin.qq.com/s/HfpR7fZoQy39ST2JM0O7sg) | Yi Liang | 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
 
-Jalen Hu
+Mason Wang
 
-2020-01-17
+2020-03-02
