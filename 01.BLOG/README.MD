@@ -135,6 +135,13 @@
 | 130 | [EMS 动手实验4:使用Intune 管理设备和移动设备](https://www.cnblogs.com/changruijun/p/12123770.html) | Ruijun Chang | 2019年12月份 | 2020/01/17  00:00:00 | 项 |  |
 | 131 | [如何从AWS Redshift迁移到Azure Synapse Analytics](https://www.cnblogs.com/royang/p/12331866.html) | Robert Yang | 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
 | 132 | [Power BI快速上手干货指南](https://mp.weixin.qq.com/s/HfpR7fZoQy39ST2JM0O7sg) | Yi Liang | 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
+| 133 | [Azure MySQL自主医疗保健手册之连接池](https://mp.weixin.qq.com/s/l6zRU-I_n6lZcj_RKd0hJw) | Renjie Zhu | 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
+| 134 | [在AKS上部署 Istio 1.4.3](https://github.com/radezheng/blog/blob/master/Istio/%E5%9C%A8AKS%E4%B8%8A%E9%83%A8%E7%BD%B2%20Istio%201.4.3.md#%E5%9C%A8aks%E4%B8%8A%E9%83%A8%E7%BD%B2-istio-143) | Rade Zheng | 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
+| 135 | [Speech SDK for Java 中使用 Push Stream](https://github.com/radezheng/blog/blob/master/Speech/Speech%20SDK%20for%20Java%20%E4%B8%AD%E4%BD%BF%E7%94%A8Push%20Stream.md#speech-sdk-for-java-%E4%B8%AD%E4%BD%BF%E7%94%A8-push-stream) | Rade Zheng | 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
+| 136 | [利用Microsoft Forms轻松创建员工返工情况调查表](https://mp.weixin.qq.com/s/x_awPeKLkSud6Pbv_zgVww) | Minsheng Wang | 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
+| 137 | [Azure 运维篇 - 通过 Ansible 批量更改 Azure 资源](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247484310&idx=1&sn=e8f23712562680647f2f566d28ff20ff&chksm=fbadf183ccda78954edea01fb3c510d275c1e090463f27dc53fb18949f3cf21b423612dffb05&token=1138576309&lang=en_US#rd) |Jian Zhao| 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
+| 138 | [如何推送Azure Monitor报警到Teams](https://www.jianshu.com/p/1742452540ef) |Kele Wang| 2020年1&2月份 | 2020/03/02  00:00:00 | 项 |  |
+
 
 Mason Wang
 
