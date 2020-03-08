@@ -200,16 +200,16 @@ Azure价格计算器可以配置 Azure 产品并估算成本，选择想要评�
 购买保留后，它将自动应用于任何现有的 Azure 存储块 blob 或与保留条款匹配的 Azure Data Lake Storage Gen2 资源。 如果尚未创建任何 Azure 存储资源，则每次创建与预订条款相匹配的资源时，将应用保留。在这两种情况下，预订期限会在成功购买后立即开始。
 
 **查看预留**：
-如果你有合作伙伴主导的企业注册，请访问 EA 门户中的“报表”来查看预留。 对于其他企业合约，可以在 EA 门户和 Azure 门户中查看预留。 只有 EA 管理员可以查看预留交易。
-若要在 Azure 门户中查看预留交易，请执行以下操作：
-1. 登录 Azure 门户。
-2. 搜索“Cost Management + Billing”。
-![image](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/New_Customer_Onboard/files/images/RI1.png)
-3. 选择“预留交易”。
-4. 若要筛选结果，请选择“时间范围”、“类型”或“说明”。
-5. 选择“应用”。
-![image](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/New_Customer_Onboard/files/images/RI2.png)
 
+1. 登录 Azure 门户
+
+2. 在 "All Services 中搜索 Reservations", 点击 "Reservations" 进入
+
+![image](./files/images/y01.png)
+
+3. 可以在这里查看已经购买的预留资源的信息
+
+![image](./files/images/y02.png)
 
 **Azure Cost Management**
 
@@ -279,7 +279,6 @@ Cost Center	 ||	资源所属的Cost Center成本中心 ，成本中心只在EA P
 Unit of Measure	 ||	列：已消耗的资源数量的单位，比如虚拟机计算资源，是按照小时来收费的，则该列显示为Hour。对于存储来说，是按照GB来收费的。则该列会显示GB|	是
 资源组|Resource Group|	资源所属的资源组名称|	是
 
-
 ### 1.3 Azure 云端资源使用准备
 
 云端资源会有 Quota 的概念, 比如: 针对虚拟机, 账户下默认的Core数Quota是350个, 当环境中超过了这个值, 会导致资源创建失败. 但这个Quota是可以通过提交工单进行调整的, 所以, 部署资源之前, 检查环境中资源的Quota Limitation, 确保不会因为Quota不足导致资源创建不出来.
@@ -292,7 +291,7 @@ Unit of Measure	 ||	列：已消耗的资源数量的单位，比如虚拟机计
 
 如果遇到 Quota Limitation 问题, 请及时开Case, 后台相关团队会协助调整
 
-![image](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/New_Customer_Onboard/files/images/x09.png)
+![image](./files/images/y03.png)
 
 ### 1.4 Azure 云端 Ticket & SLA & RCA
 
@@ -335,7 +334,34 @@ Unit of Measure	 ||	列：已消耗的资源数量的单位，比如虚拟机计
 ### 1.5 Azure 云端的安全&合规
 
 上云的安全与合规是每个企业都十分关注的问题，怎么构建更加安全可信赖的云上环境十分重要。
-我们建议启用深度防御，通过内置的控制和服务简化安全管理，并集成合作伙伴解决方案，来快速增强对Azure工作负载的保护。总体来说，可以从以下四个角度考虑：
+
+Azure提供了几个工具，帮助客户更好地查询云端安全合规方面的信息，这些信息，在用户上云，尤其是将`Mission Critical`应用迁移上云时，往往是需要了解的。
+
+__**通过 Microsoft Trust Center, 了解 Azure 云服务在 安全/合规/隐私/透明方面是如何做的**__
+
+![image](./files/images/y04.png)
+
+具体可登陆 [Microsoft Trust Center](https://www.microsoft.com/zh-cn/trust-center)
+
+__**通过 Service Trust Portal , 可以找到所有Azure相关的合规Report以及合规相关的信息，比如，SOC1，SOC2的报告**__
+
+![image](./files/images/y05.png)
+
+具体可登陆 [Service Trust Portal](https://servicetrust.microsoft.com/)
+
+__**通过 Compliance Manager, 可以对目前使用的Azure资源进行自检，看目前的环境与一些期望的证数，如 SOC1，SOC2等, 在哪些方面需要提高**__
+
+![image](./files/images/y06.png)
+
+具体可登陆 [Compliance Manager](https://servicetrust.microsoft.com/ComplianceManager/V3)
+
+__**通过 Microsoft Privacy Statement, 可以了解微软对隐私保护相关的信息**__
+
+![image](./files/images/y07.png)
+
+具体可登陆 [Microsoft Privacy Statement](https://privacy.microsoft.com/zh-cn/privacystatement)
+
+下图是列出了云端安全保护方面涉及到的一些服务，供大家参考：
 
 ![image](https://github.com/ChinaOcpPTS/OCPChinaPTSALLDOCS/blob/master/03.Azure%E8%B5%84%E6%96%99%E5%90%88%E9%9B%86/New_Customer_Onboard/files/images/security.png)
 
