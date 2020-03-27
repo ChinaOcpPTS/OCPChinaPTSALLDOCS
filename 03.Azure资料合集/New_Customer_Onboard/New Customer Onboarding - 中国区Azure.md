@@ -308,6 +308,8 @@ Azure可以通过下载Excel表格，将一段时间内Azure的详细账单，�
 
 如下三组实验, 是一个进阶的过程, 从易到难帮助大家熟悉Azure资源的操作管理
 
+如下三组实验, 是一个进阶的过程, 从易到难帮助大家熟悉Azure资源的操作管理
+
 第一组实验 管理 Azure 中的基础设施资源
 
 这组实验带我们熟悉, 通过 Azure Portal 及命令行工具, 创建并管理最基本的IaaS层资源（虚机/磁盘/网络等）(每一章节实验完成后请返回本文档点击下一章节链接继续)
@@ -319,46 +321,74 @@ Azure可以通过下载Excel表格，将一段时间内Azure的详细账单，�
 [Azure 虚拟机简介](https://docs.microsoft.com/zh-cn/learn/modules/intro-to-azure-virtual-machines/)  1 小时 7 分钟
 
 [在 Azure 中创建 Linux 虚拟机](https://docs.microsoft.com/zh-cn/learn/modules/intro-to-azure-virtual-machines/) 1 小时 26 分钟
+
 [在 Azure 中创建 Windows 虚拟机](https://docs.microsoft.com/zh-cn/learn/modules/create-windows-virtual-machine-in-azure/) 51 分钟
+
 [使用 Azure CLI 管理虚拟机](https://docs.microsoft.com/zh-cn/learn/modules/manage-virtual-machines-with-azure-cli/) 51 分钟
+
 [使虚拟机始终保持最新状态](https://docs.microsoft.com/zh-cn/learn/modules/keep-your-virtual-machines-updated/) 35 分钟
+
 [为虚拟机配置网络](https://docs.microsoft.com/zh-cn/learn/modules/configure-network-for-azure-virtual-machines/) 1 小时 34 分钟
+
 [生成 Azure 资源管理器模板](https://docs.microsoft.com/zh-cn/learn/modules/build-azure-vm-templates/) 37 分钟
+
 [在 Azure 虚拟机中添加磁盘并调整其大小](https://docs.microsoft.com/zh-cn/learn/modules/add-and-size-disks-in-azure-virtual-machines/) 36 分钟
+
 [Azure 存储磁盘中的缓存和性能](https://docs.microsoft.com/zh-cn/learn/modules/caching-and-performance-azure-storage-and-disks/) 44 分钟
+
 [保护 Azure 虚拟机磁盘](https://docs.microsoft.com/zh-cn/learn/modules/secure-your-azure-virtual-machine-disks/) 59 分钟
+
 [使用 Azure Automation State Configuration 保护虚拟机设置](https://docs.microsoft.com/zh-cn/learn/modules/protect-vm-settings-with-dsc/) 54 分钟
+
 [通过收集和分析诊断数据来监视 Azure 虚拟机的运行状况](https://docs.microsoft.com/zh-cn/learn/modules/monitor-azure-vm-using-diagnostic-data/) 43 分钟
 
+
 第二组实验 [AZ-103-Microsoft Azure Administrator](https://github.com/MicrosoftLearning/AZ-103-MicrosoftAzureAdministrator/tree/master/Instructions/Labs)
+
 这组实验更为全面的带大家熟悉常用的Azure资源的操作方法。使用工具主要是进阶的Azure命令行工具和Powershell工具。
 
 [AZ-103-MicrosoftAzureAdministrator](https://github.com/MicrosoftLearning/AZ-103-MicrosoftAzureAdministrator/tree/master/Instructions/Labs)
 
 Module_02 Deploy_and_Manage_Virtual_Machines
+
 Module_03 Implement_and_Manage_Storage
+
 Module_04 Configure_Azure_DNS
+
 Module_05 VNet_Peering_and_Service_Chaining
+
 Module_06 Network_Watcher
+
 Module_07 Azure_Site_Recovery_Between_Regions
+
 Module_08 Load_Balancer_and_Traffic_Manager
+
 Module_09 Implement_Directory_Synchronization
+
 Module_10 Azure_AD_Identity_Protection
+
 Self_Service_Password_Reset
+
 Module_11 Governance_and_Compliance
+
 Role_Based_Access_Control
+
 Module_12 Implementing_File_Sync
 
+
 第三组实验, [Enterprise-ready-cloud](https://github.com/Microsoft/MCW-Enterprise-Ready-Cloud)
+
 这组实验结合 Whiteboard Design + Handson Lab, 帮助我们了解, 企业级应用搭建在云端所需要考虑的管理策略方面的问题。使用工具主要是进阶的Azure命令行工具和Powershell工具。 
 
 [Enterprise-ready-cloud](https://github.com/Microsoft/MCW-Enterprise-Ready-Cloud)
 
 Exercise 1: Create the policy for Enterprise IT   60 minutes
-Exercise 2: Configure delegated permissions    60 minutes
-Exercise 3: Use Azure Blueprints to govern your Azure environment   75 minutes
-Exercise 4: Monitoring Compliance and Cost    20 minutes
 
+Exercise 2: Configure delegated permissions    60 minutes
+
+Exercise 3: Use Azure Blueprints to govern your Azure environment   75 minutes
+
+Exercise 4: Monitoring Compliance and Cost    20 minutes
 
 ### 2.2 开启云端之旅
 
