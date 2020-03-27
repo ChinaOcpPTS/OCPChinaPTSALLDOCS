@@ -344,7 +344,7 @@ Module_11 Governance_and_Compliance
 Role_Based_Access_Control  
 Module_12 Implementing_File_Sync  
 
-第三组实验, [Enterprise-ready-cloud](https://github.com/Microsoft/MCW-Enterprise-Ready-Cloud)  
+第三组实验 [Enterprise-ready-cloud](https://github.com/Microsoft/MCW-Enterprise-Ready-Cloud)  
 这组实验结合 Whiteboard Design + Handson Lab, 帮助我们了解, 企业级应用搭建在云端所需要考虑的管理策略方面的问题。使用工具主要是进阶的Azure命令行工具和Powershell工具。  
 
 [Enterprise-ready-cloud](https://github.com/Microsoft/MCW-Enterprise-Ready-Cloud)  
