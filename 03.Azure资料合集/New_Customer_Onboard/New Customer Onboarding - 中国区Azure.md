@@ -310,8 +310,8 @@ Azure可以通过下载Excel表格，将一段时间内Azure的详细账单，�
 第一组实验 管理 Azure 中的基础设施资源
 这组实验带我们熟悉, 通过 Azure Portal 及命令行工具, 创建并管理最基本的IaaS层资源（虚机/磁盘/网络等）(每一章节实验完成后请返回本文档点击下一章节链接继续)
 *本组实验由微软learning提供，如果能激活沙盒资源可以免费完成实验。
-管理 Azure 中的基础设施资源 
-Azure 虚拟机简介  1 小时 7 分钟
+[管理 Azure 中的基础设施资源](https://docs.microsoft.com/zh-cn/learn/paths/administer-infrastructure-resources-in-azure/)
+[Azure 虚拟机简介](https://docs.microsoft.com/zh-cn/learn/modules/intro-to-azure-virtual-machines/)  1 小时 7 分钟
 在 Azure 中创建 Linux 虚拟机 1 小时 26 分钟
 在 Azure 中创建 Windows 虚拟机 51 分钟
 使用 Azure CLI 管理虚拟机 51 分钟
