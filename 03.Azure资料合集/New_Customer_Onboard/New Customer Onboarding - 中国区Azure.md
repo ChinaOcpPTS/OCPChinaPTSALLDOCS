@@ -318,11 +318,9 @@ Azure可以通过下载Excel表格，将一段时间内Azure的详细账单，�
 
 [管理 Azure 中的基础设施资源](https://docs.microsoft.com/zh-cn/learn/paths/administer-infrastructure-resources-in-azure/)
 
-[Azure 虚拟机简介](https://docs.microsoft.com/zh-cn/learn/modules/intro-to-azure-virtual-machines/)  1 小时 7 分钟
-
-[在 Azure 中创建 Linux 虚拟机](https://docs.microsoft.com/zh-cn/learn/modules/intro-to-azure-virtual-machines/) 1 小时 26 分钟
-
-[在 Azure 中创建 Windows 虚拟机](https://docs.microsoft.com/zh-cn/learn/modules/create-windows-virtual-machine-in-azure/) 51 分钟
+  [Azure 虚拟机简介](https://docs.microsoft.com/zh-cn/learn/modules/intro-to-azure-virtual-machines/)  1 小时 7 分钟
+  [在 Azure 中创建 Linux 虚拟机](https://docs.microsoft.com/zh-cn/learn/modules/intro-to-azure-virtual-machines/) 1 小时 26 分钟
+  [在 Azure 中创建 Windows 虚拟机](https://docs.microsoft.com/zh-cn/learn/modules/create-windows-virtual-machine-in-azure/) 51 分钟
 
 [使用 Azure CLI 管理虚拟机](https://docs.microsoft.com/zh-cn/learn/modules/manage-virtual-machines-with-azure-cli/) 51 分钟
 
