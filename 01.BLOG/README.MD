@@ -4,6 +4,27 @@
 
 | 序号 | 博客 | 创建者 | 所属月份 | 创建时间 | 项目类型 | 路径 |
 | ---- | ---- | ---- | ---- |  ---- | ---- | ---- |
+| 330 | [22条军规之Azure Policy](https://aubreyhan.net/undefined/52096/#more) | Yuan Han | 2020年7-8月份 | 2020/07-08 |
+| 329 | [云基础架构采用者避坑指南：拥抱“云”，更懂“云”](https://mp.weixin.qq.com/s/b4XStG9urcUEjEfa4fd71w) | Teo Ma | 2020年7-8月份 | 2020/07-08 |
+| 328 | [微软零信任框架建设最佳实践](https://mp.weixin.qq.com/s/5iiV4YA1zE2UFp-ZtOXbpg) | Jiayu Zhu | 2020年7-8月份 | 2020/07-08 |
+| 327 | [以己之盾，御彼之矛-你需要知道的安全总览浅析](https://mp.weixin.qq.com/s?__biz=MjM5NTE3NDgyMg==&mid=2650324916&idx=1&sn=2f8709ffc797ee5f7d708e52523a5a50&chksm=bef09f7d8987166b93853ef4b8acf87b4c54c5ce76777e2ec07703e932500bdb1e1f4c23a38a&mpshare=1&scene=1&srcid=0728riZIOYwMWvOSWLjAVFc6&sharer_sharetime=1598404474034&sharer_shareid=89121a95a7db04d86d695f427fd20855&key=05cf80b74e2f0d3a118f72471f3ec5941bd89a5cb5471ba0cae3cd085b5583e5d51812785b07a46e42bd693b544f9c0c8ead014c610b22b1129bed794c2ee8b41840664aa2a9472f4d9ada4ced77cb7af1f6d507c0668dca80f8905d5fe618f698383672e5347732c3ebff49e92fdf44f2de3603bde95fdc6970d42e0e17474e&ascene=1&uin=Mjk1MTMwMjEyNQ%3D%3D&devicetype=Windows+10+x64&version=62090529&lang=zh_CN&exportkey=A%2BPLiypDgPx3WG9fkISS8kA%3D&pass_ticket=2tOIfjgpriZBNn%2BieWIa3QNLUpaRxId8qO4I4wmx7WgWmtg40Xpiqws%2FVHty2onv) | Renjie Zhu | 2020年7-8月份 | 2020/07-08 |
+| 326 | [Azure Synapse Analysis 开箱 Blog - 陆 -- Direct Data Access with Synapse Link](https://www.cnblogs.com/wekang/p/13282421.html) | Wei Kang | 2020年7-8月份 | 2020/07-08 |
+| 325 | [Azure Synapse Analysis 开箱 Blog - 伍 -- Data Factory Data Pipeline Automation](https://www.cnblogs.com/wekang/p/13282417.html) | Wei Kang | 2020年7-8月份 | 2020/07-08 |
+| 324 | [Azure Synapse Analysis 开箱 Blog - 肆 -- Synapse Analysis SQL Pool CDC Data ETL](https://www.cnblogs.com/wekang/p/13282411.html) | Wei Kang | 2020年7-8月份 | 2020/07-08 |
+| 323 | [Azure Synapse Analysis 开箱 Blog - 叁 -- Function ETL](https://www.cnblogs.com/wekang/p/13282407.html) | Wei Kang | 2020年7-8月份 | 2020/07-08 |
+| 322 | [Azure Synapse Analysis 开箱 Blog - 贰 -- Cosmos DB Change Feed Setup](https://www.cnblogs.com/wekang/p/13282402.html) | Wei Kang | 2020年7-8月份 | 2020/07-08 |
+| 321 | [Azure Synapse Analysis 开箱 Blog- 壹](https://www.cnblogs.com/wekang/p/13282398.html) | Wei Kang | 2020年7-8月份 | 2020/07-08 |
+| 320 | [Azure 安全网络篇 -- DMZ 区域设计实践](https://www.cnblogs.com/wekang/p/13450174.html) | Wei Kang | 2020年7-8月份 | 2020/07-08 |
+| 319 | [工具巧上手，运维自动化](https://aubreyhan.net/undefined/2867/) | Yuan Han | 2020年6月份 | 2020/06 |
+| 318 | [尔来四万八千岁，不与秦塞通人烟————Azure专用主机](https://aubreyhan.net/undefined/2420/) | Yuan Han | 2020年6月份 | 2020/06 |
+| 317 | [数据上云何所依？月光宝盒来助力。—————— 使用DataBox Edge数据传输](https://aubreyhan.net/undefined/15904/) | Yuan Han | 2020年6月份 | 2020/06 |
+| 316 | [Windows Virtual Desktop之配置使用Teams](http://6tt.co/ng6H) | Jiayu Zhu | 2020年5月份 | 2020/05 |
+| 315 | [Azure Sentinel -- deep dive系列一之连接方案](http://6tt.co/ng6M) | Jiayu Zhu | 2020年5月份 | 2020/05 |
+| 314 | [Power Apps 中加入 AI 的能力 - 实现一个简单的英汉词典](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247484412&idx=1&sn=03e4659f7c5454dd297de6012327c748&chksm=fbadf1e9ccda78ff86fc9c2ef0634b9a2f0774d8d2d72138f78aa25077d63457b6502262022a&token=1826914741&lang=en_US#rd) | Jian Zhao | 2020年5月份 | 2020/05 | 
+| 313 | [Kubernetes(3)——逐个解析kubernetes基础操作代码](https://blog.csdn.net/i_beidou/article/details/106097987) | Jalen Hu | 2020年5月份 | 2020/05 | 
+| 312 | [Kubernetes(2)——如何在Windows10当中安装minikube](https://blog.csdn.net/i_beidou/article/details/105977147) | Jalen Hu | 2020年5月份 | 2020/05 | 
+| 311 | [Kubernetes(1)——什么是虚拟化技术，什么是容器，什么是Docker，什么是K8S](https://blog.csdn.net/i_beidou/article/details/105947986) | Jalen Hu | 2020年5月份 | 2020/05 | 
+| 310 | [我有一百种方法帮你保护企业数据（持续更新中）](https://blog.csdn.net/i_beidou/article/details/106257933) | Jalen Hu | 2020年5月份 | 2020/05 | 
 | 309 | [用Visual Studio Code写azure template](https://www.cnblogs.com/acui2010/p/12650706.html) | Alex Cui | 2020年4月份 | 2020/04 | 
 | 308 | [Azure上使用Jmespath快速查找VM镜像](https://www.cnblogs.com/acui2010/p/12641066.html) | Alex Cui | 2020年4月份 | 2020/04 | 
 | 307 | [来认识下云搜索利器-Azure Cognitive Search](https://mp.weixin.qq.com/s/TfwOMcR5WzQBcW2vdKzwBg) | Minsheng Wang | 2020年4月份 | 2020/04 | 
