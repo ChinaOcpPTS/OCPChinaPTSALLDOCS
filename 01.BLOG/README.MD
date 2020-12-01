@@ -1,9 +1,20 @@
 # OCP PTS Team Blog汇总
 
-> 2020/4/29 updated
+> 2020/11/30 updated
 
 | 序号 | 博客 | 创建者 | 所属月份 | 创建时间 | 项目类型 | 路径 |
 | ---- | ---- | ---- | ---- |  ---- | ---- | ---- |
+| 352 | [Azure Blob 文件索引检索查询  ](https://www.cnblogs.com/wekang/p/13997917.html) | Wei Kang | 2020年11月份 | 2020/11 |
+| 351 | [Azure Blob 文件索引检索查询 -- Azure Blob Indexing 篇 ](https://www.cnblogs.com/wekang/p/13999940.html) | Wei Kang | 2020年11月份 | 2020/11 |
+| 350 | [Azure Blob 文件索引检索查询 -- RedisSearch 篇](https://www.cnblogs.com/wekang/p/14000204.html) | Wei Kang | 2020年11月份 | 2020/11 |
+| 349 | [Azure Databricks 系列 Blog（一）之开箱](https://theodorew.github.io/wxsblog.github.io/2020/09/04/2020-09-04-AzureDatabricksIntroduction/) | Xinsheng Wang | 2020年11月份 | 2020/11 |
+| 348 | [用 Web Apps 部署你的容器服务 - Azure 容器平台尝试 (一)](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247484480&idx=1&sn=eeab2c4272f9c90cec48a1920c4c0fdf&chksm=fbadf655ccda7f4349e8d7becfee22371947f9b80986b100d4d1dbba820816169bb4b8fae054&token=371811189&lang=en_US#rd) | Jian Zhao | 2020年11月份 | 2020/11 |
+| 347 | [Azure 日志管理(Log Analytics)(8)-连接本地数据中心VM](https://zhuanlan.zhihu.com/p/261070286) | Alex Cui | 2020年11月份 | 2020/11 |
+| 346 | [Azure 日志管理(Log Analytics)(9)-获取VM Custom log](https://zhuanlan.zhihu.com/p/266889990) | Alex Cui | 2020年11月份 | 2020/11 |
+| 345 | [Azure 日志管理(Log Analytics)(10)-开启安全中心标准定价层](https://zhuanlan.zhihu.com/p/266903619) | Alex Cui | 2020年11月份 | 2020/11 |
+| 344 | [Azure 日志管理(Log Analytics)(11)-注入LA日志](https://zhuanlan.zhihu.com/p/266997886) | Alex Cui | 2020年11月份 | 2020/11 |
+| 343 | [Azure Monitor云监控实战 | 管理必不可少的IT日志（上篇）](https://tinyurl.com/y3b3n2fv) | Alex Cui | 2020年11月份 | 2020/11 |
+| 342 | [Azure Monitor云监控实战| 管理必不可少的IT日志（下篇） ](https://tinyurl.com/y2mkj5vl) | Alex Cui | 2020年11月份 | 2020/11 |
 | 341 | [以己之盾，御彼之矛——你需要知道的安全总览浅析](https://mp.weixin.qq.com/s/Zx9zTx-5qF8sXS23Y4-euw) | Renjie Zhu | 2020年10月份 | 2020/10 |
 | 340 | [Power Apps 与 Azure 服务的对接 (一) - 对接 AI 服务](https://mp.weixin.qq.com/s?__biz=MzU0OTY0NDE1NA==&mid=2247484446&idx=1&sn=edd2336edcfccbaef233cb59d8f54a96&chksm=fbadf60bccda7f1df54163637a5b94385091b47c81eb5070ee1c3d3ac0f27f6517bb7c304cd1&token=1811640643&lang=en_US#rd) | Jian Zhao | 2020年10月份 | 2020/10 |
 | 339 | [使用 jsDelivr CDN 加速 Github Pages](https://theodorew.github.io/wxsblog.github.io/2020/09/03/2020-09-03-GithubCDN/) | Xinsheng Wang | 2020年9月份 | 2020/9 |
