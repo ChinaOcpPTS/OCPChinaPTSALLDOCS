@@ -102,6 +102,8 @@ sudo docker run -d --name dataload -e "SQLFQDN=$yourConnection" -e "SQLUSER=$you
 
 在VM中, `Volume`就是VM中的一个文件夹, 在 Web App 中, 用户也会关心, `Volume`的部分是如何实现的. 目前 `Web App for Container` 也是提供持久化存储的, 用户可以将持久化文件存储在 `/home` 目录下, 并映射到容器中, 但前提是预先开启配置 `WEBSITES_ENABLE_APP_SERVICE_STORAGE`
 
+![image](./images/201106/110613.png)
+
 当然，VM中常见的另外一种需求就是, 一个应用服务中会包含多个服务, VM中很容易做到, 容器中该如何做? 可以理解为多个服务就是多个容器实例, 在Docker中, 就是通过Docker Compose来做的, Docker Compose会将一组容器服务组织起来, 并确定彼此之间的调用关系.
 
 ![image](./images/201106/110621.png)
@@ -156,3 +158,9 @@ sudo docker run -d --name dataload -e "SQLFQDN=$yourConnection" -e "SQLUSER=$you
 - [使用自定义容器将自定义软件迁移到 Azure 应用服务](https://docs.microsoft.com/zh-cn/azure/app-service/tutorial-custom-container?pivots=container-linux)
 
 - [在 Azure 中运行基本的 Web 应用程序](https://docs.microsoft.com/zh-cn/azure/app-service/tutorial-custom-container?pivots=container-linux)
+
+- `实验中涉及的基础Dockerfile包 : https://github.com/Azure-Samples/openhack-containers`
+
+- `使用自定义容器将自定义软件迁移到 Azure 应用服务 : https://docs.microsoft.com/zh-cn/azure/app-service/tutorial-custom-container?pivots=container-linux`
+
+- `在 Azure 中运行基本的 Web 应用程序 : https://docs.microsoft.com/zh-cn/azure/app-service/tutorial-custom-container?pivots=container-linux`
